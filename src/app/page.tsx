@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/utils";
 import Link from "next/link";
 import { logoutAction } from "./(auth)/login/actions";
 import { LogoutButtonForButton } from "@/components/layout/logout-button";
+import { Role } from "@prisma/client";
 
 export default async function Home() {
   const user = await getCurrentUser()
@@ -14,7 +15,7 @@ export default async function Home() {
               <h1>Bienvenido, {user.name || user.email}</h1>
 
               <div>
-              {user.role === "ADMIN" && (
+              {user.role === Role.SUPER_ADMIN && (
                 <Link href="/admin">
                   <Button className="w-full">Admin</Button>
                 </Link>

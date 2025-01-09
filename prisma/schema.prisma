@@ -16,7 +16,10 @@ datasource db {
 }
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
+  TASTER
+  WINERY
   GUEST
 }
 
@@ -30,6 +33,12 @@ model User {
   accounts      Account[]                           // gennext: skip.list
   sessions      Session[]                           // gennext: skip.list
   otpConfirmations OTPSession[]                     // gennext: skip.list
+
+  wineCriticId String?
+  wineCritic WineCritic? @relation(fields: [wineCriticId], references: [id], onDelete: Cascade)
+
+  wineryId String?
+  winery Winery? @relation(fields: [wineryId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())                // gennext: skip.zod
   updatedAt DateTime @updatedAt                     // gennext: skip.zod show.column
@@ -79,7 +88,6 @@ model VerificationToken {
   @@id([identifier, token])
   @@map("verification_tokens")
 }
-
  
 model OTPCode {
   id String @id @default(cuid())
@@ -109,3 +117,126 @@ model OTPSession {
 
   @@map("otp_sessions")                  // gennext: skip.list skip.zod
 }
+
+model WineCritic {
+  id            String    @id @default(cuid())
+  name          String                              // gennext: show.column
+  slug          String    @unique                   // gennext: show.column
+  description   String                              // gennext: show.column
+
+  users         User[]                              // gennext: skip.list
+  tastings      Tasting[]                           // gennext: skip.list
+
+  createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+  @@map("wine_critics")                             // gennext: skip.list skip.zod
+}
+
+model Tasting {
+  id            String    @id @default(cuid())
+  name          String                              // gennext: show.column
+  slug          String    @unique                   // gennext: show.column
+  description   String?                             // gennext: show.column
+
+  wineCriticId  String
+  wineCritic    WineCritic @relation(fields: [wineCriticId], references: [id], onDelete: Cascade)
+
+  wineries      WineryTasting[]
+  //wines         WineTasting[]
+  //tastingDays   TastingDay[]
+
+  createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+  @@map("tastings")                                 // gennext: skip.list skip.zod
+}
+
+model Winery {
+  id            String    @id @default(cuid())
+  name          String                              // gennext: show.column
+  slug          String    @unique                   // gennext: show.column
+  description   String                              // gennext: show.column  
+
+  users         User[]                              // gennext: skip.list
+  tastings      WineryTasting[]                     // gennext: skip.list
+  //wines         Wine[]                            // gennext: skip.list
+  //tastingDays   TastingDayWinery[]                // gennext: skip.list
+
+  createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+  @@map("wineries")                                 // gennext: skip.list skip.zod
+}
+
+model WineryTasting {
+  wineryId      String
+  winery        Winery   @relation(fields: [wineryId], references: [id], onDelete: Cascade)
+  tastingId     String
+  tasting       Tasting  @relation(fields: [tastingId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+  @@id([wineryId, tastingId])                       // gennext: skip.list skip.zod
+  @@map("winery_tastings")                          // gennext: skip.list skip.zod
+}
+
+// model Wine {
+//   id            String    @id @default(cuid())
+//   name          String                              // gennext: show.column
+//   description   String                              // gennext: show.column
+
+//   wineryId      String
+//   winery Winery @relation(fields: [wineryId], references: [id], onDelete: Cascade)
+
+//   tastings      WineTasting[]
+
+//   createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+//   updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+//   @@map("wines")                                    // gennext: skip.list skip.zod
+// }
+
+// model WineTasting {
+//   score         Int?
+//   notes         String?
+
+//   wineId        String
+//   wine          Wine     @relation(fields: [wineId], references: [id], onDelete: Cascade)
+//   tastingId     String
+//   tasting       Tasting  @relation(fields: [tastingId], references: [id], onDelete: Cascade)
+
+//   createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+//   updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+//   @@id([wineId, tastingId])                         // gennext: skip.list skip.zod
+//   @@map("wine_tastings")                            // gennext: skip.list skip.zod
+// }
+
+// model TastingDay {
+//   id            String    @id @default(cuid())  
+
+//   tastingId     String
+//   tasting       Tasting @relation(fields: [tastingId], references: [id], onDelete: Cascade)
+
+//   wineries      TastingDayWinery[]
+
+//   createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+//   updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+//   @@map("tasting_days")                             // gennext: skip.list skip.zod
+// }
+
+// model TastingDayWinery {
+//   tastingDayId  String
+//   tastingDay    TastingDay @relation(fields: [tastingDayId], references: [id], onDelete: Cascade)
+//   wineryId      String
+//   winery        Winery   @relation(fields: [wineryId], references: [id], onDelete: Cascade)
+
+//   createdAt     DateTime @default(now())            // gennext: show.column skip.zod
+//   updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+
+//   @@id([tastingDayId, wineryId])                    // gennext: skip.list skip.zod
+//   @@map("tasting_day_wineries")                     // gennext: skip.list skip.zod
+// }

@@ -4,40 +4,56 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "@/hooks/use-toast"
 import { useEffect, useState } from "react"
-import { deleteUserAction, createOrUpdateUserAction, getUserDAOAction } from "./user-actions"
-import { userSchema, UserFormValues } from '@/services/user-services'
+import { deleteWineCriticAction, createOrUpdateWineCriticAction, getWineCriticDAOAction } from "./winecritic-actions"
+import { WineCriticSchema, WineCriticFormValues } from '@/services/winecritic-services'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Loader } from "lucide-react"
-import { Role } from "@prisma/client"
+import { Switch } from "@/components/ui/switch"
+import { generateSlug } from "@/lib/utils"
 
-type Props= {
+type Props = {
   id?: string
-  role: Role
-  wineCriticId?: string
   closeDialog: () => void
 }
 
-export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
-  const form = useForm<UserFormValues>({
-    resolver: zodResolver(userSchema),
+export function WineCriticForm({ id, closeDialog }: Props) {
+  const form = useForm<WineCriticFormValues>({
+    resolver: zodResolver(WineCriticSchema),
     defaultValues: {
       name: "",
-      email: "",
-      image: "",
-      role,
-      wineCriticId
+      slug: "",
+      description: ""
     },
     mode: "onChange",
   })
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = async (data: UserFormValues) => {
+  const [autoGenerateSlug, setAutoGenerateSlug] = useState(!id) // true para nuevo, false para edición
+
+  // Efecto para generar el slug automáticamente cuando cambia el nombre
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'name' && autoGenerateSlug) {
+        form.setValue('slug', generateSlug(value.name || ''))
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, autoGenerateSlug]);
+
+  // Generar slug cuando se activa autoGenerateSlug
+  useEffect(() => {
+    if (autoGenerateSlug) {
+      form.setValue('slug', generateSlug(form.getValues('name')))
+    }
+  }, [autoGenerateSlug, form])
+
+  const onSubmit = async (data: WineCriticFormValues) => {
     setLoading(true)
     try {
-      await createOrUpdateUserAction(id ? id : null, data)
-      toast({ title: id ? "Usuario actualizado" : "Usuario creado" })
+      await createOrUpdateWineCriticAction(id ? id : null, data)
+      toast({ title: id ? "WineCritic updated" : "WineCritic created" })
       closeDialog()
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" })
@@ -48,7 +64,7 @@ export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
 
   useEffect(() => {
     if (id) {
-      getUserDAOAction(id).then((data) => {
+      getWineCriticDAOAction(id).then((data) => {
         if (data) {
           form.reset(data)
         }
@@ -65,7 +81,6 @@ export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
     <div className="rounded-md">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          
           <FormField
             control={form.control}
             name="name"
@@ -73,30 +88,53 @@ export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nombre del usuario" {...field} value={field.value || ""} />
+                  <Input placeholder="WineCritic's name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
-      
           <FormField
             control={form.control}
-            name="email"
+            name="slug"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <div className="flex flex-row items-center justify-between" >
+                  <FormLabel>Slug</FormLabel>
+                  <div className="flex flex-row items-center gap-2">
+                    <p>Auto</p>
+                    <Switch                    
+                      checked={autoGenerateSlug}
+                      onCheckedChange={setAutoGenerateSlug}
+                    />
+                  </div>
+                </div>
                 <FormControl>
-                  <Input placeholder="Email del usuario" {...field} value={field.value || ""} />
+                  <Input 
+                    placeholder="WineCritic's slug" 
+                    {...field} 
+                    disabled={autoGenerateSlug}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-         
-      
-        <div className="flex justify-end">
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input placeholder="WineCritic's description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="flex justify-end">
             <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
             <Button type="submit" className="w-32 ml-2">
               {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Save</p>}
@@ -113,15 +151,15 @@ type DeleteProps= {
   closeDialog: () => void
 }
 
-export function DeleteUserForm({ id, closeDialog }: DeleteProps) {
+export function DeleteWineCriticForm({ id, closeDialog }: DeleteProps) {
   const [loading, setLoading] = useState(false)
 
   async function handleDelete() {
     if (!id) return
     setLoading(true)
-    deleteUserAction(id)
+    deleteWineCriticAction(id)
     .then(() => {
-      toast({title: "User deleted" })
+      toast({title: "WineCritic deleted" })
     })
     .catch((error) => {
       toast({title: "Error", description: error.message, variant: "destructive"})
@@ -142,4 +180,3 @@ export function DeleteUserForm({ id, closeDialog }: DeleteProps) {
     </div>
   )
 }
-

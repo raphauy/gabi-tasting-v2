@@ -10,7 +10,7 @@ async function main() {
     create: {
       name: 'Rapha',
       email: 'rapha.uy@rapha.uy',
-      role: Role.ADMIN,
+      role: Role.SUPER_ADMIN,
     },
   })
 

@@ -16,7 +16,7 @@ export async function createOrUpdateOTPSessionAction(id: string | null, data: OT
         updated= await createOTPSession(data)
     }     
 
-    revalidatePath("/admin/oTPSessions")
+    revalidatePath("/admin/otpsessions")
 
     return updated as OTPSessionDAO
 }
@@ -24,7 +24,7 @@ export async function createOrUpdateOTPSessionAction(id: string | null, data: OT
 export async function deleteOTPSessionAction(id: string): Promise<OTPSessionDAO | null> {    
     const deleted= await deleteOTPSession(id)
 
-    revalidatePath("/admin/oTPSessions")
+    revalidatePath("/admin/otpsessions")
 
     return deleted as OTPSessionDAO
 }

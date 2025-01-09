@@ -14,7 +14,7 @@ export default async function UserPage() {
     <div className="w-full">      
 
       <div className="flex justify-end mx-auto my-2">
-        <UserDialog />
+        <UserDialog role={Role.SUPER_ADMIN} />
       </div>
 
       <div className="container bg-white p-3 py-4 mx-auto border rounded-md text-muted-foreground dark:text-white dark:bg-black">

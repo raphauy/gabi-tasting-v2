@@ -19,6 +19,7 @@ export const userSchema = z.object({
 	email: z.string().email(),
 	role: z.nativeEnum(Role),
 	image: z.string().nullable().optional(),	
+	wineCriticId: z.string().nullable().optional(),
 })
 
 export type UserFormValues = z.infer<typeof userSchema>
@@ -69,3 +70,11 @@ export async function deleteUser(id: string) {
   return deleted
 }
 
+export async function getWineCriticUsersDAO(wineCriticId: string) {
+  const found = await prisma.user.findMany({
+    where: {
+      wineCriticId
+    },
+  })
+  return found as UserDAO[]
+}

@@ -10,8 +10,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Skeleton } from "../ui/skeleton"
+import { getwineCriticMenu } from "@/app/[wineCriticSlug]/tasting-menu"
+import { Role } from "@prisma/client"
+import { TastingDAO } from "@/services/tasting-services"
 
-export function SidebarComponent() {
+type Props = {  
+  wineCriticSlug?: string
+}
+
+export function SidebarComponent({ wineCriticSlug }: Props) {
   const pathname = usePathname()
   const { data: session } = useSession()
   const userRole = session?.user?.role
@@ -20,12 +27,15 @@ export function SidebarComponent() {
   const [menu, setMenu] = useState<MenuGroup[] | null>(null)
 
   useEffect(() => {
-    if (userRole === "ADMIN" && pathname.startsWith("/admin")) {
+    if (userRole === Role.SUPER_ADMIN && pathname.startsWith("/admin")) {
       setMenu(adminMenu)
+    } else if (wineCriticSlug && (userRole === Role.SUPER_ADMIN || userRole === Role.ADMIN || userRole === Role.TASTER)) {
+      const wineCriticMenu = getwineCriticMenu({ wineCriticSlug })
+      setMenu(wineCriticMenu)
     } else {
       setMenu(null)
     }
-  }, [userRole, pathname])
+  }, [userRole, pathname, wineCriticSlug])
 
   if (!menu) return <SidebarSkeleton />
   //if (!menu) return null
@@ -78,7 +88,7 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
             tooltip={item.name}
             onClick={onMenuClick}
           >
-            <Link href={item.href}>
+            <Link href={item.href} prefetch={false}>
               {item.icon}
               <span>{item.name}</span>
             </Link>

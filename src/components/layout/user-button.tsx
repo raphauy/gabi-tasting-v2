@@ -36,7 +36,7 @@ export function UserButton() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/" className="flex items-center justify-between w-full cursor-pointer">
+          <Link href="/" className="flex items-center justify-between w-full cursor-pointer" prefetch={false}>
             <span>Inicio</span>
             <Home className="h-4 w-4" />
           </Link>

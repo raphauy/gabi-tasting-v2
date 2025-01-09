@@ -5,16 +5,20 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Pencil, PlusCircle, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { DeleteUserForm, UserForm } from "./user-forms";
+import { Role } from "@prisma/client";
 
 type Props= {
   id?: string
+  role: Role
+  wineCriticId?: string
 }
 
-const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Create User</Button>
 const updateTrigger= <Pencil size={30} className="pr-2 hover:cursor-pointer"/>
 
-export function UserDialog({ id }: Props) {
+export function UserDialog({ id, role, wineCriticId }: Props) {
   const [open, setOpen] = useState(false);
+
+  const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Crear usuario {role}</Button>
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -23,12 +27,12 @@ export function UserDialog({ id }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{id ? 'Update' : 'Create'} User</DialogTitle>
+          <DialogTitle>{id ? 'Actualizar' : 'Crear'} {role} User</DialogTitle>
           <DialogDescription>
-            {id ? 'Update the user information below.' : 'Enter the new user information below.'}
+            {id ? 'Actualiza la información del usuario.' : 'Introduce la información del usuario.'}
           </DialogDescription>
         </DialogHeader>
-        <UserForm closeDialog={() => setOpen(false)} id={id} />
+        <UserForm closeDialog={() => setOpen(false)} id={id} role={role} wineCriticId={wineCriticId} />
       </DialogContent>
     </Dialog>
   )
@@ -52,7 +56,7 @@ export function DeleteUserDialog({ id, description }: DeleteProps) {
           <DialogTitle>Delete User</DialogTitle>
           <DialogDescription className="py-8">{description}</DialogDescription>
         </DialogHeader>
-        <DeleteUserForm closeDialog={() => setOpen(false)} id={id} />
+        <DeleteUserForm closeDialog={() => setOpen(false)} id={id}/>
       </DialogContent>
     </Dialog>
   )
