@@ -35,6 +35,26 @@ export function UserButton() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        <DropdownMenuItem className="font-medium p-3 hover:bg-transparent focus:bg-transparent">
+          <div className="flex flex-col space-y-1">
+          {session.user.wineCriticName && (
+            <>
+              <p className="font-medium">{session.user.wineCriticName}</p>
+              <p className="text-xs text-muted-foreground">Wine Critic</p>
+            </>
+          )}
+          {session.user.wineryName && (
+            <>
+              <p className="font-medium">{session.user.wineryName}</p>
+              <p className="text-xs text-muted-foreground">Winery</p>
+            </>
+          )}
+          {session.user.role === Role.SUPER_ADMIN && (
+            <p className="font-medium">Super Admin</p>
+          )}          
+        </div>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/" className="flex items-center justify-between w-full cursor-pointer" prefetch={false}>
             <span>Inicio</span>
@@ -116,7 +136,15 @@ function getThemeItem(theme: string, setTheme: (theme: string) => void) {
 }
 
 function getCustomMenuItems(role: Role): MenuItem[] {
-  if (role === "ADMIN") {
+  if (role === Role.SUPER_ADMIN) {
+    return [
+      {
+        name: "Admin",
+        href: "/admin",
+        icon: <LayoutDashboard className="h-4 w-4" />
+      }
+    ]
+  } else if (role === Role.ADMIN) {
     return [
       {
         name: "Admin",
@@ -125,5 +153,6 @@ function getCustomMenuItems(role: Role): MenuItem[] {
       }
     ]
   }
+
   return []
 }

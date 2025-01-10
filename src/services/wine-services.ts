@@ -39,6 +39,18 @@ export async function getWinesDAO() {
   return found as WineDAO[]
 }
 
+export async function getWinesDAOByWineryId(wineryId: string) {
+  const found = await prisma.wine.findMany({
+    where: {
+      wineryId
+    },
+    orderBy: {
+      id: 'asc'
+    },
+  })
+  return found as WineDAO[]
+}
+
 export async function getWineDAO(id: string) {
   const found = await prisma.wine.findUnique({
     where: {

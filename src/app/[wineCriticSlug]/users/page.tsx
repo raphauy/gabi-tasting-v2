@@ -2,8 +2,9 @@ import { columns } from "@/app/admin/users/user-columns"
 import { UserDialog } from "@/app/admin/users/user-dialogs"
 import { DataTable } from "@/app/admin/users/user-table"
 import { getWineCriticUsersDAO } from "@/services/user-services"
-import { getWineCriticsDAOBySlug } from "@/services/winecritic-services"
+import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
 import { Role } from "@prisma/client"
+import { notFound } from "next/navigation"
 
 type Props = {
   params: Promise<{ wineCriticSlug: string }>
@@ -11,7 +12,10 @@ type Props = {
 export default async function UserPage({ params }: Props) {
   const { wineCriticSlug } = await params
 
-  const wineCritic= await getWineCriticsDAOBySlug(wineCriticSlug)
+  const wineCritic= await getWineCriticDAOBySlug(wineCriticSlug)
+  if (!wineCritic) {
+    return notFound()
+  }
   
   const data= await getWineCriticUsersDAO(wineCritic.id)
 

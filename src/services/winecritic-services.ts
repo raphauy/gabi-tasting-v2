@@ -64,11 +64,11 @@ export async function deleteWineCritic(id: string) {
   return deleted
 }
 
-export async function getWineCriticsDAOBySlug(slug: string) {
+export async function getWineCriticDAOBySlug(slug: string) {
   const found = await prisma.wineCritic.findUnique({
     where: {
       slug
     },
   })
-  return found as WineCriticDAO
+  return found
 }

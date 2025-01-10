@@ -1,6 +1,7 @@
 import * as z from "zod"
 import { prisma } from "@/lib/db"
 import { getDefaultTastingDays } from "./tastingday-services"
+import { WineCriticDAO } from "./winecritic-services"
 
 export type WineryDAO = {
 	id: string
@@ -8,6 +9,8 @@ export type WineryDAO = {
 	slug: string
 	description: string | null | undefined
 	image: string | null | undefined
+	wineCriticId: string
+	wineCritic: WineCriticDAO
 	createdAt: Date
 	updatedAt: Date
 }
@@ -17,16 +20,23 @@ export const WinerySchema = z.object({
 	slug: z.string().min(1, "slug is required."),
 	description: z.string().nullable().optional(),
 	image: z.string().nullable().optional(),
+	wineCriticId: z.string().min(1, "wineCriticId is required."),
 })
 
 export type WineryFormValues = z.infer<typeof WinerySchema>
 
 
-export async function getWinerysDAO() {
+export async function getWinerysDAO(wineCriticId: string) {
   const found = await prisma.winery.findMany({
+    where: {
+      wineCriticId
+    },
     orderBy: {
       id: 'asc'
     },
+    include: {
+      wineCritic: true
+    }
   })
   return found as WineryDAO[]
 }
@@ -35,6 +45,16 @@ export async function getWineryDAO(id: string) {
   const found = await prisma.winery.findUnique({
     where: {
       id
+    },
+  })
+  return found as WineryDAO
+}
+
+export async function getWineryDAOBySlug(slug: string) {
+  console.log("getWineryDAOBySlug", slug)
+  const found = await prisma.winery.findUnique({
+    where: {
+      slug
     },
   })
   return found as WineryDAO

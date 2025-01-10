@@ -2,7 +2,8 @@ import { getTastingsDAO } from "@/services/tasting-services"
 import { TastingDialog } from "./tasting-dialogs"
 import { DataTable } from "./tasting-table"
 import { columns } from "./tasting-columns"
-import { getWineCriticsDAOBySlug } from "@/services/winecritic-services"
+import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
+import { notFound } from "next/navigation"
 
 type Props = {
   params: Promise<{ wineCriticSlug: string }>
@@ -12,7 +13,11 @@ export default async function TastingPage({ params }: Props) {
   
   const { wineCriticSlug }= await params
 
-  const wineCritic= await getWineCriticsDAOBySlug(wineCriticSlug)
+  const wineCritic= await getWineCriticDAOBySlug(wineCriticSlug)
+
+  if (!wineCritic) {
+    return notFound()
+  }
 
   const data= await getTastingsDAO(wineCritic.id)
 

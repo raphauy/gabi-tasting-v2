@@ -105,6 +105,20 @@ export const getUserByEmail = async (email: string) => {
             where: { 
                 id 
             },
+            include: {
+                wineCritic: {
+                    select: {
+                        name: true,
+                        slug: true,
+                    }
+                },
+                winery: {
+                    select: {
+                        name: true,
+                        slug: true,
+                    }
+                },
+            }
         })
 
         return user

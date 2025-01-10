@@ -4,17 +4,15 @@ import { auth } from "@/lib/auth"
 import { Role } from "@prisma/client"
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
-import { TastingSidebar } from "./tasting-sidebar"
-
+import { WinerySidebar } from "./winery-sidebar"
 type Props = {
   children: React.ReactNode
-  params: Promise<{ wineCriticSlug: string }>
+  params: Promise<{ winerySlug: string }>
 }
 
-export default async function TastingLayout({ children, params }: Props) {
+export default async function WineryLayout({ children, params }: Props) {
 
-  const { wineCriticSlug }= await params
-
+  const { winerySlug }= await params
   const session= await auth()
 
   if (!session) {
@@ -31,7 +29,7 @@ export default async function TastingLayout({ children, params }: Props) {
         <div className="flex h-full w-full">
           <div className="md:w-[16rem]">
             <Suspense fallback={<SidebarSkeleton />}>
-              <TastingSidebar wineCriticSlug={wineCriticSlug} />
+              <WinerySidebar winerySlug={winerySlug} />
             </Suspense>
           </div>
           

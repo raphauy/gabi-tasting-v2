@@ -124,6 +124,7 @@ model WineCritic {
   slug          String    @unique                   // gennext: show.column
   description   String?                             // gennext: show.column
 
+  wineries      Winery[]                              // gennext: skip.list
   users         User[]                              // gennext: skip.list
   tastings      Tasting[]                           // gennext: skip.list
 
@@ -158,6 +159,9 @@ model Winery {
   slug          String    @unique                   // gennext: show.column
   description   String?                             // gennext: show.column
   image         String?                             // gennext: show.column
+
+  wineCriticId  String
+  wineCritic    WineCritic @relation(fields: [wineCriticId], references: [id], onDelete: Cascade)
 
   users         User[]                              // gennext: skip.list
   tastings      WineryTasting[]                     // gennext: skip.list

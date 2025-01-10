@@ -55,18 +55,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-
-      if (token.role && session.user) {
-        session.user.role = token.role as Role;
-      }
-
       if (session.user) {
-        session.user.name = token.name
-        session.user.email = token.email as string
-        session.user.image = token.picture as string
+        session.user = {
+          ...session.user,
+          id: token.sub,
+          role: token.role as Role,
+          name: token.name,
+          email: token.email as string,
+          image: token.picture ?? null,
+          wineCriticSlug: token.wineCriticSlug ?? null,
+          wineCriticName: token.wineCriticName ?? null,
+          winerySlug: token.winerySlug ?? null,
+          wineryName: token.wineryName ?? null,
+        };
       }
 
       return session;
@@ -133,6 +134,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
+      if (existingUser.wineCritic) {
+        token.wineCriticSlug = existingUser.wineCritic.slug;
+        token.wineCriticName = existingUser.wineCritic.name;
+      }
+      if (existingUser.winery) {
+        token.winerySlug = existingUser.winery.slug;
+        token.wineryName = existingUser.winery.name;
+      }
       token.picture = existingUser.image;
 
       return token;

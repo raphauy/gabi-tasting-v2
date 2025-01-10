@@ -17,16 +17,18 @@ import { createOrUpdateWineryAction, deleteWineryAction, getWineryDAOAction } fr
 
 type Props = {
   id?: string
+  wineCriticId: string
   closeDialog: () => void
 }
 
-export function WineryForm({ id, closeDialog }: Props) {
+export function WineryForm({ id, wineCriticId, closeDialog }: Props) {
   const form = useForm<WineryFormValues>({
     resolver: zodResolver(WinerySchema),
     defaultValues: {
       name: "",
       slug: "",
-      description: ""
+      description: "",
+      wineCriticId
     },
     mode: "onChange",
   })

@@ -1,6 +1,6 @@
 import { MenuGroup } from "@/lib/utils"
 import { getTastingsDAO, TastingDAO } from "@/services/tasting-services"
-import { getWineCriticsDAOBySlug } from "@/services/winecritic-services"
+import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
 import { BookOpenCheck, Building2, Calendar, LayoutDashboard, Users, Wine } from "lucide-react"
 
 type Props = {
@@ -25,7 +25,7 @@ export function getwineCriticMenu({ wineCriticSlug, tastings }: Props): MenuGrou
           href: `/${wineCriticSlug}/tastings`,
           subItems: tastings.map((tasting) => ({
             label: tasting.name,            
-            href: `/${wineCriticSlug}/tastings/${tasting.slug}`,
+            href: `/${wineCriticSlug}/${tasting.slug}`,
           })),
         },        
         {

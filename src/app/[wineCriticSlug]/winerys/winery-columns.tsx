@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button"
 import { WineryDAO } from "@/services/winery-services"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown  } from "lucide-react"
 import { format } from "date-fns"
 import { DeleteWineryDialog, WineryDialog } from "./winery-dialogs"
+import Link from "next/link"
 
 
 export const columns: ColumnDef<WineryDAO>[] = [
@@ -18,6 +19,16 @@ export const columns: ColumnDef<WineryDAO>[] = [
           Name
           <ArrowUpDown className="w-4 h-4 ml-1" />
         </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const data = row.original
+      return (
+        <Link href={`/winery/${data.slug}`}>
+          <Button variant="link" className="p-0">
+            {data.name}
+          </Button>
+        </Link>
       )
     },
     filterFn: (row, id, value) => {
@@ -111,7 +122,7 @@ export const columns: ColumnDef<WineryDAO>[] = [
       return (
         <div className="flex items-center justify-end gap-2">
 
-          <WineryDialog id={data.id} />
+          <WineryDialog id={data.id} wineCriticId={data.wineCriticId} />
           <DeleteWineryDialog description={deleteDescription} id={data.id} />
         </div>
 

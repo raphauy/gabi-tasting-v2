@@ -36,6 +36,11 @@ export const adminMenu: MenuGroup[] = [
         icon: <BookOpenCheck className="h-4 w-4" />,
         href: "/gabi-zimmer/tastings",
       },
+      {
+        name: "Otro crítico",
+        icon: <BookOpenCheck className="h-4 w-4" />,
+        href: "/otro-critico/tastings",
+      },
     ],
   },
   {

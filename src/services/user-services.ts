@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { Role } from "@prisma/client"
 import * as z from "zod"
+import { getWineCriticDAO } from "./winecritic-services"
 
 export type UserDAO = {
 	id: string
@@ -44,6 +45,7 @@ export async function getUserDAO(id: string) {
 }
     
 export async function createUser(data: UserFormValues) {
+
   const created = await prisma.user.create({
     data
   })

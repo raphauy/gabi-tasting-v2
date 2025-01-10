@@ -1,12 +1,10 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { WineryDAO } from "@/services/winery-services";
 import { Draggable } from "@hello-pangea/dnd";
-import { Expand } from "lucide-react";
-import { WineryDialog } from "../../winerys/winery-dialogs";
+import { WineryDialog } from "@/app/[wineCriticSlug]/winerys/winery-dialogs";
 
 type Props = {
   winery: WineryDAO
@@ -32,7 +30,7 @@ export default function WineryCard({ winery, index }: Props) {
                           <p className="text-sm text-gray-500">{winery.description}</p>
                         </div>
                       </div>
-                      <WineryDialog id={winery.id} />
+                      <WineryDialog id={winery.id} wineCriticId={winery.wineCriticId} />
                     </div>
                   </CardContent>
                 </Card>

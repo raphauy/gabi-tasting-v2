@@ -63,6 +63,8 @@ export function formatWhatsAppStyle(date: Date | string): string {
 // Función para generar el slug a partir de un texto
 export function generateSlug(text: string) {
   return text?.toLowerCase()
+    .normalize('NFD')               // Normaliza caracteres Unicode
+    .replace(/[\u0300-\u036f]/g, '') // Elimina diacríticos (acentos, etc)
     .replace(/\s+/g, '-')           // Reemplaza espacios con guiones
     .replace(/[^\w\-]+/g, '')       // Remueve caracteres especiales
     .replace(/\-\-+/g, '-')         // Reemplaza múltiples guiones con uno solo

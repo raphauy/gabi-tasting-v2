@@ -26,6 +26,8 @@ export function DatePicker({ date, setDate, label }: Props) {
         <Popover>
             <PopoverTrigger asChild>
                 <Button
+                    type="button"
+                    role="button"
                     variant={"outline"}
                     className={cn(
                         "w-[250px] justify-start text-left font-normal",
@@ -37,7 +39,7 @@ export function DatePicker({ date, setDate, label }: Props) {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-                <Calendar
+                <Calendar                
                 mode="single"
                 selected={date}
                 onSelect={handleDateChange}
