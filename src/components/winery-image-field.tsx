@@ -9,31 +9,37 @@ import { Camera, Loader } from 'lucide-react'
 import { generateReactHelpers } from "@uploadthing/react"
 import { OurFileRouter } from '@/app/api/uploadthing/core'
 import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
-type Props = {
+type Props = {  
   label: string
   description: string
   imageUrl: string | null | undefined
-  onUpdate: (url: string) => Promise<boolean>
+  wineryId: string
+  onUpdate: (wineryId: string, url: string) => Promise<boolean>
 }
 
-export function AvatarField({ label = "Avatar", description = "Este es tu avatar.", imageUrl, onUpdate }: Props) {
+export function WineryImageField({ label = "Avatar", description = "", imageUrl, wineryId, onUpdate }: Props) {
   const { update, data } = useSession()
   const { toast } = useToast()
   const [avatarUrl, setAvatarUrl] = React.useState<string | null | undefined>(imageUrl)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    setAvatarUrl(imageUrl)
+  }, [imageUrl])
+
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: async (res) => {
       if (res?.[0]) {
-        const success = await onUpdate(res[0].url)
+        const success = await onUpdate(wineryId, res[0].url)
         if (success) {
           setAvatarUrl(res[0].url)
           toast({
             title: label,
-            description: "Tu avatar se ha actualizado correctamente.",
+            description: "La imagen se ha actualizado correctamente.",
           })
           update({
             trigger: "update"
@@ -42,7 +48,7 @@ export function AvatarField({ label = "Avatar", description = "Este es tu avatar
           toast({
             variant: "destructive",
             title: label,
-            description: "No se pudo actualizar el avatar. Por favor, intenta de nuevo.",
+            description: "No se pudo actualizar la imagen. Por favor, intenta de nuevo.",
           })
         }
       }
@@ -112,15 +118,10 @@ export function AvatarField({ label = "Avatar", description = "Este es tu avatar
             )}
           </div>
           <p className="text-sm text-muted-foreground">
-            Haz clic en el círculo para subir una imagen desde tus archivos.
+            Haz clic en la imagen para subir una imagen desde tus archivos.
           </p>
         </div>
       </CardContent>
-      <CardFooter className="bg-muted py-4 border-t">
-        <p className="text-sm text-muted-foreground">
-          La imagen es opcional pero altamente recomendado.
-        </p>
-      </CardFooter>
     </Card>
   )
 }

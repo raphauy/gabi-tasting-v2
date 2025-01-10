@@ -7,6 +7,7 @@ export type WineryDAO = {
 	name: string
 	slug: string
 	description: string | null | undefined
+	image: string | null | undefined
 	createdAt: Date
 	updatedAt: Date
 }
@@ -15,6 +16,7 @@ export const WinerySchema = z.object({
 	name: z.string().min(1, "name is required."),
 	slug: z.string().min(1, "slug is required."),
 	description: z.string().nullable().optional(),
+	image: z.string().nullable().optional(),
 })
 
 export type WineryFormValues = z.infer<typeof WinerySchema>

@@ -1,18 +1,19 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "@/hooks/use-toast"
-import { useEffect, useState } from "react"
-import { deleteWineryAction, createOrUpdateWineryAction, getWineryDAOAction } from "./winery-actions"
-import { WinerySchema, WineryFormValues } from '@/services/winery-services'
+import { AvatarField } from "@/components/avatar-field"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Loader } from "lucide-react"
+import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
-import { generateSlug } from "@/lib/utils"
 import { Textarea } from "@/components/ui/textarea"
+import { toast } from "@/hooks/use-toast"
+import { generateSlug } from "@/lib/utils"
+import { WineryFormValues, WinerySchema } from '@/services/winery-services'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { createOrUpdateWineryAction, deleteWineryAction, getWineryDAOAction } from "./winery-actions"
 
 type Props = {
   id?: string
@@ -30,8 +31,10 @@ export function WineryForm({ id, closeDialog }: Props) {
     mode: "onChange",
   })
   const [loading, setLoading] = useState(false)
-
+  
   const [autoGenerateSlug, setAutoGenerateSlug] = useState(!id) // true para nuevo, false para edición
+
+  const image = form.watch('image')
 
   // Efecto para generar el slug automáticamente cuando cambia el nombre
   useEffect(() => {
@@ -77,6 +80,11 @@ export function WineryForm({ id, closeDialog }: Props) {
       })
     }
   }, [form, id])
+
+  function handleImageChange(url: string) {
+    form.setValue('image', url)
+    return Promise.resolve(true)
+  }
 
   return (
     <div className="rounded-md">
@@ -134,6 +142,15 @@ export function WineryForm({ id, closeDialog }: Props) {
               </FormItem>
             )}
           />
+
+          { id && <AvatarField
+              label="Imagen"
+              description="La imagen de la bodega."
+              imageUrl={image || ''} 
+              onUpdate={handleImageChange} 
+            />
+          }
+
 
           <div className="flex justify-end">
             <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>

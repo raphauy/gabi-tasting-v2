@@ -156,7 +156,8 @@ model Winery {
   id            String    @id @default(cuid())
   name          String                              // gennext: show.column
   slug          String    @unique                   // gennext: show.column
-  description   String?                             // gennext: show.column  
+  description   String?                             // gennext: show.column
+  image         String?                             // gennext: show.column
 
   users         User[]                              // gennext: skip.list
   tastings      WineryTasting[]                     // gennext: skip.list

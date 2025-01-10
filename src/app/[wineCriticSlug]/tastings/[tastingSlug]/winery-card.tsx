@@ -23,8 +23,8 @@ export default function WineryCard({ winery, index }: Props) {
                   <CardContent className="p-3">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-4">
-                        <Avatar>
-                          <AvatarImage src={''} alt={winery.name} />
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={winery.image || undefined} alt={winery.name} className="object-cover"/>
                           <AvatarFallback>{winery.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
