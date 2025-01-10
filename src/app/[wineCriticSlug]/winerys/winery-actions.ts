@@ -16,7 +16,7 @@ export async function createOrUpdateWineryAction(id: string | null, data: Winery
         updated= await createWinery(data)
     }     
 
-    revalidatePath("/[tastingSlug]/winerys")
+    revalidatePath("/[wineCriticSlug]", "page")
 
     return updated as WineryDAO
 }
@@ -24,7 +24,7 @@ export async function createOrUpdateWineryAction(id: string | null, data: Winery
 export async function deleteWineryAction(id: string): Promise<WineryDAO | null> {    
     const deleted= await deleteWinery(id)
 
-    revalidatePath("/[tastingSlug]/winerys")
+    revalidatePath("/[wineCriticSlug]", "page")
 
     return deleted as WineryDAO
 }

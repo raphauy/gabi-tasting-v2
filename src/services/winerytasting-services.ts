@@ -4,6 +4,7 @@ import { WineryDAO } from "./winery-services"
 import { TastingDAO } from "./tasting-services"
 
 export type WineryTastingDAO = {
+	order: number
 	wineryId: string
 	winery: WineryDAO
 	tastingId: string
@@ -13,6 +14,7 @@ export type WineryTastingDAO = {
 }
 
 export const WineryTastingSchema = z.object({
+	order: z.number().min(0, "order is required."),
 	wineryId: z.string().min(1, "wineryId is required."),
 	tastingId: z.string().min(1, "tastingId is required."),
 })

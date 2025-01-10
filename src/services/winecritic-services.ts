@@ -5,7 +5,7 @@ export type WineCriticDAO = {
 	id: string
 	name: string
 	slug: string
-	description: string
+	description: string | null | undefined
 	createdAt: Date
 	updatedAt: Date
 }
@@ -13,7 +13,7 @@ export type WineCriticDAO = {
 export const WineCriticSchema = z.object({
 	name: z.string().min(1, "name is required."),
 	slug: z.string().min(1, "slug is required."),
-	description: z.string().min(1, "description is required."),
+	description: z.string().nullable().optional(),
 })
 
 export type WineCriticFormValues = z.infer<typeof WineCriticSchema>

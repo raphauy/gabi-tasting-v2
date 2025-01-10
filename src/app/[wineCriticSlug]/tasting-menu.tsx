@@ -1,7 +1,7 @@
 import { MenuGroup } from "@/lib/utils"
 import { getTastingsDAO, TastingDAO } from "@/services/tasting-services"
 import { getWineCriticsDAOBySlug } from "@/services/winecritic-services"
-import { BookOpenCheck, Building2, LayoutDashboard, Users } from "lucide-react"
+import { BookOpenCheck, Building2, Calendar, LayoutDashboard, Users, Wine } from "lucide-react"
 
 type Props = {
   wineCriticSlug: string
@@ -32,6 +32,11 @@ export function getwineCriticMenu({ wineCriticSlug, tastings }: Props): MenuGrou
           name: "Wineries",
           icon: <Building2 className="h-4 w-4" />,
           href: `/${wineCriticSlug}/winerys`,
+        },
+        {
+          name: "Wines",
+          icon: <Wine className="h-4 w-4" />,
+          href: `/${wineCriticSlug}/wines`,
         },
       ],
     },

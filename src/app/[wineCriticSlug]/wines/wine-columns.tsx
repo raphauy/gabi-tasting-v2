@@ -1,15 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { TastingDAO } from "@/services/tasting-services"
+import { WineDAO } from "@/services/wine-services"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { format } from "date-fns"
-import { DeleteTastingDialog, TastingDialog } from "./tasting-dialogs"
-import Link from "next/link"
+import { DeleteWineDialog, WineDialog } from "./wine-dialogs"
 
 
-export const columns: ColumnDef<TastingDAO>[] = [
+export const columns: ColumnDef<WineDAO>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -21,44 +20,73 @@ export const columns: ColumnDef<TastingDAO>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const data = row.original
-      return (
-        <Link href={`/${data.wineCritic.slug}/tastings/${data.slug}`}>
-          <Button variant="link" className="p-0">
-            {data.name}
-          </Button>
-        </Link>
-      )
-    },
     filterFn: (row, id, value) => {
       const data = row.original
       const valueLower = value.toLowerCase()
       return !!(data.name?.toLowerCase().includes(valueLower) ||
-        data.slug?.toLowerCase().includes(valueLower) ||
-        data.description?.toLowerCase().includes(valueLower))
+        data.vintage?.toLowerCase().includes(valueLower) ||
+        data.region?.toLowerCase().includes(valueLower) ||
+        data.style?.toLowerCase().includes(valueLower) ||
+        data.abv?.toString().includes(valueLower) ||
+        data.price?.toString().includes(valueLower))
     },
   },
   
   {
-    accessorKey: "slug",
+    accessorKey: "vintage",
     header: ({ column }) => {
         return (
           <Button variant="ghost" className="pl-0 dark:text-white"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Slug
+            Vintage
             <ArrowUpDown className="w-4 h-4 ml-1" />
           </Button>
     )},
   },
 
   {
-    accessorKey: "description",
+    accessorKey: "region",
     header: ({ column }) => {
         return (
           <Button variant="ghost" className="pl-0 dark:text-white"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Description
+            Region
+            <ArrowUpDown className="w-4 h-4 ml-1" />
+          </Button>
+    )},
+  },
+
+  {
+    accessorKey: "style",
+    header: ({ column }) => {
+        return (
+          <Button variant="ghost" className="pl-0 dark:text-white"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Style
+            <ArrowUpDown className="w-4 h-4 ml-1" />
+          </Button>
+    )},
+  },
+
+  {
+    accessorKey: "abv",
+    header: ({ column }) => {
+        return (
+          <Button variant="ghost" className="pl-0 dark:text-white"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Abv
+            <ArrowUpDown className="w-4 h-4 ml-1" />
+          </Button>
+    )},
+  },
+
+  {
+    accessorKey: "price",
+    header: ({ column }) => {
+        return (
+          <Button variant="ghost" className="pl-0 dark:text-white"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Price
             <ArrowUpDown className="w-4 h-4 ml-1" />
           </Button>
     )},
@@ -117,13 +145,13 @@ export const columns: ColumnDef<TastingDAO>[] = [
     cell: ({ row }) => {
       const data= row.original
 
-      const deleteDescription= `Do you want to delete Tasting ${data.id}?`
+      const deleteDescription= `Do you want to delete Wine ${data.id}?`
  
       return (
         <div className="flex items-center justify-end gap-2">
 
-          <TastingDialog id={data.id} wineCriticId={data.wineCriticId} />
-          <DeleteTastingDialog description={deleteDescription} id={data.id} />
+          <WineDialog id={data.id} />
+          <DeleteWineDialog description={deleteDescription} id={data.id} />
         </div>
 
       )

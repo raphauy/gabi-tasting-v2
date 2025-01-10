@@ -1,12 +1,13 @@
 import * as z from "zod"
 import { prisma } from "@/lib/db"
 import { WineCriticDAO } from "./winecritic-services"
+import { createTastingDay } from "./tastingday-services"
 
 export type TastingDAO = {
 	id: string
 	name: string
 	slug: string
-	description: string | undefined
+	description: string | null | undefined
 	wineCriticId: string
 	wineCritic: WineCriticDAO
 	createdAt: Date
@@ -16,7 +17,7 @@ export type TastingDAO = {
 export const TastingSchema = z.object({
 	name: z.string().min(1, "name is required."),
 	slug: z.string().min(1, "slug is required."),
-	description: z.string().optional(),
+	description: z.string().nullable().optional(),
 	wineCriticId: z.string().min(1, "wineCriticId is required."),
 })
 
@@ -31,6 +32,13 @@ export async function getTastingsDAO(wineCriticId: string) {
     orderBy: {
       id: 'asc'
     },
+    include: {
+      wineCritic: {
+        select: {
+          slug: true
+        }
+      }
+    }
   })
   return found as TastingDAO[]
 }
@@ -43,11 +51,33 @@ export async function getTastingDAO(id: string) {
   })
   return found as TastingDAO
 }
+
+
+export async function getTastingDAOBySlug(slug: string) {
+  const found = await prisma.tasting.findUnique({
+    where: {
+      slug
+    },
+    include: {
+      wineCritic: {
+        select: {
+          slug: true
+        }
+      }
+    }
+  })
+  return found as TastingDAO
+}
+
     
 export async function createTasting(data: TastingFormValues) {
-  // TODO: implement createTasting
   const created = await prisma.tasting.create({
     data
+  })
+  // create default tasting day
+  await createTastingDay({
+    tastingId: created.id,
+    isDefault: true
   })
   return created
 }

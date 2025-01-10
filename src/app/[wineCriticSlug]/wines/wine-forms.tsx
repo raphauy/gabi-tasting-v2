@@ -4,57 +4,38 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "@/hooks/use-toast"
 import { useEffect, useState } from "react"
-import { deleteWineCriticAction, createOrUpdateWineCriticAction, getWineCriticDAOAction } from "./winecritic-actions"
-import { WineCriticSchema, WineCriticFormValues } from '@/services/winecritic-services'
+import { deleteWineAction, createOrUpdateWineAction, getWineDAOAction } from "./wine-actions"
+import { WineSchema, WineFormValues } from '@/services/wine-services'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Loader } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
-import { generateSlug } from "@/lib/utils"
-import { Textarea } from "@/components/ui/textarea"
+
+
 
 type Props = {
   id?: string
   closeDialog: () => void
 }
 
-export function WineCriticForm({ id, closeDialog }: Props) {
-  const form = useForm<WineCriticFormValues>({
-    resolver: zodResolver(WineCriticSchema),
+export function WineForm({ id, closeDialog }: Props) {
+  const form = useForm<WineFormValues>({
+    resolver: zodResolver(WineSchema),
     defaultValues: {
       name: "",
-      slug: "",
-      description: ""
+      vintage: "",
+      region: "",
     },
     mode: "onChange",
   })
   const [loading, setLoading] = useState(false)
 
-  const [autoGenerateSlug, setAutoGenerateSlug] = useState(!id) // true para nuevo, false para edición
 
-  // Efecto para generar el slug automáticamente cuando cambia el nombre
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === 'name' && autoGenerateSlug) {
-        form.setValue('slug', generateSlug(value.name || ''))
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [form, autoGenerateSlug]);
-
-  // Generar slug cuando se activa autoGenerateSlug
-  useEffect(() => {
-    if (autoGenerateSlug) {
-      form.setValue('slug', generateSlug(form.getValues('name')))
-    }
-  }, [autoGenerateSlug, form])
-
-  const onSubmit = async (data: WineCriticFormValues) => {
+  const onSubmit = async (data: WineFormValues) => {
     setLoading(true)
     try {
-      await createOrUpdateWineCriticAction(id ? id : null, data)
-      toast({ title: id ? "WineCritic updated" : "WineCritic created" })
+      await createOrUpdateWineAction(id ? id : null, data)
+      toast({ title: id ? "Wine updated" : "Wine created" })
       closeDialog()
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" })
@@ -65,7 +46,7 @@ export function WineCriticForm({ id, closeDialog }: Props) {
 
   useEffect(() => {
     if (id) {
-      getWineCriticDAOAction(id).then((data) => {
+      getWineDAOAction(id).then((data) => {
         if (data) {
           form.reset(data)
         }
@@ -89,7 +70,7 @@ export function WineCriticForm({ id, closeDialog }: Props) {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="WineCritic's name" {...field} />
+                  <Input placeholder="Wine's name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -97,25 +78,12 @@ export function WineCriticForm({ id, closeDialog }: Props) {
           />
           <FormField
             control={form.control}
-            name="slug"
+            name="vintage"
             render={({ field }) => (
               <FormItem>
-                <div className="flex flex-row items-center justify-between" >
-                  <FormLabel>Slug</FormLabel>
-                  <div className="flex flex-row items-center gap-2">
-                    <p>Auto</p>
-                    <Switch                    
-                      checked={autoGenerateSlug}
-                      onCheckedChange={setAutoGenerateSlug}
-                    />
-                  </div>
-                </div>
+                <FormLabel>Vintage</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="WineCritic's slug" 
-                    {...field} 
-                    disabled={autoGenerateSlug}
-                  />
+                  <Input placeholder="Wine's vintage" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,12 +91,51 @@ export function WineCriticForm({ id, closeDialog }: Props) {
           />
           <FormField
             control={form.control}
-            name="description"
+            name="region"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Region</FormLabel>
                 <FormControl>
-                  <Textarea rows={6} placeholder="WineCritic's description" {...field} value={field.value || ''} />
+                  <Input placeholder="Wine's region" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="style"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Style</FormLabel>
+                <FormControl>
+                  <Input placeholder="Wine's style" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="abv"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Abv</FormLabel>
+                <FormControl>
+                  <Input placeholder="Wine's abv" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Price</FormLabel>
+                <FormControl>
+                  <Input placeholder="Wine's price" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,15 +159,15 @@ type DeleteProps= {
   closeDialog: () => void
 }
 
-export function DeleteWineCriticForm({ id, closeDialog }: DeleteProps) {
+export function DeleteWineForm({ id, closeDialog }: DeleteProps) {
   const [loading, setLoading] = useState(false)
 
   async function handleDelete() {
     if (!id) return
     setLoading(true)
-    deleteWineCriticAction(id)
+    deleteWineAction(id)
     .then(() => {
-      toast({title: "WineCritic deleted" })
+      toast({title: "Wine deleted" })
     })
     .catch((error) => {
       toast({title: "Error", description: error.message, variant: "destructive"})

@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Loader } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { generateSlug } from "@/lib/utils"
+import { Textarea } from "@/components/ui/textarea"
 
 type Props = {
   id?: string
@@ -127,7 +128,7 @@ export function WineryForm({ id, closeDialog }: Props) {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input placeholder="Winery's description" {...field} />
+                  <Textarea rows={6} placeholder="Winery's description" {...field} value={field.value || ''} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
