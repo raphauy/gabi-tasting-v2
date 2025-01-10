@@ -15,30 +15,12 @@ import { Role } from "@prisma/client"
 import { TastingDAO } from "@/services/tasting-services"
 
 type Props = {  
-  wineCriticSlug?: string
+  menuGroups: MenuGroup[]
 }
 
-export function SidebarComponent({ wineCriticSlug }: Props) {
+export function SidebarComponent({ menuGroups }: Props) {
   const pathname = usePathname()
-  const { data: session } = useSession()
-  const userRole = session?.user?.role
   const { isMobile, setOpenMobile } = useSidebar()
-
-  const [menu, setMenu] = useState<MenuGroup[] | null>(null)
-
-  useEffect(() => {
-    if (userRole === Role.SUPER_ADMIN && pathname.startsWith("/admin")) {
-      setMenu(adminMenu)
-    } else if (wineCriticSlug && (userRole === Role.SUPER_ADMIN || userRole === Role.ADMIN || userRole === Role.TASTER)) {
-      const wineCriticMenu = getwineCriticMenu({ wineCriticSlug })
-      setMenu(wineCriticMenu)
-    } else {
-      setMenu(null)
-    }
-  }, [userRole, pathname, wineCriticSlug])
-
-  if (!menu) return <SidebarSkeleton />
-  //if (!menu) return null
 
   const handleMenuClick = () => {
     if (isMobile) {
@@ -62,7 +44,7 @@ export function SidebarComponent({ wineCriticSlug }: Props) {
         </SidebarHeader>
         <SidebarContent className="block">
           {
-            menu.map((group) => (
+            menuGroups.map((group) => (
               <SidebarGroup key={group.name}>
                 <SidebarGroupLabel>{group.name}</SidebarGroupLabel>
                 <SidebarGroupContent>
@@ -117,7 +99,7 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
   )
 }
 
-function SidebarSkeleton() {
+export function SidebarSkeleton() {
   return (
     <div className="h-[calc(100svh-84px)] w-[16rem]">
       <div className="rounded-xl bg-gray-50 border mr-4 h-full">

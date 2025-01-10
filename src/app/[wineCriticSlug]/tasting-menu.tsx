@@ -5,9 +5,10 @@ import { BookOpenCheck, Building2, LayoutDashboard, Users } from "lucide-react"
 
 type Props = {
   wineCriticSlug: string
+  tastings: TastingDAO[]
 }
 
-export function getwineCriticMenu({ wineCriticSlug }: Props): MenuGroup[] {
+export function getwineCriticMenu({ wineCriticSlug, tastings }: Props): MenuGroup[] {
 
   return [
     {
@@ -22,10 +23,10 @@ export function getwineCriticMenu({ wineCriticSlug }: Props): MenuGroup[] {
           name: "Tastings",
           icon: <BookOpenCheck className="h-4 w-4" />,
           href: `/${wineCriticSlug}/tastings`,
-          // subItems: tastings.map((tasting) => ({
-          //   label: tasting.name,            
-          //   href: `/${wineCriticSlug}/tastings/${tasting.id}`,
-          // })) || [],
+          subItems: tastings.map((tasting) => ({
+            label: tasting.name,            
+            href: `/${wineCriticSlug}/tastings/${tasting.slug}`,
+          })),
         },        
         {
           name: "Wineries",

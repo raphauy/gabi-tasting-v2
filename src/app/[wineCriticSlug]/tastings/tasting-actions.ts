@@ -16,7 +16,7 @@ export async function createOrUpdateTastingAction(id: string | null, data: Tasti
         updated= await createTasting(data)
     }     
 
-    revalidatePath("/[tastingSlug]/tastings")
+    revalidatePath("/[wineCriticSlug]/tastings", "layout")
 
     return updated as TastingDAO
 }
@@ -24,7 +24,7 @@ export async function createOrUpdateTastingAction(id: string | null, data: Tasti
 export async function deleteTastingAction(id: string): Promise<TastingDAO | null> {    
     const deleted= await deleteTasting(id)
 
-    revalidatePath("/[tastingSlug]/tastings")
+    revalidatePath("/[wineCriticSlug]/tastings", "layout")
 
     return deleted as TastingDAO
 }

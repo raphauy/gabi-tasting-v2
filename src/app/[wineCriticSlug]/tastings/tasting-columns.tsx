@@ -25,7 +25,7 @@ export const columns: ColumnDef<TastingDAO>[] = [
       const valueLower = value.toLowerCase()
       return !!(data.name?.toLowerCase().includes(valueLower) ||
         data.slug?.toLowerCase().includes(valueLower) ||
-        data.wineCriticId?.toLowerCase().includes(valueLower))
+        data.description?.toLowerCase().includes(valueLower))
     },
   },
   
