@@ -2,6 +2,7 @@ import * as z from "zod"
 import { prisma } from "@/lib/db"
 import { WineCriticDAO } from "./winecritic-services"
 import { createTastingDay } from "./tastingday-services"
+import { getWineryDAOBySlug } from "./winery-services"
 
 export type TastingDAO = {
 	id: string
@@ -101,3 +102,20 @@ export async function deleteTasting(id: string) {
   return deleted
 }
 
+export async function getTastingsDAOByWinerySlug(winerySlug: string) {
+  const winery = await getWineryDAOBySlug(winerySlug)
+  if (!winery) {
+    throw new Error("Winery not found")
+  }
+  const found = await prisma.wineryTasting.findMany({
+    where: {
+      wineryId: winery.id      
+    },
+    include: {
+      tasting: true
+    }
+  })
+  const res= found.map(item => item.tasting) as TastingDAO[]
+  console.log(`Found ${res.length} tastings for winery ${winerySlug}`)
+  return res
+} 

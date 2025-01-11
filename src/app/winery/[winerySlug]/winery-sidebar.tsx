@@ -1,7 +1,8 @@
 import { SidebarComponent } from "@/components/layout/sidebar-component"
 import { MenuGroup } from "@/lib/utils"
+import { getTastingsDAOByWinerySlug, TastingDAO } from "@/services/tasting-services"
 import { getWinesDAOByWinerySlug, WineDAO } from "@/services/wine-services"
-import { Users } from "lucide-react"
+import { Glasses, Users } from "lucide-react"
 import { Wine } from "lucide-react"
 import { LayoutDashboard } from "lucide-react"
 
@@ -11,10 +12,11 @@ type Props = {
 
 export async function WinerySidebar({ winerySlug }: Props) {
     const wines= await getWinesDAOByWinerySlug(winerySlug)
-    return <SidebarComponent menuGroups={getWineryMenu(winerySlug, wines)} />
+    const tastings= await getTastingsDAOByWinerySlug(winerySlug)
+    return <SidebarComponent menuGroups={getWineryMenu(winerySlug, wines, tastings)} />
 }
 
-export function getWineryMenu(winerySlug: string, wines: WineDAO[]): MenuGroup[] {
+export function getWineryMenu(winerySlug: string, wines: WineDAO[], tastings: TastingDAO[]): MenuGroup[] {
 
     return [
       {
@@ -32,6 +34,15 @@ export function getWineryMenu(winerySlug: string, wines: WineDAO[]): MenuGroup[]
             subItems: wines.map(wine => ({
               label: wine.name,
               href: `/winery/${winerySlug}/wines/${wine.id}`,
+            })),
+          },
+          {
+            name: "Tastings",
+            icon: <Glasses className="h-4 w-4" />,
+            href: `/winery/${winerySlug}/tastings`,
+            subItems: tastings.map(tasting => ({
+              label: tasting.name,
+              href: `/winery/${winerySlug}/${tasting.slug}`,
             })),
           },
         ],

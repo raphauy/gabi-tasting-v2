@@ -24,7 +24,7 @@ export const columns: ColumnDef<TastingDAO>[] = [
     cell: ({ row }) => {
       const data = row.original
       return (
-        <Link href={`/${data.wineCritic.slug}/tastings/${data.slug}`}>
+        <Link href={`/${data.wineCritic.slug}/${data.slug}`}>
           <Button variant="link" className="p-0">
             {data.name}
           </Button>
