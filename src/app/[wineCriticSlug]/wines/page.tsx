@@ -8,11 +8,9 @@ export default async function WinePage() {
   const data= await getWinesDAO()
 
   return (
-    <div className="w-full">      
+    <div className="w-full space-y-4">      
 
-      <div className="flex justify-end mx-auto my-2">
-        <WineDialog />
-      </div>
+      <p className="text-2xl font-bold text-center">Wines</p>
 
       <div className="container bg-white p-3 py-4 mx-auto border rounded-md text-muted-foreground dark:text-white dark:bg-black">
         <DataTable columns={columns} data={data} subject="Wine"/>      

@@ -14,7 +14,8 @@ export default async function WinePage({ params }: Props) {
     return (
         <div className="flex flex-col gap-4 space-y-4">
             <p className="text-2xl font-bold text-center">{wine.name}</p>
-            <WineForm wineryId={winerySlug} id={wineId} />
+            <p className="text-center text-muted-foreground mb-2">{wine.tastings[0].name} - {wine.winery.name}</p>
+            <WineForm wineryId={wine.winery.id} id={wineId} tastingId={wine.tastings[0].id}/>
         </div>
     )
 }

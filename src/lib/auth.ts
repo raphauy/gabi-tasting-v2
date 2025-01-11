@@ -75,11 +75,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, trigger}) {
       //console.log("token", token)
 
-      const nodeEnv = process.env.NODE_ENV
-      if (nodeEnv === "development") {
-        console.log("dev mode")
-        return token
-      }
+      // const nodeEnv = process.env.NODE_ENV
+      // if (nodeEnv === "development") {
+      //   console.log("dev mode")
+      //   return token
+      // }
       
       if (!token.sub) return token
 

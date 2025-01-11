@@ -150,7 +150,7 @@ export const columns: ColumnDef<WineDAO>[] = [
       return (
         <div className="flex items-center justify-end gap-2">
 
-          <WineDialog id={data.id} />
+          <WineDialog id={data.id} wineryId={data.wineryId} />
           <DeleteWineDialog description={deleteDescription} id={data.id} />
         </div>
 

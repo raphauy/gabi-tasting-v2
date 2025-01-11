@@ -1,11 +1,7 @@
-import { columns as wineryColumns } from "@/app/[wineCriticSlug]/winerys/winery-columns"
-import { DataTable as WineryDataTable } from "@/app/[wineCriticSlug]/winerys/winery-table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getTastingDAOBySlug } from "@/services/tasting-services"
-import { getKanbanTastingDays, getTastingDaysDAO } from "@/services/tastingday-services"
-import { getWinerysDAOByTastingId } from "@/services/winery-services"
-import { columns } from "./tastingdays/tastingday-columns"
-import { DataTable } from "./tastingdays/tastingday-table"
+import { getKanbanTastingDays } from "@/services/tastingday-services"
+import AssociatedWineriesWrapper from "./associated-wineries-wrapper"
 import Kanban from "./kanban"
 
 type Props = {
@@ -22,7 +18,18 @@ export default async function TastingPage({ params }: Props) {
         <div className="space-y-10 w-full">
             <p className="text-2xl font-bold text-center">{tasting.name}</p>            
 
-            <Kanban tasting={tasting} initialTastingDays={tastingDays} />            
+            <Tabs defaultValue="kanban">
+                <TabsList>
+                    <TabsTrigger value="kanban">Kanban</TabsTrigger>
+                    <TabsTrigger value="wineries">Wineries</TabsTrigger>
+                </TabsList>
+                <TabsContent value="kanban">
+                    <Kanban tasting={tasting} initialTastingDays={tastingDays} />
+                </TabsContent>
+                <TabsContent value="wineries">
+                    <AssociatedWineriesWrapper tasting={tasting} />
+                </TabsContent>
+            </Tabs>
         </div>
     )
 }

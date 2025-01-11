@@ -12,16 +12,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader } from "lucide-react"
 import { WineStyle } from "@prisma/client"
+import { useRouter } from "next/navigation"
 
 const styles= Object.values(WineStyle)
 
 type Props = {
   id?: string
   wineryId: string
+  tastingId?: string
   closeDialog?: () => void
 }
 
-export function WineForm({ id, wineryId, closeDialog }: Props) {
+export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
   const form = useForm<WineFormValues>({
     resolver: zodResolver(WineSchema),
     defaultValues: {
@@ -30,20 +32,30 @@ export function WineForm({ id, wineryId, closeDialog }: Props) {
       region: "",
       abv: "",
       price: "",
-      wineryId
+      wineryId,
+      tastingId
     },
     mode: "onChange",
   })
   const [loading, setLoading] = useState(false)
   const { isDirty } = form.formState
+  const router = useRouter()
 
   const onSubmit = async (data: WineFormValues) => {
     setLoading(true)
     try {
-      await createOrUpdateWineAction(id ? id : null, data)
+      const updated= await createOrUpdateWineAction(id ? id : null, data)
+      if (!updated) {
+        toast({ title: "Error", description: "No se pudo crear o actualizar el vino", variant: "destructive" })
+        return
+      }
       toast({ title: id ? "Vino actualizado" : "Vino creado" })
       form.reset(data)
-      closeDialog && closeDialog()
+      if (closeDialog) {
+        closeDialog()
+      } else {
+        router.push(`/winery/${updated.winery.slug}/${updated.tastings[0].slug}`)
+      }
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" })
     } finally {
@@ -58,7 +70,8 @@ export function WineForm({ id, wineryId, closeDialog }: Props) {
           form.reset({
             ...data,
             abv: data.abv ? data.abv.toString() : undefined,
-            price: data.price ? data.price.toString() : undefined,            
+            price: data.price ? data.price.toString() : undefined,
+            tastingId
           })
         }
         Object.keys(form.getValues()).forEach((key: any) => {
@@ -68,7 +81,7 @@ export function WineForm({ id, wineryId, closeDialog }: Props) {
         })
       })
     }
-  }, [form, id])
+  }, [form, id, tastingId])
 
   return (
     <div className="rounded-lg border bg-card p-6 shadow-sm max-w-xl mx-auto w-full">

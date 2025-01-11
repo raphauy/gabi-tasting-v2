@@ -134,7 +134,16 @@ export async function getLastOTPSession(userId: string): Promise<OTPSessionDAO |
       createdAt: 'desc'
     },
     include: {
-      user: true
+      user: {
+        include: {
+          wineCritic: true,
+          winery: {
+            include: {
+              wineCritic: true
+            }
+          }
+        }
+      }
     }
   });
 }

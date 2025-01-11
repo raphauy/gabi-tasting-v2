@@ -24,7 +24,7 @@ export default async function UserPage({ params }: Props) {
   return (
     <div className="w-full max-w-4xl mx-auto py-6">      
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Usuarios de la Bodega</h1>
+        <p className="text-2xl font-bold">Usuarios de la Bodega</p>
         <UserDialog role={Role.WINERY} wineryId={winery.id} wineCriticId={winery.wineCriticId}/>
       </div>
 

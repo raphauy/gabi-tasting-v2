@@ -64,15 +64,9 @@ export async function getWineryDAOBySlug(slug: string) {
 }
     
 export async function createWinery(data: WineryFormValues) {
-  // TODO: implement createWinery
   const created = await prisma.winery.create({
     data
   })
-  
-  const defaultTastingDays = await getDefaultTastingDays()
-  for (const tastingDay of defaultTastingDays) {
-    await addWineryToTastingDay(tastingDay.id, created.id)
-  }
   
   return created
 }
@@ -118,4 +112,57 @@ export async function addWineryToTastingDay(tastingDayId: string, wineryId: stri
   })
 
   return created
+}
+
+export async function getWinerysDAOByWineCriticId(wineCriticId: string) {
+  const found = await prisma.winery.findMany({
+    where: {
+      wineCriticId
+    }
+  })
+  return found as WineryDAO[]
+}
+
+export async function addWineryToTasting(tastingId: string, wineryId: string) {
+  const created= await prisma.wineryTasting.create({
+    data: {
+      tastingId,
+      wineryId
+    }
+  })
+
+  // get default tasting day of tasting
+  const defaultTastingDay= await prisma.tastingDay.findFirst({
+    where: {
+      tastingId
+    }
+  })
+  if (defaultTastingDay) {
+    await addWineryToTastingDay(defaultTastingDay.id, wineryId)
+  } else {
+    console.error("No default tasting day found for tasting", tastingId)
+  }
+
+  return created
+}
+
+export async function removeWineryFromTasting(tastingId: string, wineryId: string) {
+  // first remove all tasting days of winery for this tasting
+  await prisma.tastingDayWinery.deleteMany({
+    where: {
+      wineryId,
+      tastingDay: {
+        tastingId
+      }
+    }
+  })
+  const deleted = await prisma.wineryTasting.delete({
+    where: {
+      wineryId_tastingId: {
+        wineryId,
+        tastingId
+      }
+    }
+  })
+  return deleted
 }

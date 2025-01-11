@@ -2,6 +2,7 @@ import * as z from "zod"
 import { prisma } from "@/lib/db"
 import { WineryDAO } from "./winery-services"
 import { WineStyle } from "@prisma/client"
+import { TastingDAO } from "./tasting-services"
 
 export type WineDAO = {
 	id: string
@@ -13,6 +14,7 @@ export type WineDAO = {
 	price: number | undefined
 	wineryId: string
 	winery: WineryDAO
+	tastings: TastingDAO[]
 	createdAt: Date
 	updatedAt: Date
 }
@@ -25,6 +27,7 @@ export const WineSchema = z.object({
 	abv: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
 	price: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
 	wineryId: z.string().min(1, "wineryId is required."),
+	tastingId: z.string(),
 })
 
 export type WineFormValues = z.infer<typeof WineSchema>
@@ -37,6 +40,38 @@ export async function getWinesDAO() {
     },
   })
   return found as WineDAO[]
+}
+
+export async function getWinesDAOByWineryAndTasting(wineryId: string, tastingId: string) {
+  const found = await prisma.wine.findMany({
+    where: {
+      wineryId,
+      tastings: {
+        some: {
+          tastingId
+        }
+      }
+    },
+    orderBy: {
+      id: 'asc'
+    },
+    include: {
+      tastings: {
+        include: {
+          tasting: true
+        }
+      },
+      winery: {
+        include: {
+          wineCritic: true
+        }
+      }
+    }
+  })
+  return found.map(wine => ({
+    ...wine,
+    tastings: wine.tastings.map(wt => wt.tasting)
+  })) as WineDAO[]
 }
 
 export async function getWinesDAOByWineryId(wineryId: string) {
@@ -56,39 +91,95 @@ export async function getWineDAO(id: string) {
     where: {
       id
     },
+    include: {
+      tastings: {
+        include: {
+          tasting: true
+        }
+      },
+      winery: {
+        include: {
+          wineCritic: true
+        }
+      }
+    }
   })
-  return found as WineDAO
+  if (!found) return null
+  return {
+    ...found,
+    tastings: found.tastings.map(wt => wt.tasting)
+  } as WineDAO
 }
 
 
     
 export async function createWine(data: WineFormValues) {
+  console.log(data)
   const abv = data.abv ? Number(data.abv) : null
   const price = data.price ? Number(data.price) : null
+  const { tastingId, ...wineData } = data
+
   const created = await prisma.wine.create({
     data: {
-      ...data,
+      ...wineData,
       abv,
-      price
+      price,
+      tastings: {
+        create: {
+          tastingId
+        }
+      }
+    },
+    include: {
+      tastings: {
+        include: {
+          tasting: true
+        }
+      },
+      winery: {
+        include: {
+          wineCritic: true
+        }
+      }
     }
   })
-  return created
+
+  return {
+    ...created,
+    tastings: created.tastings.map(wt => wt.tasting)
+  } as WineDAO
 }
 
 export async function updateWine(id: string, data: WineFormValues) {
   const abv = data.abv ? Number(data.abv) : null
   const price = data.price ? Number(data.price) : null
+  const { tastingId, ...wineData } = data
   const updated = await prisma.wine.update({
     where: {
       id
     },
     data: {
-      ...data,
+      ...wineData,
       abv,
       price
+    },
+    include: {
+      tastings: {
+        include: {
+          tasting: true
+        }
+      },
+      winery: {
+        include: {
+          wineCritic: true
+        }
+      }
     }
   })
-  return updated
+  return {
+    ...updated,
+    tastings: updated.tastings.map(wt => wt.tasting)
+  } as WineDAO
 }
 
 export async function deleteWine(id: string) {
@@ -101,12 +192,27 @@ export async function deleteWine(id: string) {
 }
 
 export async function getWinesDAOByWinerySlug(winerySlug: string) {
-  const found= await prisma.wine.findMany({
+  const found = await prisma.wine.findMany({
     where: {
       winery: {
         slug: winerySlug
       }
+    },
+    include: {
+      tastings: {
+        include: {
+          tasting: true
+        }
+      },
+      winery: {
+        include: {
+          wineCritic: true
+        }
+      }
     }
   })
-  return found as WineDAO[]
+  return found.map(wine => ({
+    ...wine,
+    tastings: wine.tastings.map(wt => wt.tasting)
+  })) as WineDAO[]
 }

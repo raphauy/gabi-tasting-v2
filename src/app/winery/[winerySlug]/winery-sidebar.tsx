@@ -33,7 +33,7 @@ export function getWineryMenu(winerySlug: string, wines: WineDAO[], tastings: Ta
             href: `/winery/${winerySlug}/wines`,
             subItems: wines.map(wine => ({
               label: wine.name,
-              href: `/winery/${winerySlug}/wines/${wine.id}`,
+              href: `/winery/${winerySlug}/${wine.tastings[0].slug}/${wine.id}`,
             })),
           },
           {
