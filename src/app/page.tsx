@@ -20,7 +20,7 @@ export default async function Home() {
   }
 
   if (user?.winerySlug && userRole === Role.WINERY) {
-    redirect(`/${user.wineCriticSlug}/${user.winerySlug}`)
+    redirect(`/winery/${user.winerySlug}`)
   }
 
   return (

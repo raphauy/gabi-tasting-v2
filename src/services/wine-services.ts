@@ -22,8 +22,8 @@ export const WineSchema = z.object({
 	vintage: z.string().min(1, "vintage is required."),
 	region: z.string().min(1, "region is required."),
 	style: z.nativeEnum(WineStyle),
-	abv: z.number().optional(),
-	price: z.number().optional(),
+	abv: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
+	price: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
 	wineryId: z.string().min(1, "wineryId is required."),
 })
 
@@ -63,19 +63,30 @@ export async function getWineDAO(id: string) {
 
     
 export async function createWine(data: WineFormValues) {
-  // TODO: implement createWine
+  const abv = data.abv ? Number(data.abv) : null
+  const price = data.price ? Number(data.price) : null
   const created = await prisma.wine.create({
-    data
+    data: {
+      ...data,
+      abv,
+      price
+    }
   })
   return created
 }
 
 export async function updateWine(id: string, data: WineFormValues) {
+  const abv = data.abv ? Number(data.abv) : null
+  const price = data.price ? Number(data.price) : null
   const updated = await prisma.wine.update({
     where: {
       id
     },
-    data
+    data: {
+      ...data,
+      abv,
+      price
+    }
   })
   return updated
 }
@@ -89,3 +100,13 @@ export async function deleteWine(id: string) {
   return deleted
 }
 
+export async function getWinesDAOByWinerySlug(winerySlug: string) {
+  const found= await prisma.wine.findMany({
+    where: {
+      winery: {
+        slug: winerySlug
+      }
+    }
+  })
+  return found as WineDAO[]
+}

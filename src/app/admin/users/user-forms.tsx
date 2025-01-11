@@ -1,25 +1,26 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "@/hooks/use-toast"
-import { useEffect, useState } from "react"
-import { deleteUserAction, createOrUpdateUserAction, getUserDAOAction } from "./user-actions"
-import { userSchema, UserFormValues } from '@/services/user-services'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Loader } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { toast } from "@/hooks/use-toast"
+import { UserFormValues, userSchema } from '@/services/user-services'
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Role } from "@prisma/client"
+import { Loader } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { createOrUpdateUserAction, deleteUserAction, getUserDAOAction } from "./user-actions"
 
 type Props= {
   id?: string
   role: Role
   wineCriticId?: string
+  wineryId?: string
   closeDialog: () => void
 }
 
-export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
+export function UserForm({ id, role, wineCriticId, wineryId, closeDialog }: Props) {
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -27,7 +28,8 @@ export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
       email: "",
       image: "",
       role,
-      wineCriticId
+      wineCriticId,
+      wineryId
     },
     mode: "onChange",
   })
@@ -97,9 +99,9 @@ export function UserForm({ id, role, wineCriticId, closeDialog }: Props) {
          
       
         <div className="flex justify-end">
-            <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
+            <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
             <Button type="submit" className="w-32 ml-2">
-              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Save</p>}
+              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Guardar</p>}
             </Button>
           </div>
         </form>
@@ -134,10 +136,10 @@ export function DeleteUserForm({ id, closeDialog }: DeleteProps) {
   
   return (
     <div>
-      <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
+      <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
       <Button onClick={handleDelete} variant="destructive" className="w-32 ml-2 gap-1">
         { loading && <Loader className="h-4 w-4 animate-spin" /> }
-        Delete  
+        Eliminar  
       </Button>
     </div>
   )

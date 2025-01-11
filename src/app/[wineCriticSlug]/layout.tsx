@@ -5,6 +5,7 @@ import { Role } from "@prisma/client"
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 import { TastingSidebar } from "./tasting-sidebar"
+import { NotAlowed } from "@/components/not-alowed"
 
 type Props = {
   children: React.ReactNode
@@ -22,7 +23,7 @@ export default async function TastingLayout({ children, params }: Props) {
   }
 
   if (session.user.role !== Role.SUPER_ADMIN && session.user.role !== Role.ADMIN && session.user.role !== Role.TASTER) {
-    return notFound()
+    return <NotAlowed message="No tienes permisos para acceder."/>
   }
 
   return (

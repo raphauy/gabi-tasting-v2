@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { format } from "date-fns"
 import { DeleteUserDialog, UserDialog } from "./user-dialogs"
+import { UserCard } from "@/components/user-card"
 
 
 export const columns: ColumnDef<UserDAO>[] = [
@@ -20,6 +21,10 @@ export const columns: ColumnDef<UserDAO>[] = [
             <ArrowUpDown className="w-4 h-4 ml-1" />
           </Button>
     )},
+    cell: ({ row }) => {
+      const data= row.original
+      return <UserCard user={data} />
+    },
     filterFn: (row, id, value) => {
       const data = row.original
       const valueLower = value.toLowerCase()
@@ -29,19 +34,6 @@ export const columns: ColumnDef<UserDAO>[] = [
       )
     },
   },
-
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-        return (
-          <Button variant="ghost" className="pl-0 dark:text-white"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Email
-            <ArrowUpDown className="w-4 h-4 ml-1" />
-          </Button>
-    )},
-  },
-
   {
     accessorKey: "emailVerified",
     header: ({ column }) => {
@@ -58,50 +50,12 @@ export const columns: ColumnDef<UserDAO>[] = [
       return (<p>{date}</p>)
     }
   },
-
   {
     accessorKey: "role",
-    header: ({ column }) => {
-        return (
-          <Button variant="ghost" className="pl-0 dark:text-white"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Role
-            <ArrowUpDown className="w-4 h-4 ml-1" />
-          </Button>
-    )},
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
   },
-
-  {
-    accessorKey: "updatedAt",
-    header: ({ column }) => {
-        return (
-          <Button variant="ghost" className="pl-0 dark:text-white"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            UpdatedAt
-            <ArrowUpDown className="w-4 h-4 ml-1" />
-          </Button>
-    )},
-		cell: ({ row }) => {
-      const data= row.original
-      const date= data.updatedAt && format(new Date(data.updatedAt), "yyyy-MM-dd")
-      return (<p>{date}</p>)
-    }
-  },
-  // {
-  //   accessorKey: "role",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button variant="ghost" className="pl-0 dark:text-white"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-  //         Rol
-  //         <ArrowUpDown className="w-4 h-4 ml-1" />
-  //       </Button>
-  //     )
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id))
-  //   },
-  // },
   {
     id: "actions",
     cell: ({ row }) => {

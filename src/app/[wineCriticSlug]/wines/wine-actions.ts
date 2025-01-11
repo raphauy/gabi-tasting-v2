@@ -16,7 +16,7 @@ export async function createOrUpdateWineAction(id: string | null, data: WineForm
         updated= await createWine(data)
     }     
 
-    revalidatePath("/[wineCriticSlug]/wines")
+    revalidatePath("/winery/[winerySlug]/wines", "page")
 
     return updated as WineDAO
 }
@@ -24,7 +24,7 @@ export async function createOrUpdateWineAction(id: string | null, data: WineForm
 export async function deleteWineAction(id: string): Promise<WineDAO | null> {    
     const deleted= await deleteWine(id)
 
-    revalidatePath("/[wineCriticSlug]/wines")
+    revalidatePath("/winery/[winerySlug]/wines", "page")
 
     return deleted as WineDAO
 }

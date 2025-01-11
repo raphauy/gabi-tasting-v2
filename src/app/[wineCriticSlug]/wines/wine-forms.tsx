@@ -9,34 +9,41 @@ import { WineSchema, WineFormValues } from '@/services/wine-services'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader } from "lucide-react"
+import { WineStyle } from "@prisma/client"
 
-
+const styles= Object.values(WineStyle)
 
 type Props = {
   id?: string
-  closeDialog: () => void
+  wineryId: string
+  closeDialog?: () => void
 }
 
-export function WineForm({ id, closeDialog }: Props) {
+export function WineForm({ id, wineryId, closeDialog }: Props) {
   const form = useForm<WineFormValues>({
     resolver: zodResolver(WineSchema),
     defaultValues: {
       name: "",
       vintage: "",
       region: "",
+      abv: "",
+      price: "",
+      wineryId
     },
     mode: "onChange",
   })
   const [loading, setLoading] = useState(false)
-
+  const { isDirty } = form.formState
 
   const onSubmit = async (data: WineFormValues) => {
     setLoading(true)
     try {
       await createOrUpdateWineAction(id ? id : null, data)
-      toast({ title: id ? "Wine updated" : "Wine created" })
-      closeDialog()
+      toast({ title: id ? "Vino actualizado" : "Vino creado" })
+      form.reset(data)
+      closeDialog && closeDialog()
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" })
     } finally {
@@ -48,7 +55,11 @@ export function WineForm({ id, closeDialog }: Props) {
     if (id) {
       getWineDAOAction(id).then((data) => {
         if (data) {
-          form.reset(data)
+          form.reset({
+            ...data,
+            abv: data.abv ? data.abv.toString() : undefined,
+            price: data.price ? data.price.toString() : undefined,            
+          })
         }
         Object.keys(form.getValues()).forEach((key: any) => {
           if (form.getValues(key) === null) {
@@ -60,92 +71,103 @@ export function WineForm({ id, closeDialog }: Props) {
   }, [form, id])
 
   return (
-    <div className="rounded-md">
+    <div className="rounded-lg border bg-card p-6 shadow-sm max-w-xl mx-auto w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="vintage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Vintage</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's vintage" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="region"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Region</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's region" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="style"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Style</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's style" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="abv"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Abv</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's abv" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input placeholder="Wine's price" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-5">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nombre del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vintage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Añada</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Añada del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="region"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Región</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Región del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="style"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estilo</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un estilo" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {styles.map(style => (
+                        <SelectItem key={style} value={style}>{style}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="abv"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Graduación alcohólica</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Graduación del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Precio</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Precio del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <div className="flex justify-end">
-            <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
-            <Button type="submit" className="w-32 ml-2">
-              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Save</p>}
+          <div className="flex justify-end space-x-4 pt-6 border-t">
+            <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
+            <Button type="submit" className="w-32 ml-2" disabled={!isDirty}>
+              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Guardar</p>}
             </Button>
           </div>
         </form>
@@ -167,7 +189,7 @@ export function DeleteWineForm({ id, closeDialog }: DeleteProps) {
     setLoading(true)
     deleteWineAction(id)
     .then(() => {
-      toast({title: "Wine deleted" })
+      toast({title: "Vino eliminado" })
     })
     .catch((error) => {
       toast({title: "Error", description: error.message, variant: "destructive"})
@@ -179,11 +201,11 @@ export function DeleteWineForm({ id, closeDialog }: DeleteProps) {
   }
   
   return (
-    <div>
-      <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
-      <Button onClick={handleDelete} variant="destructive" className="w-32 ml-2 gap-1">
+    <div className="flex justify-end space-x-4 pt-6 border-t">
+      <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
+      <Button onClick={handleDelete} variant="destructive" className="w-32 gap-1">
         { loading && <Loader className="h-4 w-4 animate-spin" /> }
-        Delete  
+        Eliminar  
       </Button>
     </div>
   )

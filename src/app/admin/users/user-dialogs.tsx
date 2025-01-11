@@ -11,14 +11,15 @@ type Props= {
   id?: string
   role: Role
   wineCriticId?: string
+  wineryId?: string
 }
 
 const updateTrigger= <Pencil size={30} className="pr-2 hover:cursor-pointer"/>
 
-export function UserDialog({ id, role, wineCriticId }: Props) {
+export function UserDialog({ id, role, wineCriticId, wineryId }: Props) {
   const [open, setOpen] = useState(false);
 
-  const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Crear usuario {role}</Button>
+  const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Crear usuario {role !== Role.WINERY ? role : ''}</Button>
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -32,7 +33,7 @@ export function UserDialog({ id, role, wineCriticId }: Props) {
             {id ? 'Actualiza la información del usuario.' : 'Introduce la información del usuario.'}
           </DialogDescription>
         </DialogHeader>
-        <UserForm closeDialog={() => setOpen(false)} id={id} role={role} wineCriticId={wineCriticId} />
+        <UserForm closeDialog={() => setOpen(false)} id={id} role={role} wineCriticId={wineCriticId} wineryId={wineryId} />
       </DialogContent>
     </Dialog>
   )

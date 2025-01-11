@@ -8,12 +8,13 @@ import { useState } from "react"
 
 type Props= {
   id?: string
+  wineryId: string
 }
 
 const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Create Wine</Button>
 const updateTrigger= <Pencil size={30} className="pr-2 hover:cursor-pointer"/>
 
-export function WineDialog({ id }: Props) {
+export function WineDialog({ id, wineryId }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,7 +29,7 @@ export function WineDialog({ id }: Props) {
             {id ? 'Update the Wine with the following fields:' : 'Create a new Wine with the following fields:'}
           </DialogDescription>
         </DialogHeader>
-        <WineForm closeDialog={() => setOpen(false)} id={id} />
+        <WineForm closeDialog={() => setOpen(false)} id={id} wineryId={wineryId} />
       </DialogContent>
     </Dialog>
   )

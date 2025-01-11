@@ -30,7 +30,7 @@ export default async function UserPage({ params }: Props) {
       </div>
 
       <div className="container bg-white p-3 py-4 mx-auto border rounded-md text-muted-foreground dark:text-white dark:bg-black">
-        <DataTable columns={columns} data={data} subject="User" roles={roles}/>      
+        <DataTable columns={columns} data={data} subject="User" roles={roles} columnsOff={["role"]} />      
       </div>
     </div>
   )

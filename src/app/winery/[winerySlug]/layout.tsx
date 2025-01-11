@@ -5,6 +5,9 @@ import { Role } from "@prisma/client"
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 import { WinerySidebar } from "./winery-sidebar"
+import { getWineryDAOBySlug } from "@/services/winery-services"
+import { log } from "console"
+import { NotAlowed } from "@/components/not-alowed"
 type Props = {
   children: React.ReactNode
   params: Promise<{ winerySlug: string }>
@@ -19,8 +22,21 @@ export default async function WineryLayout({ children, params }: Props) {
     return redirect("/login")
   }
 
-  if (session.user.role !== Role.SUPER_ADMIN && session.user.role !== Role.ADMIN && session.user.role !== Role.TASTER) {
+  const winery= await getWineryDAOBySlug(winerySlug)
+  console.log("Checking winery on layout", winerySlug)
+  if (!winery) {
     return notFound()
+  }
+
+  const user= session.user
+  const userWinecriticSlug= user.wineCriticSlug
+
+  if (user.role === Role.WINERY || user.role === Role.ADMIN || user.role === Role.TASTER) {
+    if (userWinecriticSlug !== winery.wineCritic.slug) {
+      const message= `El crítico asociado al usuario (${userWinecriticSlug}) no coincide con el crítico asociado a la Bodega (${winery.wineCritic.slug})`
+      console.log(message)
+      return <NotAlowed message={message}/>
+    }
   }
 
   return (

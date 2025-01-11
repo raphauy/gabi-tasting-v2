@@ -2,7 +2,8 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { Role } from "@prisma/client"
 import * as z from "zod"
-import { getWineCriticDAO } from "./winecritic-services"
+import { getWineCriticDAO, WineCriticDAO } from "./winecritic-services"
+import { WineryDAO } from "./winery-services"
 
 export type UserDAO = {
 	id: string
@@ -11,6 +12,10 @@ export type UserDAO = {
 	emailVerified: Date | null
 	image: string | null | undefined
 	role: Role
+	wineCriticId: string | null
+	wineCritic: WineCriticDAO | null
+	wineryId: string | null
+	winery: WineryDAO | null
 	createdAt: Date
 	updatedAt: Date
 }
@@ -21,6 +26,7 @@ export const userSchema = z.object({
 	role: z.nativeEnum(Role),
 	image: z.string().nullable().optional(),	
 	wineCriticId: z.string().nullable().optional(),
+	wineryId: z.string().nullable().optional(),
 })
 
 export type UserFormValues = z.infer<typeof userSchema>
@@ -77,6 +83,22 @@ export async function getWineCriticUsersDAO(wineCriticId: string) {
     where: {
       wineCriticId
     },
+    include: {
+      wineCritic: true,
+      winery: true
+    }
+  })
+  return found as UserDAO[]
+}
+
+export async function getWineryUsersDAO(wineryId: string) {
+  const found = await prisma.user.findMany({
+    where: {
+      wineryId
+    },
+    include: {
+      winery: true
+    }
   })
   return found as UserDAO[]
 }

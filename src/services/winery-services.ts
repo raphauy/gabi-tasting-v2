@@ -56,6 +56,9 @@ export async function getWineryDAOBySlug(slug: string) {
     where: {
       slug
     },
+    include: {
+      wineCritic: true
+    }
   })
   return found as WineryDAO
 }
