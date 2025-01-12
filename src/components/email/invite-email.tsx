@@ -23,7 +23,7 @@ export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName =
                 <img 
                   src="https://tasting.gabizimmer.com/log-mail.png"
                   alt="Gabi Tasting Logo"
-                  className="mx-auto h-14 w-14"
+                  className="mx-auto h-16 w-16"
                 />
               </div>
               <Heading className="text-center text-2xl mb-4 text-[#35472a]">
