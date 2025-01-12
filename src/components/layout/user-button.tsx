@@ -69,7 +69,7 @@ export function UserButton() {
         </DropdownMenuItem>
         {getCustomMenuItems(session.user.role).map((item) => (
           <DropdownMenuItem asChild key={item.name}>
-            <Link href={item.href} className="flex items-center justify-between w-full cursor-pointer">
+            <Link href={item.href || ""} className="flex items-center justify-between w-full cursor-pointer">
               <span>{item.name}</span>
               {item.icon}
             </Link>
