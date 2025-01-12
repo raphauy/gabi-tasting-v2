@@ -6,7 +6,7 @@ interface OtpEmailProps {
   code: string;
 }
 
-export default function OtpEmail({ code }: OtpEmailProps) {
+export default function OtpEmail({ code = "123456" }: OtpEmailProps) {
   return (
     <Html>
       <Head />

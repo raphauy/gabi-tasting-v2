@@ -27,7 +27,6 @@ export function getWineryMenu(winerySlug: string, wineryName: string, wines: Win
           {
             name: "Tastings",
             icon: <Glasses className="h-4 w-4" />,
-            href: `/winery/${winerySlug}/tastings`,
             subItems: tastings.map(tasting => ({
               label: tasting.name,
               href: `/winery/${winerySlug}/${tasting.slug}`,

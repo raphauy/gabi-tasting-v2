@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:seed": "dotenv -e .env -- tsx prisma/seed.ts",
-    "email": "email dev --port 3600 -d ./src/components/email"
+    "email": "email dev --port 3600 -d ./src/components/email",
+    "main": "tsx src/services/main.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
@@ -42,6 +43,7 @@
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "dotenv": "^16.4.7",
     "input-otp": "^1.4.1",
     "lucide-react": "^0.469.0",
     "next": "15.1.3",

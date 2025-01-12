@@ -70,10 +70,15 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
             tooltip={item.name}
             onClick={onMenuClick}
           >
+            {item.href ? 
             <Link href={item.href} prefetch={false}>
               {item.icon}
               <span>{item.name}</span>
-            </Link>
+            </Link> : 
+            <div>
+              {item.icon}
+              <span>{item.name}</span>
+            </div>}
           </SidebarMenuButton>
           {item.subItems && item.subItems.length > 0 && (
             <SidebarMenuSub>
@@ -84,10 +89,15 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
                     isActive={pathname === subItem.href}
                     onClick={onMenuClick}
                   >
+                    {subItem.href ? 
                     <Link href={subItem.href}>
                       {subItem.icon}
                       <span>{subItem.label}</span>
-                    </Link>
+                    </Link> : 
+                    <div>
+                      {subItem.icon}
+                      <span>{subItem.label}</span>
+                    </div>}
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))}
