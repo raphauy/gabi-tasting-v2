@@ -6,7 +6,7 @@ import { Role } from "@prisma/client"
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const TOKEN_SESSION_EXPIRATION_IN_MINUTES = 5
+const TOKEN_SESSION_EXPIRATION_IN_MINUTES = 15
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),

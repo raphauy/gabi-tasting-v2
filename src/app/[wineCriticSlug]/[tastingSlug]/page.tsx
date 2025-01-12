@@ -3,6 +3,7 @@ import { getTastingDAOBySlug } from "@/services/tasting-services"
 import { getKanbanTastingDays } from "@/services/tastingday-services"
 import AssociatedWineriesWrapper from "./associated-wineries-wrapper"
 import Kanban from "./kanban"
+import { getWinesDAOByTastingId } from "@/services/wine-services"
 
 type Props = {
     params: Promise<{ tastingSlug: string }>
@@ -11,7 +12,7 @@ type Props = {
 export default async function TastingPage({ params }: Props) {
     const { tastingSlug } = await params
     const tasting = await getTastingDAOBySlug(tastingSlug)
-
+    const wines = await getWinesDAOByTastingId(tasting.id)
     const tastingDays= await getKanbanTastingDays(tasting.id)
 
     return (
@@ -24,7 +25,7 @@ export default async function TastingPage({ params }: Props) {
                     <TabsTrigger value="wineries">Wineries</TabsTrigger>
                 </TabsList>
                 <TabsContent value="kanban">
-                    <Kanban tasting={tasting} initialTastingDays={tastingDays} />
+                    <Kanban tasting={tasting} initialTastingDays={tastingDays} wines={wines} />
                 </TabsContent>
                 <TabsContent value="wineries">
                     <AssociatedWineriesWrapper tasting={tasting} />

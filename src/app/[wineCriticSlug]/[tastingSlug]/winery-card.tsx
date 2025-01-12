@@ -5,12 +5,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { WineryDAO } from "@/services/winery-services";
 import { Draggable } from "@hello-pangea/dnd";
 import { WineryDialog } from "@/app/[wineCriticSlug]/winerys/winery-dialogs";
+import { WineDAO } from "@/services/wine-services";
+import DropdownWines from "./dropdown-wines";
 
 type Props = {
   winery: WineryDAO
+  wines: WineDAO[]
   index: number
 }
-export default function WineryCard({ winery, index }: Props) {
+export default function WineryCard({ winery, wines, index }: Props) {
 
   return (
     <>
@@ -32,7 +35,11 @@ export default function WineryCard({ winery, index }: Props) {
                       </div>
                       <WineryDialog id={winery.id} wineCriticId={winery.wineCriticId} />
                     </div>
-                  </CardContent>
+                    { 
+                      wines.length > 0 && 
+                      <DropdownWines wines={wines} />
+                    }
+                    </CardContent>
                 </Card>
               </div>
             )}

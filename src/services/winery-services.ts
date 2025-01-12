@@ -2,6 +2,7 @@ import * as z from "zod"
 import { prisma } from "@/lib/db"
 import { getDefaultTastingDays } from "./tastingday-services"
 import { WineCriticDAO } from "./winecritic-services"
+import { WineDAO } from "./wine-services"
 
 export type WineryDAO = {
 	id: string
@@ -35,7 +36,7 @@ export async function getWinerysDAO(wineCriticId: string) {
       id: 'asc'
     },
     include: {
-      wineCritic: true
+      wineCritic: true,
     }
   })
   return found as WineryDAO[]
@@ -165,4 +166,51 @@ export async function removeWineryFromTasting(tastingId: string, wineryId: strin
     }
   })
   return deleted
+}
+
+export async function addAllWineriesToTasting(tastingId: string, wineryIds: string[]) {
+  
+  for (const wineryId of wineryIds) {
+    await addWineryToTasting(tastingId, wineryId)
+  }
+
+  return true
+}
+
+export async function removeAllWineriesFromTasting(tastingId: string) {
+
+  const tastingWineries= await getWinerysDAOByTastingId(tastingId)
+  for (const tastingWinery of tastingWineries) {
+    await removeWineryFromTasting(tastingId, tastingWinery.id)
+  }
+  
+  return true
+}
+
+export async function getFirstTastingSlug(wineryId: string) {
+  const tasting= await prisma.winery.findFirst({
+    where: {
+      id: wineryId
+    },
+    include: {
+      tastings: {
+        orderBy: {
+          order: 'asc'
+        },
+        include: {
+          tasting: true
+        }
+      }
+    }
+  })
+  return tasting?.tastings[0].tasting.slug
+}
+
+export async function getWineryNameBySlug(slug: string) {
+  const winery= await prisma.winery.findUnique({
+    where: {
+      slug
+    }
+  })
+  return winery?.name
 }

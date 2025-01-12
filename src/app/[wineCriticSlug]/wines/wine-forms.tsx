@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader } from "lucide-react"
 import { WineStyle } from "@prisma/client"
 import { useRouter } from "next/navigation"
+import { DeleteWineDialog } from "./wine-dialogs"
 
 const styles= Object.values(WineStyle)
 
@@ -177,11 +178,14 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
             />
           </div>
 
-          <div className="flex justify-end space-x-4 pt-6 border-t">
-            <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
-            <Button type="submit" className="w-32 ml-2" disabled={!isDirty}>
-              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Guardar</p>}
-            </Button>
+          <div className="flex items-center justify-between space-x-4 pt-6 border-t">
+            { id && <DeleteWineDialog id={id} description="¿Estás seguro de que deseas eliminar este vino?"/> }
+            <div className="flex space-x-4">
+              <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
+              <Button type="submit" className="w-32 ml-2" disabled={!isDirty}>
+                {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Guardar</p>}
+              </Button>
+            </div>
           </div>
         </form>
       </Form>

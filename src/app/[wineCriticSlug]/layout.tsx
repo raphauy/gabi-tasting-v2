@@ -6,6 +6,7 @@ import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 import { TastingSidebar } from "./tasting-sidebar"
 import { NotAlowed } from "@/components/not-alowed"
+import { getCurrentUser } from "@/lib/utils"
 
 type Props = {
   children: React.ReactNode
@@ -16,13 +17,13 @@ export default async function TastingLayout({ children, params }: Props) {
 
   const { wineCriticSlug }= await params
 
-  const session= await auth()
+  const user= await getCurrentUser()
 
-  if (!session) {
+  if (!user) {
     return redirect("/login")
   }
 
-  if (session.user.role !== Role.SUPER_ADMIN && session.user.role !== Role.ADMIN && session.user.role !== Role.TASTER) {
+  if (user.role !== Role.SUPER_ADMIN && user.role !== Role.ADMIN && user.role !== Role.TASTER) {
     return <NotAlowed message="No tienes permisos para acceder."/>
   }
 

@@ -17,7 +17,7 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-explicit-any": "off",
     },
-  },
+  },  
 ];
 
 export default eslintConfig;

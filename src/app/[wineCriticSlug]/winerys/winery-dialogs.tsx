@@ -12,7 +12,7 @@ type Props= {
 }
 
 const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Create Winery</Button>
-const updateTrigger= <Pencil size={30} className="pr-2 hover:cursor-pointer"/>
+const updateTrigger= <div><Pencil className="pr-2 hover:cursor-pointer text-muted-foreground hover:text-foreground"/></div>
 
 export function WineryDialog({ id, wineCriticId }: Props) {
   const [open, setOpen] = useState(false);

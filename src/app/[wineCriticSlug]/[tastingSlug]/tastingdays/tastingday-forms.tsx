@@ -36,7 +36,7 @@ export function TastingDayForm({ id, tastingId, closeDialog }: Props) {
     setLoading(true)
     try {
       await createOrUpdateTastingDayAction(id ? id : null, data)
-      toast({ title: id ? "TastingDay updated" : "TastingDay created" })
+      toast({ title: id ? "TastingDay actualizado" : "TastingDay creado" })
       closeDialog()
     } catch (error: any) {
       toast({ title: "Error", description: error.message, variant: "destructive" })
@@ -78,9 +78,9 @@ export function TastingDayForm({ id, tastingId, closeDialog }: Props) {
           />
 
           <div className="flex justify-end">
-            <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancel</Button>
+            <Button onClick={() => closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
             <Button type="submit" className="w-32 ml-2">
-              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Save</p>}
+              {loading ? <Loader className="h-4 w-4 animate-spin" /> : <p>Guardar</p>}
             </Button>
           </div>
         </form>

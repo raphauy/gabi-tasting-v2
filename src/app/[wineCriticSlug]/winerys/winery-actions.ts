@@ -1,7 +1,7 @@
 "use server"
   
 import { revalidatePath } from "next/cache"
-import { WineryDAO, WineryFormValues, createWinery, updateWinery, getWineryDAO, deleteWinery, addWineryToTasting, removeWineryFromTasting } from "@/services/winery-services"
+import { WineryDAO, WineryFormValues, createWinery, updateWinery, getWineryDAO, deleteWinery, addWineryToTasting, removeWineryFromTasting, addAllWineriesToTasting, removeAllWineriesFromTasting } from "@/services/winery-services"
 import { WineryTastingDAO } from "@/services/winerytasting-services"
 
 
@@ -52,16 +52,24 @@ export async function removeWineryFromTastingAction(tastingId: string, wineryId:
     }
 }
 
-export async function addAllWineriesToTasting(tastingId: string, wineryIds: string[]) {
-    // Implementa la lógica para agregar todas las bodegas al tasting en la base de datos
+export async function addAllWineriesToTastingAction(tastingId: string, wineryIds: string[]) {
     console.log("Agregando todas las bodegas al tasting", tastingId)
-    // Ejemplo: await db.tasting.update({ where: { id: tastingId }, data: { wineries: { connect: wineryIds.map(id => ({ id })) } } })
-    revalidatePath(`/tastings/${tastingId}`)
+    const added= await addAllWineriesToTasting(tastingId, wineryIds)
+    if (added) {
+        revalidatePath("/[wineCriticSlug]", "page")
+        return true
+    } else {
+        return false
+    }
 }
 
-export async function removeAllWineriesFromTasting(tastingId: string) {
-    // Implementa la lógica para quitar todas las bodegas del tasting en la base de datos
+export async function removeAllWineriesFromTastingAction(tastingId: string) {
     console.log("Quitando todas las bodegas del tasting", tastingId)
-    // Ejemplo: await db.tasting.update({ where: { id: tastingId }, data: { wineries: { set: [] } } })
-    revalidatePath(`/tastings/${tastingId}`)
+    const removed= await removeAllWineriesFromTasting(tastingId)
+    if (removed) {
+        revalidatePath("/[wineCriticSlug]", "page")
+        return true
+    } else {
+        return false
+    }
 }

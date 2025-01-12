@@ -10,6 +10,7 @@ import { WineryTastingDAO } from "@/services/winerytasting-services";
 import { TastingDayWineryDAO } from '@/services/tastingdaywinery-services';
 import TastingDayColumn from './tasting-day-column';
 import { TastingDayDialog } from './tastingdays/tastingday-dialogs';
+import { WineDAO } from '@/services/wine-services';
 
 function reorder<T>(list: T[], startIndex: number, endIndex: number) {
   const result = Array.from(list)
@@ -20,10 +21,11 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 
 type Props = {
   tasting: TastingDAO;
+  wines: WineDAO[];
   initialTastingDays: KanbanTastingDayDAOWithWineries[];
 };
 
-export default function Kanban({ tasting, initialTastingDays }: Props) {
+export default function Kanban({ tasting, wines, initialTastingDays }: Props) {
   const [tastingDays, setTastingDays] = useState<KanbanTastingDayDAOWithWineries[]>(initialTastingDays)
 
   useEffect(() => {
@@ -121,7 +123,7 @@ export default function Kanban({ tasting, initialTastingDays }: Props) {
             {(provided) => (
               <ol className="flex gap-x-3 h-full min-h-[600px]" ref={provided.innerRef} {...provided.droppableProps}>
                 {tastingDays.map((tastingDay, index) => (
-                  <TastingDayColumn key={tastingDay.id} tastingDay={tastingDay} index={index} />
+                  <TastingDayColumn key={tastingDay.id} tastingDay={tastingDay} index={index} wines={wines} />
                 ))}
                 {provided.placeholder}
                 <TastingDayDialog tastingId={tasting.id} />

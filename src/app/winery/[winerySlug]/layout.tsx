@@ -1,13 +1,12 @@
 import { SidebarSkeleton } from "@/components/layout/sidebar-component"
+import { NotAlowed } from "@/components/not-alowed"
 import { SidebarProvider } from "@/components/ui/sidebar"
-import { auth } from "@/lib/auth"
+import { getCurrentUser } from "@/lib/utils"
+import { getWineryDAOBySlug } from "@/services/winery-services"
 import { Role } from "@prisma/client"
 import { notFound, redirect } from "next/navigation"
 import { Suspense } from "react"
 import { WinerySidebar } from "./winery-sidebar"
-import { getWineryDAOBySlug } from "@/services/winery-services"
-import { log } from "console"
-import { NotAlowed } from "@/components/not-alowed"
 type Props = {
   children: React.ReactNode
   params: Promise<{ winerySlug: string }>
@@ -16,9 +15,9 @@ type Props = {
 export default async function WineryLayout({ children, params }: Props) {
 
   const { winerySlug }= await params
-  const session= await auth()
+  const user= await getCurrentUser()
 
-  if (!session) {
+  if (!user) {
     return redirect("/login")
   }
 
@@ -28,7 +27,6 @@ export default async function WineryLayout({ children, params }: Props) {
     return notFound()
   }
 
-  const user= session.user
   const userWinecriticSlug= user.wineCriticSlug
 
   if (user.role === Role.WINERY || user.role === Role.ADMIN || user.role === Role.TASTER) {

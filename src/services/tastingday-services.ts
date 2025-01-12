@@ -77,6 +77,19 @@ export async function updateTastingDay(id: string, data: TastingDayFormValues) {
 }
 
 export async function deleteTastingDay(id: string) {
+  const tastingDay = await getTastingDayDAO(id)
+  // add all tasting day wineries to the default tasting day
+  const defaultTastingDay = await getDefaultTastingDay(tastingDay.tastingId)
+  if (defaultTastingDay) {
+    await prisma.tastingDayWinery.updateMany({
+      where: {
+        tastingDayId: id
+      },
+      data: {
+        tastingDayId: defaultTastingDay.id
+      }
+    })
+  }
   const deleted = await prisma.tastingDay.delete({
     where: {
       id
@@ -137,4 +150,14 @@ export async function getDefaultTastingDays() {
     }
   })
   return tastingDays as TastingDayDAO[]
+}
+
+export async function getDefaultTastingDay(tastingId: string) {
+  const tastingDay = await prisma.tastingDay.findFirst({
+    where: {
+      tastingId,
+      isDefault: true
+    }
+  })
+  return tastingDay
 }

@@ -46,7 +46,7 @@ export function DeleteWineDialog({ id, description }: DeleteProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Trash2 className="hover:cursor-pointer"/>
+        <Trash2 className="hover:cursor-pointer text-red-500"/>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

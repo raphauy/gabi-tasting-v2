@@ -4,17 +4,19 @@ import { auth } from "@/lib/auth"
 import { Role } from "@prisma/client"
 import { redirect } from "next/navigation"
 import { adminMenu } from "./admin-menu"
+import { getCurrentUser } from "@/lib/utils"
+import { NotAlowed } from "@/components/not-alowed"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
 
-  const session= await auth()
+  const user= await getCurrentUser()
 
-  if (!session) {
+  if (!user) {
     return redirect("/login")
   }
 
-  if (session.user.role !== Role.SUPER_ADMIN) {
-    return redirect("/")
+  if (user.role !== Role.SUPER_ADMIN) {
+    return <NotAlowed message="No tienes permisos para acceder a esta sección" />
   }
 
   return (

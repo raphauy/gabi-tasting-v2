@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { TastingDayForm, DeleteTastingDayForm } from "./tastingday-forms"
-import { PlusCircle, Pencil, Trash2 } from "lucide-react"
+import { PlusCircle, Pencil, Trash2, Calendar } from "lucide-react"
 import { useState } from "react"
 
 type Props= {
@@ -12,7 +12,7 @@ type Props= {
 }
 
 const addTrigger= <Button><PlusCircle size={22} className="mr-2"/>Create TastingDay</Button>
-const updateTrigger= <Pencil size={30} className="pr-2 hover:cursor-pointer"/>
+const updateTrigger= <Calendar size={18} className="hover:cursor-pointer"/>
 
 export function TastingDayDialog({ id, tastingId }: Props) {
   const [open, setOpen] = useState(false);
@@ -24,9 +24,9 @@ export function TastingDayDialog({ id, tastingId }: Props) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{id ? 'Update' : 'Create'} TastingDay</DialogTitle>
+          <DialogTitle>{id ? 'Actualizar' : 'Crear'} TastingDay</DialogTitle>
           <DialogDescription>
-            {id ? 'Update the TastingDay with the following fields:' : 'Create a new TastingDay with the following fields:'}
+            {id ? 'Actualiza la fecha del tasting day:' : 'Define la fecha del tasting day:'}
           </DialogDescription>
         </DialogHeader>
         <TastingDayForm closeDialog={() => setOpen(false)} id={id} tastingId={tastingId} />
@@ -46,11 +46,11 @@ export function DeleteTastingDayDialog({ id, description }: DeleteProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Trash2 className="hover:cursor-pointer"/>
+        <Trash2 size={18} className="hover:cursor-pointer text-red-500"/>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete TastingDay</DialogTitle>
+          <DialogTitle>Eliminar TastingDay</DialogTitle>
           <DialogDescription className="py-8">{description}</DialogDescription>
         </DialogHeader>
         <DeleteTastingDayForm closeDialog={() => setOpen(false)} id={id} />

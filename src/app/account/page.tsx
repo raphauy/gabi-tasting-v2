@@ -3,15 +3,16 @@ import { EditableField } from "@/components/editable-field"
 import { updateUserAvatar, updateUserName } from "./actions"
 import { getUserDAO } from "@/services/user-services"
 import { AvatarField } from "@/components/avatar-field"
+import { getCurrentUser } from "@/lib/utils"
 
 export default async function AccountPage() {
-  const session = await auth()
-  if (!session?.user?.id) {
-    console.log("No user id, user: ", session?.user)
+  const sessionUser = await getCurrentUser()
+  if (!sessionUser?.id) {
+    console.log("No user id, user: ", sessionUser)
     return null
   }
 
-  const user = await getUserDAO(session.user.id)
+  const user = await getUserDAO(sessionUser.id)
 
   return (
     <div className="mx-auto p-6 w-full">

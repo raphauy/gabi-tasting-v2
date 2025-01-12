@@ -33,8 +33,18 @@ export const WineSchema = z.object({
 export type WineFormValues = z.infer<typeof WineSchema>
 
 
-export async function getWinesDAO() {
+export async function getWinesDAOByWineCriticSlug(wineCriticSlug: string) {
   const found = await prisma.wine.findMany({
+    where: {
+      winery: {
+        wineCritic: {
+          slug: wineCriticSlug
+        }
+      }
+    },
+    include: {
+      winery: true
+    },
     orderBy: {
       id: 'asc'
     },
@@ -79,9 +89,33 @@ export async function getWinesDAOByWineryId(wineryId: string) {
     where: {
       wineryId
     },
+    include: {
+      winery: true,
+      tastings: {
+        include: {
+          tasting: true
+        }
+      }
+    },
     orderBy: {
       id: 'asc'
     },
+  })
+  return found.map(wine => ({
+    ...wine,
+    tastings: wine.tastings.map(wt => wt.tasting)
+  })) as WineDAO[]
+}
+
+export async function getWinesDAOByTastingId(tastingId: string) {
+  const found = await prisma.wine.findMany({
+    where: {
+      tastings: {
+        some: {
+          tastingId
+        }
+      }
+    }
   })
   return found as WineDAO[]
 }

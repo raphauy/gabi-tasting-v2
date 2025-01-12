@@ -1,11 +1,7 @@
 import { columns } from "@/app/[wineCriticSlug]/wines/wine-columns"
-import { WineDialog } from "@/app/[wineCriticSlug]/wines/wine-dialogs"
 import { DataTable } from "@/app/[wineCriticSlug]/wines/wine-table"
-import { Button } from "@/components/ui/button"
-import { getWinesDAO, getWinesDAOByWineryId } from "@/services/wine-services"
+import { getWinesDAOByWineryId } from "@/services/wine-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
-import { PlusCircle } from "lucide-react"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 
 type Props = {

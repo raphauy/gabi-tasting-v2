@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { format } from "date-fns"
 import { DeleteWineDialog, WineDialog } from "./wine-dialogs"
+import Link from "next/link"
 
 
 export const columns: ColumnDef<WineDAO>[] = [
@@ -18,6 +19,16 @@ export const columns: ColumnDef<WineDAO>[] = [
           Name
           <ArrowUpDown className="w-4 h-4 ml-1" />
         </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const data= row.original
+      return (
+        <Link href={`/winery/${data.winery.slug}/${data.tastings[0].slug}/${data.id}`}>
+          <Button variant="link" className="px-0">
+            {data.name}
+          </Button>
+        </Link>
       )
     },
     filterFn: (row, id, value) => {
@@ -93,29 +104,12 @@ export const columns: ColumnDef<WineDAO>[] = [
   },
 
   {
-    accessorKey: "createdAt",
-    header: ({ column }) => {
-        return (
-          <Button variant="ghost" className="pl-0 dark:text-white"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            CreatedAt
-            <ArrowUpDown className="w-4 h-4 ml-1" />
-          </Button>
-    )},
-		cell: ({ row }) => {
-      const data= row.original
-      const date= data.createdAt && format(new Date(data.createdAt), "yyyy-MM-dd")
-      return (<p>{date}</p>)
-    }
-  },
-
-  {
     accessorKey: "updatedAt",
     header: ({ column }) => {
         return (
           <Button variant="ghost" className="pl-0 dark:text-white"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            UpdatedAt
+            Actualizado
             <ArrowUpDown className="w-4 h-4 ml-1" />
           </Button>
     )},
@@ -125,32 +119,15 @@ export const columns: ColumnDef<WineDAO>[] = [
       return (<p>{date}</p>)
     }
   },
-  // {
-  //   accessorKey: "role",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button variant="ghost" className="pl-0 dark:text-white"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-  //         Rol
-  //         <ArrowUpDown className="w-4 h-4 ml-1" />
-  //       </Button>
-  //     )
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id))
-  //   },
-  // },
   {
     id: "actions",
     cell: ({ row }) => {
       const data= row.original
 
-      const deleteDescription= `Do you want to delete Wine ${data.id}?`
+      const deleteDescription= `¿Estás seguro de que deseas eliminar el vino ${data.name}?`
  
       return (
         <div className="flex items-center justify-end gap-2">
-
-          <WineDialog id={data.id} wineryId={data.wineryId} />
           <DeleteWineDialog description={deleteDescription} id={data.id} />
         </div>
 

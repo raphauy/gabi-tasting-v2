@@ -2,6 +2,7 @@ import { SidebarComponent } from "@/components/layout/sidebar-component"
 import { MenuGroup } from "@/lib/utils"
 import { getTastingsDAOByWinerySlug, TastingDAO } from "@/services/tasting-services"
 import { getWinesDAOByWinerySlug, WineDAO } from "@/services/wine-services"
+import { getWineryNameBySlug } from "@/services/winery-services"
 import { Glasses, Users } from "lucide-react"
 import { Wine } from "lucide-react"
 import { LayoutDashboard } from "lucide-react"
@@ -11,21 +12,26 @@ type Props = {
 }
 
 export async function WinerySidebar({ winerySlug }: Props) {
+    const wineryName= await getWineryNameBySlug(winerySlug) || "Bodega"
     const wines= await getWinesDAOByWinerySlug(winerySlug)
     const tastings= await getTastingsDAOByWinerySlug(winerySlug)
-    return <SidebarComponent menuGroups={getWineryMenu(winerySlug, wines, tastings)} />
+    return <SidebarComponent menuGroups={getWineryMenu(winerySlug, wineryName, wines, tastings)} />
 }
 
-export function getWineryMenu(winerySlug: string, wines: WineDAO[], tastings: TastingDAO[]): MenuGroup[] {
+export function getWineryMenu(winerySlug: string, wineryName: string, wines: WineDAO[], tastings: TastingDAO[]): MenuGroup[] {
 
     return [
       {
-        name: "Winery",
+        name: `${wineryName}`,
         items: [
           {
-            name: "Dashboard",
-            icon: <LayoutDashboard className="h-4 w-4" />,
-            href: `/winery/${winerySlug}`,
+            name: "Tastings",
+            icon: <Glasses className="h-4 w-4" />,
+            href: `/winery/${winerySlug}/tastings`,
+            subItems: tastings.map(tasting => ({
+              label: tasting.name,
+              href: `/winery/${winerySlug}/${tasting.slug}`,
+            })),
           },
           {
             name: "Vinos",
@@ -34,15 +40,6 @@ export function getWineryMenu(winerySlug: string, wines: WineDAO[], tastings: Ta
             subItems: wines.map(wine => ({
               label: wine.name,
               href: `/winery/${winerySlug}/${wine.tastings[0].slug}/${wine.id}`,
-            })),
-          },
-          {
-            name: "Tastings",
-            icon: <Glasses className="h-4 w-4" />,
-            href: `/winery/${winerySlug}/tastings`,
-            subItems: tastings.map(tasting => ({
-              label: tasting.name,
-              href: `/winery/${winerySlug}/${tasting.slug}`,
             })),
           },
         ],
