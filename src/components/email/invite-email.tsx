@@ -19,16 +19,12 @@ export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName =
           <Container className="mx-auto py-20 px-4">
             <Section className="border border-solid border-gray-200 rounded-lg p-8 shadow-sm">
               <div className="text-center mb-4">
-                {/* Ícono de copa de vino */}
-                <svg
-                  className="mx-auto h-12 w-12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#35472a"
-                  strokeWidth="2"
-                >
-                  <path d="M12 20v-7m0 0c3.5-1 5-4 5-7H7c0 3 1.5 6 5 7zM7 6h10M12 20h5a1 1 0 001-1v-1H6v1a1 1 0 001 1h5z" />
-                </svg>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src="https://tasting.gabizimmer.com/log-mail.png"
+                  alt="Gabi Tasting Logo"
+                  className="mx-auto h-14 w-14"
+                />
               </div>
               <Heading className="text-center text-2xl mb-4 text-[#35472a]">
                 BIENVENIDO A GABI TASTING

@@ -7,6 +7,7 @@ import { getWinesDAOByWineryAndTasting } from "@/services/wine-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 type Props = {
     params: Promise<{
@@ -56,6 +57,15 @@ function getEmptyWinesComponent(tastingName: string, winerySlug: string, tasting
   return (
     <div className="w-full max-w-5xl mx-auto py-12">
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center bg-muted">
+        <div className="mb-6">
+          <Image
+            src="/empty-wine.png"
+            alt="No hay vinos"
+            width={120}
+            height={120}
+            className="mx-auto opacity-50"
+          />
+        </div>
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
           Aún no tienes vinos inscriptos en {tastingName}
         </h3>
