@@ -8,7 +8,7 @@ import { deleteWineAction, createOrUpdateWineAction, getWineDAOAction } from "./
 import { WineSchema, WineFormValues } from '@/services/wine-services'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader } from "lucide-react"
 import { WineStyle } from "@prisma/client"
@@ -169,6 +169,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
+                  <FormDescription>Precio del vino en pesos uruguayos, mercado local</FormDescription>
                   <FormControl>
                     <Input placeholder="Precio del vino" {...field} />
                   </FormControl>
