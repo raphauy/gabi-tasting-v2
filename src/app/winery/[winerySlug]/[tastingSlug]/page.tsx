@@ -58,13 +58,30 @@ function getEmptyWinesComponent(tastingName: string, winerySlug: string, tasting
     <div className="w-full max-w-5xl mx-auto py-12">
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center bg-muted">
         <div className="mb-6">
-          <Image
-            src="/empty-wine.png"
-            alt="No hay vinos"
-            width={120}
-            height={120}
-            className="mx-auto opacity-50"
-          />
+          <svg 
+            width="120" 
+            height="120" 
+            viewBox="0 0 120 120" 
+            className="mx-auto text-gray-400"
+          >
+            {/* Cuello de la botella */}
+            <path 
+              d="M55 15H65V40C65 40 75 45 75 55C75 65 75 100 75 100H45C45 100 45 65 45 55C45 45 55 40 55 40V15Z" 
+              stroke="currentColor" 
+              fill="none"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            
+            {/* Boca de la botella */}
+            <path 
+              d="M52 15H68" 
+              stroke="currentColor" 
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
           Aún no tienes vinos inscriptos en {tastingName}

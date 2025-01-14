@@ -1,4 +1,4 @@
-import { SidebarComponent } from "@/components/layout/sidebar-component"
+import { SidebarComponent, SidebarSkeleton } from "@/components/layout/sidebar-component"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { auth } from "@/lib/auth"
 import { Role } from "@prisma/client"
@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { adminMenu } from "./admin-menu"
 import { getCurrentUser } from "@/lib/utils"
 import { NotAlowed } from "@/components/not-alowed"
+import { Suspense } from "react"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
 
@@ -23,9 +24,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="w-full h-full">
       <SidebarProvider className="h-full flex">
         <div className="flex h-full w-full">
-          <div className="md:w-[16rem]">
+          <Suspense fallback={<SidebarSkeleton />}>
             <SidebarComponent menuGroups={adminMenu} />
-          </div>
+          </Suspense>
           
           <main className="p-2 w-full flex-1 overflow-auto mt-10 md:mt-0">
             {children}

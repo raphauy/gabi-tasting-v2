@@ -43,13 +43,21 @@ export async function getWinesDAOByWineCriticSlug(wineCriticSlug: string) {
       }
     },
     include: {
-      winery: true
+      winery: true,
+      tastings: {
+        include: {
+          tasting: true
+        }
+      }
     },
     orderBy: {
       id: 'asc'
     },
   })
-  return found as WineDAO[]
+  return found.map(wine => ({
+    ...wine,
+    tastings: wine.tastings.map(wt => wt.tasting)
+  })) as WineDAO[]
 }
 
 export async function getWinesDAOByWineryAndTasting(wineryId: string, tastingId: string) {

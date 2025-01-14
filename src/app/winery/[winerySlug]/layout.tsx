@@ -41,11 +41,9 @@ export default async function WineryLayout({ children, params }: Props) {
     <div className="w-full h-full">
       <SidebarProvider className="h-full flex">
         <div className="flex h-full w-full">
-          <div className="md:w-[16rem]">
-            <Suspense fallback={<SidebarSkeleton />}>
-              <WinerySidebar winerySlug={winerySlug} />
-            </Suspense>
-          </div>
+          <Suspense fallback={<SidebarSkeleton />}>
+            <WinerySidebar winerySlug={winerySlug} />
+          </Suspense>
           
           <main className="p-2 w-full flex-1 overflow-auto mt-10 md:mt-0">
             {children}

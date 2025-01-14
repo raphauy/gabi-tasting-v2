@@ -31,11 +31,9 @@ export default async function TastingLayout({ children, params }: Props) {
     <div className="w-full h-full">
       <SidebarProvider className="h-full flex">
         <div className="flex h-full w-full">
-          <div className="md:w-[16rem]">
-            <Suspense fallback={<SidebarSkeleton />}>
-              <TastingSidebar wineCriticSlug={wineCriticSlug} />
-            </Suspense>
-          </div>
+          <Suspense fallback={<SidebarSkeleton />}>
+            <TastingSidebar wineCriticSlug={wineCriticSlug} />
+          </Suspense>
           
           <main className="p-2 w-full flex-1 overflow-auto mt-10 md:mt-0">
             {children}
