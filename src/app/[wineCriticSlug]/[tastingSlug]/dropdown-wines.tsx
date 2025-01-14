@@ -21,7 +21,12 @@ export default function DropdownWines({ wines }: Props) {
       className="w-full space-y-2"
     >
       <CollapsibleTrigger className="flex w-full items-center justify-between hover:bg-muted mt-2 text-muted-foreground">
-        <span>{wines.length} vinos</span>
+        <div className="flex items-center space-x-2">
+          <div className="rounded-full bg-muted p-2 w-7 h-7 border bg-green-500 text-white flex items-center justify-center font-bold">
+            {wines.length}
+          </div>
+          <p>vino{wines.length > 1 ? 's' : ''}</p>
+        </div>
         <ChevronDown className={cn(
           "h-4 w-4 transition-transform duration-200",
           isOpen && "rotate-180"
