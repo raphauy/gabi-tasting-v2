@@ -4,11 +4,12 @@ import { getTastingNameBySlugAction } from "@/app/[wineCriticSlug]/tastings/tast
 import { getWineryNameBySlugAction } from "@/app/[wineCriticSlug]/winerys/winery-actions"
 import { getWineCriticNameBySlugAction } from "@/app/admin/winecritics/winecritic-actions"
 import { cn } from "@/lib/utils"
-import { useParams } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 
 export function HeaderLabel() {
   const params = useParams()
+  const pathname = usePathname()
   
   const [names, setNames] = useState({
     winery: "",
@@ -75,7 +76,7 @@ export function HeaderLabel() {
       <div className="hidden md:flex items-center">{renderSlashAndText(names.tasting)}</div>
       {renderSlashAndText(names.winery)}
 
-      {!names.tasting && !names.winery && !names.wineCritic && (
+      {pathname.startsWith("/admin") && (
         <>
           <div>{getSVGSlash()}</div>
           <p>Admin</p>
