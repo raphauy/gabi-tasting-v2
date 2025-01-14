@@ -72,3 +72,12 @@ export async function getWineCriticDAOBySlug(slug: string) {
   })
   return found
 }
+
+export async function getWineCriticNameBySlug(slug: string) {
+  const found = await prisma.wineCritic.findUnique({
+    where: {
+      slug
+    },
+  })
+  return found?.name || ""
+}

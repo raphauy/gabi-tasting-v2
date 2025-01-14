@@ -119,3 +119,8 @@ export async function getTastingsDAOByWinerySlug(winerySlug: string) {
   console.log(`Found ${res.length} tastings for winery ${winerySlug}`)
   return res
 } 
+
+export async function getTastingNameBySlug(slug: string) {
+  const tasting = await getTastingDAOBySlug(slug)
+  return tasting?.name || ""
+}

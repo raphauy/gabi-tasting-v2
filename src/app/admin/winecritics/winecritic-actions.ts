@@ -1,7 +1,7 @@
 "use server"
   
 import { revalidatePath } from "next/cache"
-import { WineCriticDAO, WineCriticFormValues, createWineCritic, updateWineCritic, getWineCriticDAO, deleteWineCritic } from "@/services/winecritic-services"
+import { WineCriticDAO, WineCriticFormValues, createWineCritic, updateWineCritic, getWineCriticDAO, deleteWineCritic, getWineCriticNameBySlug } from "@/services/winecritic-services"
 
 
 export async function getWineCriticDAOAction(id: string): Promise<WineCriticDAO | null> {
@@ -29,3 +29,7 @@ export async function deleteWineCriticAction(id: string): Promise<WineCriticDAO 
     return deleted as WineCriticDAO
 }
 
+export async function getWineCriticNameBySlugAction(slug: string): Promise<string> {
+    const name = await getWineCriticNameBySlug(slug)
+    return name || ""
+}

@@ -1,7 +1,7 @@
 "use server"
   
 import { revalidatePath } from "next/cache"
-import { TastingDAO, TastingFormValues, createTasting, updateTasting, getTastingDAO, deleteTasting } from "@/services/tasting-services"
+import { TastingDAO, TastingFormValues, createTasting, updateTasting, getTastingDAO, deleteTasting, getTastingNameBySlug } from "@/services/tasting-services"
 
 
 export async function getTastingDAOAction(id: string): Promise<TastingDAO | null> {
@@ -29,3 +29,7 @@ export async function deleteTastingAction(id: string): Promise<TastingDAO | null
     return deleted as TastingDAO
 }
 
+export async function getTastingNameBySlugAction(slug: string): Promise<string> {
+    const name = await getTastingNameBySlug(slug)
+    return name || ""
+}

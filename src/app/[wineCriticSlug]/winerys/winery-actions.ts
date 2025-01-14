@@ -1,12 +1,17 @@
 "use server"
   
 import { revalidatePath } from "next/cache"
-import { WineryDAO, WineryFormValues, createWinery, updateWinery, getWineryDAO, deleteWinery, addWineryToTasting, removeWineryFromTasting, addAllWineriesToTasting, removeAllWineriesFromTasting } from "@/services/winery-services"
+import { WineryDAO, WineryFormValues, createWinery, updateWinery, getWineryDAO, deleteWinery, addWineryToTasting, removeWineryFromTasting, addAllWineriesToTasting, removeAllWineriesFromTasting, getWineryNameBySlug } from "@/services/winery-services"
 import { WineryTastingDAO } from "@/services/winerytasting-services"
 
 
 export async function getWineryDAOAction(id: string): Promise<WineryDAO | null> {
     return getWineryDAO(id)
+}
+
+export async function getWineryNameBySlugAction(slug: string): Promise<string> {
+    const name = await getWineryNameBySlug(slug)
+    return name || ""
 }
 
 export async function createOrUpdateWineryAction(id: string | null, data: WineryFormValues): Promise<WineryDAO | null> {       
