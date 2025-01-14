@@ -203,6 +203,8 @@ export async function getFirstTastingSlug(wineryId: string) {
       }
     }
   })
+  if (tasting?.tastings.length === 0) return null
+
   return tasting?.tastings[0].tasting.slug
 }
 

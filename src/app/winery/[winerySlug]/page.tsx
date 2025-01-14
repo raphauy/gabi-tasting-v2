@@ -20,6 +20,8 @@ export default async function WineryPage({ params }: Props) {
 
   if (firstTasting) {
     redirect(`/winery/${winerySlug}/${firstTasting}`)
+  } else {
+    return <div>Esta bodega no tiene ningún tasting asociado</div>
   }
 
   return (
