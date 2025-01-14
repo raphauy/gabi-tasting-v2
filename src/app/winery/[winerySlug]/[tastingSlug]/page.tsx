@@ -87,12 +87,12 @@ function getEmptyWinesComponent(tastingName: string, winerySlug: string, tasting
           Aún no tienes vinos inscriptos en {tastingName}
         </h3>
         <p className="text-gray-500 mb-6">
-          Comienza agregando tu primer vino a esta degustación
+          Comienza agregando tu primer vino a este tasting
         </p>
         <Link href={`/winery/${winerySlug}/${tastingSlug}/new`}>
           <Button size="lg">
             <PlusCircle size={22} className="mr-2"/>
-            Agregar mi primer vino
+            Agregar primer vino
           </Button>
         </Link>
       </div>
