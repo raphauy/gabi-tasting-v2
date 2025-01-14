@@ -33,6 +33,18 @@ export default async function UserPage({ params }: Props) {
           <UserCard key={user.id} user={user} fullData={false} />
         ))}
       </div>
+
+      {data.length === 0 && getEmptyUsersComponent()}
+    </div>
+  )
+}
+
+function getEmptyUsersComponent() {
+  return (
+    <div className="w-full max-w-5xl mx-auto py-12">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg text-center bg-muted p-12">
+        <p>No hay usuarios</p>
+      </div>
     </div>
   )
 }
