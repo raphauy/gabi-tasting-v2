@@ -20,7 +20,7 @@ export default function DropdownWines({ wines }: Props) {
       onOpenChange={setIsOpen}
       className="w-full space-y-2"
     >
-      <CollapsibleTrigger className="flex w-full items-center justify-between hover:bg-muted mt-2 text-muted-foreground">
+      <CollapsibleTrigger className="flex w-full items-center justify-between hover:bg-muted mt-2 text-muted-foreground border-t pt-3">
         <div className="flex items-center space-x-2">
           <div className="rounded-full p-2 w-7 h-7 border bg-green-500 text-white flex items-center justify-center font-bold">
             {wines.length}
