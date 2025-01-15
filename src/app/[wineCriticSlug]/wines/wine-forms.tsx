@@ -200,7 +200,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
                 <FormDescription>La Ficha Técnica es opcional pero recomendada.</FormDescription>
                 <div className="flex items-start justify-between pt-5">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    {fileName ? (
+                    {fileName && (
                       <>
                         <FileText className="h-4 w-4" />
                         <Button 
@@ -217,50 +217,48 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
                           </a>
                         </Button>
                       </>
-                    ) : (
-                      <p>Aún no se ha subido ningún PDF ➡️</p>
                     )}
                   </div>
-                  <UploadButton
-                    endpoint="pdfUploader"
-                    content={{
-                      button({ ready, uploadProgress }) {
-                        if (uploadProgress) {
-                          return <Button variant="secondary" disabled>Subiendo... {uploadProgress}%</Button>;
+                  <div className={cn("flex", fileName ? "justify-end" : "w-full")}>
+                    <UploadButton
+                      endpoint="pdfUploader"
+                      className={cn(fileName ? "ut-button:w-auto" : "w-full")}
+                      content={{                      
+                        button({ ready, uploadProgress }) {
+                          return (
+                            <Button variant="secondary" asChild>
+                              <span className="w-full">
+                                {
+                                ready ? 
+                                  <div className="flex items-center gap-2">
+                                    { uploadProgress ? <Loader className="h-4 w-4 animate-spin" /> : <FileText className="h-6 w-6 text-muted-foreground" />  }
+                                    <p>{form.watch('technicalFileName') ? 'Cambiar PDF' : 'Seleccionar PDF'}</p>
+                                  </div> 
+                                  : "Cargando..."
+                                }
+                              </span>
+                            </Button>
+                          );
                         }
-                        return (
-                          <Button variant="secondary" asChild>                  
-                            <span>
-                              {
-                              ready ? 
-                                <div className="flex items-center gap-2">
-                                  <FileText className="h-6 w-6 text-muted-foreground" /> 
-                                  <p>{form.watch('technicalFileName') ? 'Cambiar PDF' : 'Seleccionar PDF'}</p>
-                                </div> 
-                                : "Cargando..."
-                              }
-                            </span>
-                          </Button>
-                        );
-                      }
-                    }}
-                    onClientUploadComplete={(res) => {
-                      if (res?.[0]) {
-                        const url = res[0].url
-                        const fileName = res[0].name
-                        field.onChange(url);
-                        form.setValue('technicalFileName', fileName);
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      console.error("Error al subir PDF:", error.message);
-                      toast({ 
-                        title: "Error al subir archivo", 
-                        description: error.message, 
-                        variant: "destructive" 
-                      });
-                    }}
-                  />
+                      }}
+                      onClientUploadComplete={(res) => {
+                        if (res?.[0]) {
+                          const url = res[0].url
+                          const fileName = res[0].name
+                          field.onChange(url);
+                          form.setValue('technicalFileName', fileName);
+                        }
+                      }}
+                      onUploadError={(error: Error) => {
+                        console.error("Error al subir PDF:", error.message);
+                        toast({ 
+                          title: "Error al subir archivo", 
+                          description: error.message, 
+                          variant: "destructive" 
+                        });
+                      }}
+                      />
+                  </div>
                 </div>
                 <FormMessage />
               </FormItem>
