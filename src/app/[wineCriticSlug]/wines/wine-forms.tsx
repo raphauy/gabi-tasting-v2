@@ -181,7 +181,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
-                  <FormDescription>Precio del vino en pesos uruguayos, mercado local</FormDescription>
+                  <FormDescription>Precio del vino en moneda local, mercado local</FormDescription>
                   <FormControl>
                     <Input placeholder="Precio del vino" {...field} />
                   </FormControl>
