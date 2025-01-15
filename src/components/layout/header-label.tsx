@@ -1,35 +1,29 @@
 "use client"
 
-import { getWineryNameBySlugAction } from "@/app/[wineCriticSlug]/winerys/winery-actions"
-import { cn } from "@/lib/utils"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useWineryName, useTastingName } from "@/hooks/use-names"
 
 export function HeaderLabel() {
-  const params = useParams()
-  const winerySlug = params.winerySlug as string
-  
-  const [winery, setWinery] = useState("")
-
-  useEffect(() => {
-    if (!winerySlug) {
-      setWinery("")
-      return
-    }
-    getWineryNameBySlugAction(winerySlug)
-    .then(name => setWinery(name))
-    .catch(error => console.error('Error fetching winery name:', error))
-    
-  }, [winerySlug])
+  const tastingName = useTastingName()
+  const wineryName = useWineryName()
 
   return (
-    <div className={cn("flex items-center gap-2 font-medium")}>
-      {winery && (
-        <div className="flex items-center gap-2">
-          {getSVGSlash()}
-          <p>{winery}</p>
-        </div>
-      )}
+    <div className="flex items-center gap-2 font-medium">
+      {
+        tastingName && !wineryName && (
+          <div className="flex items-center gap-2">
+            {getSVGSlash()}
+            <p>{tastingName}</p>
+          </div>
+        )
+      }
+      {
+        wineryName && (
+          <div className="flex items-center gap-2">
+            {getSVGSlash()}
+            <p>{wineryName}</p>
+          </div>
+        )
+      }
     </div>
   )
 }

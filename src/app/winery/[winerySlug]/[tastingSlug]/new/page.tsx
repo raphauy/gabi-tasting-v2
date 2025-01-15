@@ -1,4 +1,5 @@
 import { WineForm } from "@/app/[wineCriticSlug]/wines/wine-forms"
+import { FileUpload } from "@/components/file-upload"
 import { getTastingDAOBySlug } from "@/services/tasting-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
 import { notFound } from "next/navigation"
@@ -22,6 +23,11 @@ export default async function NewWinePage({ params }: Props) {
             <p className="text-2xl font-bold text-center">Agregar Vino</p>
             <p className="text-center text-muted-foreground mb-2">{tasting.name} - {winery.name}</p>
             <WineForm wineryId={winery.id} tastingId={tasting.id} />
+
+            <div className="container mx-auto p-8">
+                <h2 className="text-2xl font-bold mb-8">Subir Archivos</h2>
+                <FileUpload />
+            </div>
         </div>
     )
 }

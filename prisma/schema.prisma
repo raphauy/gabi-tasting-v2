@@ -200,21 +200,23 @@ enum WineStyle {
 }
 
 model Wine {
-  id            String    @id @default(cuid())
-  name          String                              // gennext: show.column
-  vintage       String                              // gennext: show.column
-  region        String                              // gennext: show.column
-  style         WineStyle                           // gennext: show.column
-  abv           Float?                              // gennext: show.column
-  price         Float?                              // gennext: show.column
+  id                String    @id @default(cuid())
+  name              String                              // gennext: show.column
+  vintage           String                              // gennext: show.column
+  region            String                              // gennext: show.column
+  style             WineStyle                           // gennext: show.column
+  abv               Float?                              // gennext: show.column
+  price             Float?                              // gennext: show.column
+  technicalFileUrl  String?                             // gennext: show.column
+  technicalFileName String?                             // gennext: show.column
 
-  wineryId      String
-  winery Winery @relation(fields: [wineryId], references: [id], onDelete: Cascade)
+  wineryId          String
+  winery            Winery @relation(fields: [wineryId], references: [id], onDelete: Cascade)
 
-  tastings      WineTasting[]                       // gennext: skip.list
+  tastings          WineTasting[]                       // gennext: skip.list
 
-  createdAt     DateTime @default(now())            // gennext: show.column skip.zod
-  updatedAt     DateTime @updatedAt                 // gennext: show.column skip.zod
+  createdAt         DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt         DateTime @updatedAt                 // gennext: show.column skip.zod
 
   @@map("wines")                                    // gennext: skip.list skip.zod
 }

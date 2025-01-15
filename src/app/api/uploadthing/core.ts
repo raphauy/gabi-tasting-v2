@@ -1,9 +1,8 @@
+import { auth } from "@/lib/auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
-
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -19,24 +18,38 @@ export const ourFileRouter = {
     },
   })
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
-      // This code runs on your server before upload
-      const user = await auth(req);
-
-      // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
-
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id };
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) throw new UploadThingError("No autorizado");
+      return { userId: session.user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      console.log("Imagen subida:", file.url);
+      return {
+        uploadedBy: metadata.userId,
+        url: file.url,
+        name: file.name,
+      };
+    }),
 
-      console.log("file url", file.url);
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
+  pdfUploader: f({
+    pdf: {
+      maxFileSize: "8MB",
+      maxFileCount: 1,      
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) throw new UploadThingError("No autorizado");
+      return { userId: session.user.id };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("PDF subido:", metadata);
+      return {
+        uploadedBy: metadata.userId,
+        url: file.url,
+        name: file.name,
+      };
     }),
 } satisfies FileRouter;
 

@@ -12,6 +12,8 @@ export type WineDAO = {
 	style: WineStyle
 	abv: number | undefined
 	price: number | undefined
+	technicalFileUrl: string | undefined
+	technicalFileName: string | undefined
 	wineryId: string
 	winery: WineryDAO
 	tastings: TastingDAO[]
@@ -26,6 +28,8 @@ export const WineSchema = z.object({
 	style: z.nativeEnum(WineStyle),
 	abv: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
 	price: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
+	technicalFileUrl: z.string().optional(),
+	technicalFileName: z.string().optional(),
 	wineryId: z.string().min(1, "wineryId is required."),
 	tastingId: z.string(),
 })

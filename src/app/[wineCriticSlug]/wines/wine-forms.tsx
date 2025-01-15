@@ -1,19 +1,21 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "@/hooks/use-toast"
-import { useEffect, useState } from "react"
-import { deleteWineAction, createOrUpdateWineAction, getWineDAOAction } from "./wine-actions"
-import { WineSchema, WineFormValues } from '@/services/wine-services'
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Loader } from "lucide-react"
+import { toast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
+import { WineFormValues, WineSchema } from '@/services/wine-services'
+import { zodResolver } from "@hookform/resolvers/zod"
 import { WineStyle } from "@prisma/client"
+import { FileText, Loader } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { createOrUpdateWineAction, deleteWineAction, getWineDAOAction } from "./wine-actions"
 import { DeleteWineDialog } from "./wine-dialogs"
+import { UploadButton } from "@/lib/uploadthing"
 
 const styles= Object.values(WineStyle)
 
@@ -33,11 +35,13 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
       region: "",
       abv: "",
       price: "",
+      technicalFileUrl: "",
       wineryId,
       tastingId
     },
     mode: "onChange",
   })
+  const fileName= form.watch('technicalFileName')
   const [loading, setLoading] = useState(false)
   const { isDirty } = form.formState
   const router = useRouter()
@@ -72,6 +76,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
             ...data,
             abv: data.abv ? data.abv.toString() : undefined,
             price: data.price ? data.price.toString() : undefined,
+            technicalFileUrl: data.technicalFileUrl || undefined,
             tastingId
           })
         }
@@ -157,7 +162,14 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
                 <FormItem>
                   <FormLabel>Graduación alcohólica</FormLabel>
                   <FormControl>
-                    <Input placeholder="Graduación del vino" {...field} />
+                    <Input 
+                      placeholder="Graduación del vino" 
+                      {...field} 
+                      onChange={(e) => {
+                        const value = e.target.value.replace(',', '.')
+                        field.onChange(value)
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -179,7 +191,83 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
             />
           </div>
 
-          <div className="flex items-center justify-between space-x-4 pt-6 border-t">
+          <FormField
+            control={form.control}
+            name="technicalFileUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ficha Técnica (PDF)</FormLabel>
+                <FormDescription>La Ficha Técnica es opcional pero recomendada.</FormDescription>
+                <div className="flex items-start justify-between pt-5">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {fileName ? (
+                      <>
+                        <FileText className="h-4 w-4" />
+                        <Button 
+                          variant="link" 
+                          className="p-0 h-auto"
+                          asChild
+                        >
+                          <a 
+                            href={field.value} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            {fileName}
+                          </a>
+                        </Button>
+                      </>
+                    ) : (
+                      <p>Aún no se ha subido ningún PDF ➡️</p>
+                    )}
+                  </div>
+                  <UploadButton
+                    endpoint="pdfUploader"
+                    content={{
+                      button({ ready, uploadProgress }) {
+                        if (uploadProgress) {
+                          return <Button variant="secondary" disabled>Subiendo... {uploadProgress}%</Button>;
+                        }
+                        return (
+                          <Button variant="secondary" asChild>                  
+                            <span>
+                              {
+                              ready ? 
+                                <div className="flex items-center gap-2">
+                                  <FileText className="h-6 w-6 text-muted-foreground" /> 
+                                  <p>{form.watch('technicalFileName') ? 'Cambiar PDF' : 'Seleccionar PDF'}</p>
+                                </div> 
+                                : "Cargando..."
+                              }
+                            </span>
+                          </Button>
+                        );
+                      }
+                    }}
+                    onClientUploadComplete={(res) => {
+                      if (res?.[0]) {
+                        const url = res[0].url
+                        const fileName = res[0].name
+                        field.onChange(url);
+                        form.setValue('technicalFileName', fileName);
+                      }
+                    }}
+                    onUploadError={(error: Error) => {
+                      console.error("Error al subir PDF:", error.message);
+                      toast({ 
+                        title: "Error al subir archivo", 
+                        description: error.message, 
+                        variant: "destructive" 
+                      });
+                    }}
+                  />
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <div className={cn("flex items-center justify-end space-x-4 pt-6 border-t", id && "justify-between")}>
             { id && <DeleteWineDialog id={id} description="¿Estás seguro de que deseas eliminar este vino?"/> }
             <div className="flex space-x-4">
               <Button onClick={() => closeDialog && closeDialog()} type="button" variant={"secondary"} className="w-32">Cancelar</Button>
