@@ -18,6 +18,7 @@ export type ReviewDAO = {
 	flavourCharacteristics: string | undefined
 	score: number | undefined
 	comments: string | undefined
+	finished: boolean
 	wineId: string
 	wine: WineDAO
 	createdAt: Date
@@ -40,6 +41,7 @@ export const ReviewSchema = z.object({
 	score: z.number().optional(),
 	comments: z.string().optional(),
 	wineId: z.string().min(1, "wineId is required."),
+	finished: z.boolean().optional(),
 })
 
 export type ReviewFormValues = z.infer<typeof ReviewSchema>

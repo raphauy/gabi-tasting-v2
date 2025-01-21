@@ -293,6 +293,8 @@ model Review {
   score                   Int?                                 // gennext: show.column
   comments                String?                              // gennext: show.column
 
+  finished                Boolean @default(false)
+
   wineId                  String    @unique
   wine                    Wine      @relation(fields: [wineId], references: [id], onDelete: Cascade)
 

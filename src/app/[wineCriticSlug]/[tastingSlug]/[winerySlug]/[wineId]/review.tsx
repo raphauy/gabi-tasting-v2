@@ -112,14 +112,24 @@ export function Review({ review }: Props) {
         update: setFieldAction,
         type: "textarea"
     }
-    // const score: DataField = {
-    //     id: review.id,
-    //     name: "score",
-    //     initialValue: review.score || "",
-    //     update: setFieldAction,
-    //     type: "input"
-    // }
-    const conclusionFields: DataField[] = [comments]
+    const score: DataField = {
+        id: review.id,
+        name: "score",
+        initialValue: review.score || "",
+        update: setFieldAction,
+        type: "number",
+        min: 0,
+        max: 100,
+        step: 1
+    }
+    const finished: DataField = {
+        id: review.id,
+        name: "finished",
+        initialValue: review.finished,
+        update: setFieldAction,
+        type: "boolean"
+    }
+    const conclusionFields: DataField[] = [comments, score, finished]
 
     return (
         <div className="grid lg:grid-cols-2 gap-4">
@@ -130,92 +140,3 @@ export function Review({ review }: Props) {
         </div>
     )
 }
-
-// Appearance
-
-
-// Intensity: (opciones)
-
-// Pale
-
-// Medium
-
-// Deep
-
-
-// Colour (para escribir)
-
-
-// Nose
-
-
-// Aroma Intensity: (opciones)
-
-// Light 
-
-// Medium
-
-// Pronounced
-
-
-// Aroma Characteristics:
-
-
-// Primary: (para escribir)
-
-// Secondary: (para escribir)
-
-// Tertiary: (para escribir)
-
-
-// Palate
-
-
-// Sweetness: (opciones)
-
-// Dry
-
-// Off-dry
-
-// Medium
-
-// Sweet
-
-
-// Acidity: (opciones)
-
-// Low
-
-// Medium
-
-// High
-
-
-// Alcohol: (opciones)
-
-// Low 
-
-// Medium
-
-// High
-
-
-// Body: (opciones)
-
-// Light
-
-// Medium
-
-// Full
-
-
-// Flavour Intensity: (opciones)
-
-// Light 
-
-// Medium
-
-// Pronounced
-
-
-// Flavour Characteristics: (para escribir)

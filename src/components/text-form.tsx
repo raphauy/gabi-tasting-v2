@@ -11,29 +11,70 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 
 type Props= {
   id: string
   label?: string
   fieldName: string
-  initialValue: string
-  update: (id: string, fieldName: string, newValue: string) => Promise<boolean>
-  type: "input" | "textarea" | "select"
+  initialValue: string | number | boolean | undefined
+  update: (id: string, fieldName: string, newValue: string | number | boolean | undefined) => Promise<boolean>
+  type: "input" | "textarea" | "select" | "number" | "boolean"
   selectOptions?: string[]
+  min?: number
+  max?: number
+  step?: number
 }
 
-export function TextForm({ id, label, fieldName, initialValue, update, type, selectOptions }: Props) {
+export function TextForm({ id, label, fieldName, initialValue, update, type, selectOptions, min, max, step = 1 }: Props) {
 
   const [isEditing, setIsEditing] = useState(false)
   const toggleEdit = () => setIsEditing(!isEditing)
 
   const [loading, setLoading] = useState(false)
-  const [newValue, setNewValue] = useState(initialValue === "null" ? "" : initialValue)
+  const [newValue, setNewValue] = useState(() => {
+    if (initialValue === null || initialValue === undefined) return ""
+    if (type === "number") return initialValue.toString()
+    if (type === "boolean") return initialValue
+    return initialValue.toString()
+  })
 
   async function onSubmit() {
-    if (newValue === initialValue) {
+    if (type === "boolean") return // Los booleanos se manejan en su propio onChange
+
+    if (newValue === initialValue?.toString()) {
       setIsEditing(false)
+      return
+    }
+
+    // Validación específica para números
+    if (type === "number") {
+      const numValue = Number(newValue)
+      if (isNaN(numValue)) {
+        toast({ title: "El valor debe ser un número", variant: "destructive" })
+        return
+      }
+      if (min !== undefined && numValue < min) {
+        toast({ title: `El valor mínimo es ${min}`, variant: "destructive" })
+        return
+      }
+      if (max !== undefined && numValue > max) {
+        toast({ title: `El valor máximo es ${max}`, variant: "destructive" })
+        return
+      }
+
+      setLoading(true)
+      toggleEdit()
+      const ok = await update(id, fieldName, numValue)
+      
+      if (ok) {
+        toast({title: "Valor editado" })
+      } else {      
+        toast({title: "Error al editar el valor", variant: "destructive"})
+      }
+      
+      setLoading(false)
       return
     }
 
@@ -64,8 +105,22 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
     setLoading(false)
   }
 
+  async function onBooleanChange(checked: boolean) {
+    setNewValue(checked)
+    setLoading(true)
+    
+    const ok = await update(id, fieldName, checked)
+    if (ok) {
+      toast({title: "Valor editado" })
+    } else {      
+      toast({title: "Error al editar el valor", variant: "destructive"})
+    }
+    
+    setLoading(false)
+  }
+
   function handleEnterKey(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (e.key === "Enter" && !e.shiftKey && type === "input") {
+    if (e.key === "Enter" && !e.shiftKey && (type === "input" || type === "number")) {
       e.preventDefault()
       onSubmit()
     }
@@ -78,7 +133,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
 
     return (
       <Select
-        value={newValue || undefined}
+        value={newValue?.toString() || undefined}
         onValueChange={onSelectChange}
         disabled={loading}
       >
@@ -106,15 +161,50 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
       return renderSelect()
     }
 
+    if (type === "boolean") {
+      return (
+        <Switch
+          checked={newValue as boolean}
+          onCheckedChange={onBooleanChange}
+          disabled={loading}
+        />
+      )
+    }
+
     const commonProps = {
       name: fieldName,
       className: "flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
       autoFocus: true,
       disabled: !isEditing,
-      value: newValue,
+      value: newValue as string,
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setNewValue(e.target.value),
       onKeyDown: handleEnterKey,
       onBlur: onSubmit
+    }
+
+    if (type === "number") {
+      return (
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            min={min}
+            max={max}
+            step={step}
+            {...commonProps}
+            className={cn(
+              commonProps.className,
+              "h-10 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            )}
+          />
+          {(min !== undefined || max !== undefined) && (
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
+              {min !== undefined && max !== undefined ? `${min}-${max}` : 
+               min !== undefined ? `Min: ${min}` : 
+               max !== undefined ? `Max: ${max}` : ''}
+            </span>
+          )}
+        </div>
+      )
     }
 
     return type === "input" ? (
@@ -144,6 +234,16 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
       return renderSelect()
     }
 
+    if (type === "boolean") {
+      return (
+        <Switch
+          checked={newValue as boolean}
+          onCheckedChange={onBooleanChange}
+          disabled={loading}
+        />
+      )
+    }
+
     return (
       <Button
         onClick={toggleEdit}
@@ -162,10 +262,10 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
       <div className="font-medium flex flex-col">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-1">
-            <Tag className="h-4 w-4" />
+            {type !== "boolean" && <Tag className="h-4 w-4" />}
             <p>{label || fieldName}:</p>
           </div>
-          {!isEditing && !loading && type !== "select" && (
+          {!isEditing && !loading && type !== "select" && type !== "boolean" && (
             <Button 
               onClick={toggleEdit}
               variant="ghost"
@@ -176,7 +276,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
           )}
         </div>
         <div className="mt-2">
-          {isEditing && type !== "select" ? (
+          {isEditing && type !== "select" && type !== "boolean" ? (
             <div className="font-medium">
               {renderEditField()}
             </div>

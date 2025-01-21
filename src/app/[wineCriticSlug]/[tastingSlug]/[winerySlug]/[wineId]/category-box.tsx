@@ -9,10 +9,13 @@ import { LucideIcon } from "lucide-react"
 export type DataField = {
   id: string
   name: string
-  initialValue: string
+  initialValue: string | number | boolean | undefined
   update: (id: string, name: string, value: string | number | boolean | undefined) => Promise<boolean>
-  type: "input" | "textarea" | "select"
+  type: "input" | "textarea" | "select" | "number" | "boolean"
   selectOptions?: string[]
+  min?: number
+  max?: number
+  step?: number
 }
 
 type Props = {
@@ -36,7 +39,7 @@ export default function CategoryBox({ title, iconName, dataFields }: Props) {
       </CardHeader>
       <CardContent>
         {dataFields.map((dataField) => (
-          <TextForm key={dataField.name} id={dataField.id} label={getLabel(dataField.name)} fieldName={dataField.name} initialValue={dataField.initialValue} update={dataField.update} type={dataField.type} selectOptions={dataField.selectOptions}/>
+          <TextForm key={dataField.name} id={dataField.id} label={getLabel(dataField.name)} fieldName={dataField.name} initialValue={dataField.initialValue} update={dataField.update} type={dataField.type} selectOptions={dataField.selectOptions} min={dataField.min} max={dataField.max} step={dataField.step}/>
         ))}
       </CardContent>
     </Card>
@@ -73,23 +76,9 @@ function getLabel(fieldName: string) {
       return "Score"
     case "comments":
       return "Comments"
+    case "finished":
+      return "Finished"
     default:
       return fieldName
   }
 }
-
-// intensity               String?                              // gennext: show.column
-// colour                  String?                              // gennext: show.column
-// aromaIntensity          String?                              // gennext: show.column
-
-// aromaPrimary            String?                              // gennext: show.column
-// aromaSecondary          String?                              // gennext: show.column
-// aromaTertiary           String?                              // gennext: show.column
-
-// sweetness               String?                              // gennext: show.column
-// acidity                 String?                              // gennext: show.column
-// alcohol                 String?                              // gennext: show.column
-// body                    String?                              // gennext: show.column
-
-// flavourIntensity        String?                              // gennext: show.column
-// flavourCharacteristics  String?                              // gennext: show.column
