@@ -131,7 +131,12 @@ export async function getWinesDAOByWineryAndTastingSlugs(winerySlug: string, tas
     },
     select: {
       id: true,
-      name: true
+      name: true,
+      review: {
+        select: {
+          finished: true
+        }
+      }
     }
   })
   return found

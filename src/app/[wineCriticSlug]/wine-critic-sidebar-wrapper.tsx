@@ -5,7 +5,7 @@ import { MenuGroup } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getWinesDAOByWineryAndTastingSlugsAction } from "./wines/wine-actions"
-import { Wine } from "lucide-react"
+import { Check, Wine } from "lucide-react"
 
 type Props = {
     wineCriticMenu: MenuGroup[]
@@ -51,6 +51,7 @@ async function getWinesMenu(wineCriticSlug: string, tastingSlug: string, wineryS
         name: wine.name,
         href: `/${wineCriticSlug}/${tastingSlug}/${winerySlug}/${wine.id}`,
         icon: <Wine className="h-4 w-4" />,
+        opositeIcon: wine.review?.finished ? <Check className="h-4 w-4" /> : undefined
     }))
 }
 

@@ -16,10 +16,12 @@ export type MenuGroup = {
 export type MenuItem = {
   name: string
   icon?: React.ReactNode
+  opositeIcon?: React.ReactNode
   href?: string
   subItems?: {
     label: string
     icon?: React.ReactNode
+    opositeIcon?: React.ReactNode
     href?: string
   }[]
 }

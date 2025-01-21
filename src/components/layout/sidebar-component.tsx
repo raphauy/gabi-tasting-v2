@@ -66,13 +66,27 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
             onClick={onMenuClick}
           >
             {item.href ? 
-            <Link href={item.href} prefetch={false}>
-              {item.icon}
-              <span>{item.name}</span>
+            <Link href={item.href} prefetch={false} className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                {item.icon}
+                <span>{item.name}</span>
+              </div>
+              {item.opositeIcon && (
+                <div className="ml-auto">
+                  {item.opositeIcon}
+                </div>
+              )}
             </Link> : 
-            <div>
-              {item.icon}
-              <span>{item.name}</span>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                {item.icon}
+                <span>{item.name}</span>
+              </div>
+              {item.opositeIcon && (
+                <div className="ml-auto">
+                  {item.opositeIcon}
+                </div>
+              )}
             </div>}
           </SidebarMenuButton>
           {item.subItems && item.subItems.length > 0 && (
@@ -85,13 +99,27 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
                     onClick={onMenuClick}
                   >
                     {subItem.href ? 
-                    <Link href={subItem.href}>
-                      {subItem.icon}
-                      <span>{subItem.label}</span>
+                    <Link href={subItem.href} className="flex items-center justify-between w-full">
+                      <div className="flex items-center">
+                        {subItem.icon}
+                        <span>{subItem.label}</span>
+                      </div>
+                      {subItem.opositeIcon && (
+                        <div className="ml-auto">
+                          {subItem.opositeIcon}
+                        </div>
+                      )}
                     </Link> : 
-                    <div>
-                      {subItem.icon}
-                      <span>{subItem.label}</span>
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center">
+                        {subItem.icon}
+                        <span>{subItem.label}</span>
+                      </div>
+                      {subItem.opositeIcon && (
+                        <div className="ml-auto">
+                          {subItem.opositeIcon}
+                        </div>
+                      )}
                     </div>}
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
