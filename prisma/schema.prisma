@@ -203,6 +203,7 @@ model Wine {
   id                String    @id @default(cuid())
   name              String                              // gennext: show.column
   vintage           String                              // gennext: show.column
+  grapes            String @default("")                 // gennext: show.column
   region            String                              // gennext: show.column
   style             WineStyle                           // gennext: show.column
   abv               Float?                              // gennext: show.column

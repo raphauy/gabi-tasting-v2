@@ -2,6 +2,7 @@ import { getTastingsDAO } from "@/services/tasting-services"
 import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
 import { getwineCriticMenu } from "./wine-critic-menu"
 import { SidebarComponent } from "@/components/layout/sidebar-component"
+import { WineCriticSidebarWrapper } from "./wine-critic-sidebar-wrapper"
 
 type Props = {
     wineCriticSlug: string
@@ -14,5 +15,5 @@ export async function WineCriticSidebar({ wineCriticSlug }: Props) {
     }
     const tastings = await getTastingsDAO(wineCritic.id)
     const wineCriticMenu = getwineCriticMenu({ wineCriticSlug, tastings })
-    return <SidebarComponent menuGroups={wineCriticMenu} />
+    return <WineCriticSidebarWrapper wineCriticMenu={wineCriticMenu} />
 }

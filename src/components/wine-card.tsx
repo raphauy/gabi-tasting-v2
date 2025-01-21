@@ -45,6 +45,11 @@ export function WineCard({ wine }: Props) {
             </div>
 
             <div className="flex items-center gap-2">
+              <GrapeIcon className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm">{wine.grapes}</span>
+            </div>
+
+            <div className="flex items-center gap-2">
               <Droplet className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm">{wine.abv}% Alc.</span>
             </div>

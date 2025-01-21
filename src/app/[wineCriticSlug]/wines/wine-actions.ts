@@ -1,7 +1,7 @@
 "use server"
   
 import { revalidatePath } from "next/cache"
-import { WineDAO, WineFormValues, createWine, updateWine, getWineDAO, deleteWine } from "@/services/wine-services"
+import { WineDAO, WineFormValues, createWine, updateWine, getWineDAO, deleteWine, getWinesDAOByWineryAndTastingSlugs } from "@/services/wine-services"
 
 
 export async function getWineDAOAction(id: string): Promise<WineDAO | null> {
@@ -29,3 +29,6 @@ export async function deleteWineAction(id: string): Promise<WineDAO | null> {
     return deleted as WineDAO
 }
 
+export async function getWinesDAOByWineryAndTastingSlugsAction(winerySlug: string, tastingSlug: string) {
+    return getWinesDAOByWineryAndTastingSlugs(winerySlug, tastingSlug)
+}

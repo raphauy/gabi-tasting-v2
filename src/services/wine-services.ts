@@ -8,6 +8,7 @@ export type WineDAO = {
 	id: string
 	name: string
 	vintage: string
+  grapes: string
 	region: string
 	style: WineStyle
 	abv: number | undefined
@@ -24,6 +25,7 @@ export type WineDAO = {
 export const WineSchema = z.object({
 	name: z.string().min(1, "name is required."),
 	vintage: z.string().min(1, "vintage is required."),
+	grapes: z.string().min(1, "grapes is required."),
 	region: z.string().min(1, "region is required."),
 	style: z.nativeEnum(WineStyle),
 	abv: z.string().refine((val) => !isNaN(Number(val)), { message: "(debe ser un número)" }).optional(),
@@ -94,6 +96,26 @@ export async function getWinesDAOByWineryAndTasting(wineryId: string, tastingId:
     ...wine,
     tastings: wine.tastings.map(wt => wt.tasting)
   })) as WineDAO[]
+}
+
+export async function getWinesDAOByWineryAndTastingSlugs(winerySlug: string, tastingSlug: string) {
+  const found = await prisma.wine.findMany({
+    where: {
+      winery: {
+        slug: winerySlug
+      },
+      tastings: {
+        some: {
+          tasting: { slug: tastingSlug }
+        }
+      }
+    },
+    select: {
+      id: true,
+      name: true
+    }
+  })
+  return found
 }
 
 export async function getWinesDAOByWineryId(wineryId: string) {

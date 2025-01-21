@@ -32,6 +32,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
     defaultValues: {
       name: "",
       vintage: "",
+      grapes: "",
       region: "",
       abv: "",
       price: "",
@@ -115,6 +116,19 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
                   <FormLabel>Añada</FormLabel>
                   <FormControl>
                     <Input placeholder="Añada del vino" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="grapes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cepas (separadas por comas)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Cepas del vino" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
