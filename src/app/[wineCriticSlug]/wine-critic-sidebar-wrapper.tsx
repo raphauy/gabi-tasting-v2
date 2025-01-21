@@ -19,11 +19,7 @@ export function WineCriticSidebarWrapper({ wineCriticMenu }: Props) {
     const [finalMenu, setFinalMenu] = useState<MenuGroup[]>(wineCriticMenu)
 
     useEffect(() => {
-        console.log("winerySlug: ", winerySlug)
-        console.log("tastingSlug: ", tastingSlug)
-        console.log("wineCriticSlug: ", wineCriticSlug)
         if (winerySlug && tastingSlug) {
-            console.log("getting wines menu")
             getWinesMenu(wineCriticSlug as string, tastingSlug as string, winerySlug as string)
                 .then(wines => {
                     setFinalMenu(prevMenu => [...prevMenu, {
