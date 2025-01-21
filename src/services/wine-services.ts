@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db"
 import { WineryDAO } from "./winery-services"
 import { WineStyle } from "@prisma/client"
 import { TastingDAO } from "./tasting-services"
+import { ReviewDAO } from "./review-services"
 
 export type WineDAO = {
 	id: string
@@ -18,6 +19,24 @@ export type WineDAO = {
 	wineryId: string
 	winery: WineryDAO
 	tastings: TastingDAO[]
+	createdAt: Date
+	updatedAt: Date
+}
+
+export type WineAndReviewsDAO = WineDAO & {
+	id: string
+	name: string
+	vintage: string
+  grapes: string
+	region: string
+	style: WineStyle
+	abv: number | undefined
+	price: number | undefined
+	technicalFileUrl: string | undefined
+	technicalFileName: string | undefined
+	wineryId: string
+  reviewId: string | null
+	review: ReviewDAO | null
 	createdAt: Date
 	updatedAt: Date
 }
@@ -179,8 +198,19 @@ export async function getWineDAO(id: string) {
   } as WineDAO
 }
 
+export async function getWineAndReviewsDAO(id: string): Promise<WineAndReviewsDAO | null> {
+  const found = await prisma.wine.findUnique({
+    where: {
+      id
+    },
+    include: {
+      review: true
+    }
+  })
+  
+  return found as WineAndReviewsDAO
+}
 
-    
 export async function createWine(data: WineFormValues) {
   console.log(data)
   const abv = data.abv ? Number(data.abv) : null

@@ -12,24 +12,34 @@ type Props = {
 }
 
 export function WineCriticSidebarWrapper({ wineCriticMenu }: Props) {
-
     const params = useParams()
     const { winerySlug, tastingSlug, wineCriticSlug } = params
 
     const [finalMenu, setFinalMenu] = useState<MenuGroup[]>(wineCriticMenu)
 
     useEffect(() => {
-        if (winerySlug && tastingSlug) {
-            getWinesMenu(wineCriticSlug as string, tastingSlug as string, winerySlug as string)
-                .then(wines => {
-                    setFinalMenu(prevMenu => [...prevMenu, {
-                        name: unSlugify(winerySlug as string) + " wines",
+        const updateMenu = async () => {
+            if (winerySlug && tastingSlug) {
+                const wines = await getWinesMenu(wineCriticSlug as string, tastingSlug as string, winerySlug as string)
+                const wineryName = unSlugify(winerySlug as string)
+                
+                // Filtrar el menú existente para remover el grupo de vinos de esta bodega si existe
+                const baseMenu = wineCriticMenu.filter(group => group.name !== `${wineryName} wines`)
+                
+                // Agregar el grupo actualizado de vinos
+                setFinalMenu([
+                    ...baseMenu,
+                    {
+                        name: `${wineryName} wines`,
                         items: wines
-                    }])
-                })
-        } else {
-            setFinalMenu(wineCriticMenu)
+                    }
+                ])
+            } else {
+                setFinalMenu(wineCriticMenu)
+            }
         }
+
+        updateMenu()
     }, [winerySlug, tastingSlug, wineCriticSlug, wineCriticMenu])
 
     return <SidebarComponent menuGroups={finalMenu} />

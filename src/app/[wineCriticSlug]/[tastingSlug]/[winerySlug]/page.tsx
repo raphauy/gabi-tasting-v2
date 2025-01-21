@@ -11,7 +11,7 @@ export default async function WineryPage({ params }: Props) {
     const winery = await getWineryDAOBySlug(winerySlug)
 
     return (
-        <div className=" bg-green-100">
+        <div className="">
             <p className="text-2xl font-bold text-center">{tasting.name} - {winery.name}</p>
         </div>
     )

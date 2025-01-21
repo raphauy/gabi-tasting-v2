@@ -215,11 +215,12 @@ model Wine {
   winery            Winery @relation(fields: [wineryId], references: [id], onDelete: Cascade)
 
   tastings          WineTasting[]                       // gennext: skip.list
+  review            Review?                             // gennext: skip.list
 
   createdAt         DateTime @default(now())            // gennext: show.column skip.zod
   updatedAt         DateTime @updatedAt                 // gennext: show.column skip.zod
 
-  @@map("wines")                                    // gennext: skip.list skip.zod
+  @@map("wines")                                        // gennext: skip.list skip.zod
 }
 
 model WineTasting {
@@ -268,4 +269,35 @@ model TastingDayWinery {
 
   @@id([tastingDayId, wineryId])                    // gennext: skip.list skip.zod
   @@map("tasting_day_wineries")                     // gennext: skip.list skip.zod
+}
+
+model Review {
+  id                      String    @id @default(cuid())
+  
+  intensity               String?                              // gennext: show.column
+  colour                  String?                              // gennext: show.column
+  aromaIntensity          String?                              // gennext: show.column
+  
+  aromaPrimary            String?                              // gennext: show.column
+  aromaSecondary          String?                              // gennext: show.column
+  aromaTertiary           String?                              // gennext: show.column
+  
+  sweetness               String?                              // gennext: show.column
+  acidity                 String?                              // gennext: show.column
+  alcohol                 String?                              // gennext: show.column
+  body                    String?                              // gennext: show.column
+  
+  flavourIntensity        String?                              // gennext: show.column
+  flavourCharacteristics  String?                              // gennext: show.column
+  
+  score                   Int?                                 // gennext: show.column
+  comments                String?                              // gennext: show.column
+
+  wineId                  String    @unique
+  wine                    Wine      @relation(fields: [wineId], references: [id], onDelete: Cascade)
+
+  createdAt               DateTime @default(now())            // gennext: show.column skip.zod
+  updatedAt               DateTime @updatedAt                 // gennext: show.column skip.zod
+
+  @@map("reviews")                                            // gennext: skip.list skip.zod
 }
