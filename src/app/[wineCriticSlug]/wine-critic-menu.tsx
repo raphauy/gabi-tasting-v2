@@ -1,7 +1,6 @@
 import { MenuGroup } from "@/lib/utils"
-import { getTastingsDAO, TastingDAO } from "@/services/tasting-services"
-import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
-import { BookOpenCheck, Building2, Calendar, LayoutDashboard, Users, Wine } from "lucide-react"
+import { TastingDAO } from "@/services/tasting-services"
+import { BookOpenCheck, Building2, LayoutDashboard, Users, Wine } from "lucide-react"
 
 type Props = {
   wineCriticSlug: string

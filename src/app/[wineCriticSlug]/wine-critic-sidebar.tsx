@@ -1,13 +1,13 @@
 import { getTastingsDAO } from "@/services/tasting-services"
 import { getWineCriticDAOBySlug } from "@/services/winecritic-services"
-import { getwineCriticMenu } from "./tasting-menu"
+import { getwineCriticMenu } from "./wine-critic-menu"
 import { SidebarComponent } from "@/components/layout/sidebar-component"
 
 type Props = {
     wineCriticSlug: string
 }
 
-export async function TastingSidebar({ wineCriticSlug }: Props) {
+export async function WineCriticSidebar({ wineCriticSlug }: Props) {
     const wineCritic = await getWineCriticDAOBySlug(wineCriticSlug)
     if (!wineCritic) {
         return <div>Wine critic {wineCriticSlug} not found</div>

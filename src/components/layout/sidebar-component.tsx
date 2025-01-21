@@ -1,24 +1,19 @@
 "use client"
 
-import { adminMenu } from "@/app/admin/admin-menu"
 import { Button } from "@/components/ui/button"
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { MenuGroup, MenuItem } from "@/lib/utils"
-import { Loader, Menu } from "lucide-react"
-import { useSession } from "next-auth/react"
+import { Menu } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
 import { Skeleton } from "../ui/skeleton"
-import { getwineCriticMenu } from "@/app/[wineCriticSlug]/tasting-menu"
-import { Role } from "@prisma/client"
-import { TastingDAO } from "@/services/tasting-services"
 
 type Props = {  
   menuGroups: MenuGroup[]
+  side?: "left" | "right"
 }
 
-export function SidebarComponent({ menuGroups }: Props) {
+export function SidebarComponent({ menuGroups, side = "left" }: Props) {
   const pathname = usePathname()
   const { isMobile, setOpenMobile } = useSidebar()
 
@@ -38,7 +33,7 @@ export function SidebarComponent({ menuGroups }: Props) {
       >
         <Menu />
       </Button>
-      <Sidebar variant="floating" collapsible="icon" className="top-[4rem] h-[calc(100svh-4rem)]">
+      <Sidebar side={side} variant="floating" collapsible="icon" className="top-[4rem] h-[calc(100svh-4rem)]">
         <SidebarHeader className="h-8 flex items-end mr-0.5">
           <SidebarTrigger />
         </SidebarHeader>

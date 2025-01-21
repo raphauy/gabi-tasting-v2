@@ -1,12 +1,11 @@
 import { SidebarSkeleton } from "@/components/layout/sidebar-component"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { auth } from "@/lib/auth"
-import { Role } from "@prisma/client"
-import { notFound, redirect } from "next/navigation"
-import { Suspense } from "react"
-import { TastingSidebar } from "./tasting-sidebar"
 import { NotAlowed } from "@/components/not-alowed"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { getCurrentUser } from "@/lib/utils"
+import { Role } from "@prisma/client"
+import { redirect } from "next/navigation"
+import { Suspense } from "react"
+import { WineCriticSidebar } from "./wine-critic-sidebar"
 
 type Props = {
   children: React.ReactNode
@@ -32,7 +31,7 @@ export default async function TastingLayout({ children, params }: Props) {
       <SidebarProvider className="h-full flex">
         <div className="flex h-full w-full">
           <Suspense fallback={<SidebarSkeleton />}>
-            <TastingSidebar wineCriticSlug={wineCriticSlug} />
+            <WineCriticSidebar wineCriticSlug={wineCriticSlug} />
           </Suspense>
           
           <main className="p-2 w-full flex-1 overflow-auto mt-10 md:mt-0">

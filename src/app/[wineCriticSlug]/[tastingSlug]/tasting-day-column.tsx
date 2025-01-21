@@ -15,10 +15,12 @@ import { WineDAO } from "@/services/wine-services";
 
 type Props = {
     tastingDay: KanbanTastingDayDAOWithWineries
+    wineCriticSlug: string
+    tastingSlug: string
     index: number
     wines: WineDAO[]
 }
-export default function TastingDayColumn({ tastingDay, index, wines }: Props) {
+export default function TastingDayColumn({ tastingDay, wineCriticSlug, tastingSlug, index, wines }: Props) {
   const [wineries, setWineries] = useState<TastingDayWineryDAO[]>([])
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function TastingDayColumn({ tastingDay, index, wines }: Props) {
                   {(provided) => (
                     <ol className="space-y-3 h-full" ref={provided.innerRef} {...provided.droppableProps}>
                       {wineries.map((winery, index) => (
-                        <WineryCard key={winery.wineryId} winery={winery.winery} wines={wines.filter(wine => wine.wineryId === winery.wineryId)} index={index} />
+                        <WineryCard key={winery.wineryId} winery={winery.winery} wines={wines.filter(wine => wine.wineryId === winery.wineryId)} wineCriticSlug={wineCriticSlug} tastingSlug={tastingSlug} index={index} />
                       ))}
                       {provided.placeholder}
                     </ol>

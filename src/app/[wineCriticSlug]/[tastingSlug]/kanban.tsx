@@ -123,7 +123,7 @@ export default function Kanban({ tasting, wines, initialTastingDays }: Props) {
             {(provided) => (
               <ol className="flex gap-x-3 h-full min-h-[600px]" ref={provided.innerRef} {...provided.droppableProps}>
                 {tastingDays.map((tastingDay, index) => (
-                  <TastingDayColumn key={tastingDay.id} tastingDay={tastingDay} index={index} wines={wines} />
+                  <TastingDayColumn key={tastingDay.id} tastingDay={tastingDay} index={index} wines={wines} wineCriticSlug={tasting.wineCritic.slug} tastingSlug={tasting.slug} />
                 ))}
                 {provided.placeholder}
                 <TastingDayDialog tastingId={tasting.id} />

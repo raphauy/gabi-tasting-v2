@@ -7,13 +7,17 @@ import { Draggable } from "@hello-pangea/dnd";
 import { WineryDialog } from "@/app/[wineCriticSlug]/winerys/winery-dialogs";
 import { WineDAO } from "@/services/wine-services";
 import DropdownWines from "./dropdown-wines";
+import Link from "next/link";
+import { Expand } from "lucide-react";
 
 type Props = {
   winery: WineryDAO
   wines: WineDAO[]
+  wineCriticSlug: string
+  tastingSlug: string
   index: number
 }
-export default function WineryCard({ winery, wines, index }: Props) {
+export default function WineryCard({ winery, wines, wineCriticSlug, tastingSlug, index }: Props) {
 
   return (
     <>
@@ -29,11 +33,16 @@ export default function WineryCard({ winery, wines, index }: Props) {
                           <AvatarFallback>{winery.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <h3 className="font-medium">{winery.name}</h3>
+                          <Link href={`/${wineCriticSlug}/${tastingSlug}/${winery.slug}`} className="font-medium">{winery.name}</Link>
                           <p className="text-sm text-gray-500">{winery.description}</p>
                         </div>
                       </div>
-                      <WineryDialog id={winery.id} wineCriticId={winery.wineCriticId} />
+                      <div className="flex items-center gap-2">
+                        <Link href={`/${wineCriticSlug}/${tastingSlug}/${winery.slug}`}>
+                          <Expand className="h-4 w-4 text-muted-foreground" />
+                        </Link>
+                        <WineryDialog id={winery.id} wineCriticId={winery.wineCriticId} />
+                      </div>
                     </div>
                     { 
                       wines.length > 0 && 
