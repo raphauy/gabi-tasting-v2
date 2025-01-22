@@ -1,5 +1,5 @@
 import { getWineAndReviewsDAO, getWineDAO } from "@/services/wine-services"
-import { ReviewWineCard } from "./review-wine-card"
+import { WineCard } from "../../../../../components/wine-card"
 import { Review } from "./review"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -20,7 +20,7 @@ export default async function WinePage({ params }: Props) {
     
     return (
         <div className="space-y-4">
-            <ReviewWineCard wine={wine} />
+            <WineCard wine={wine} />
 
             {
                 review ? <Review review={review} /> : getEmptyReviewBox(wineCriticSlug, tastingSlug, winerySlug, wineId)

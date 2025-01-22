@@ -3,9 +3,7 @@ import { MenuGroup } from "@/lib/utils"
 import { getTastingsDAOByWinerySlug, TastingDAO } from "@/services/tasting-services"
 import { getWinesDAOByWinerySlug, WineDAO } from "@/services/wine-services"
 import { getWineryNameBySlug } from "@/services/winery-services"
-import { Glasses, Users } from "lucide-react"
-import { Wine } from "lucide-react"
-import { LayoutDashboard } from "lucide-react"
+import { Glasses, Users, Wine } from "lucide-react"
 
 type Props = {
     winerySlug: string
@@ -25,7 +23,7 @@ export function getWineryMenu(winerySlug: string, wineryName: string, wines: Win
         name: `${wineryName}`,
         items: [
           {
-            name: "Tastings",
+            name: " Tastings",
             icon: <Glasses className="h-4 w-4" />,
             subItems: tastings.map(tasting => ({
               label: tasting.name,

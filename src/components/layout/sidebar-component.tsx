@@ -67,7 +67,7 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
           >
             {item.href ? 
             <Link href={item.href} prefetch={false} className="flex items-center justify-between w-full">
-              <div className="flex items-center min-w-0">
+              <div className="flex items-center min-w-0 gap-2">
                 {item.icon}
                 <span className="truncate">{item.name}</span>
               </div>
@@ -78,7 +78,7 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
               )}
             </Link> : 
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center min-w-0">
+              <div className="flex items-center min-w-0 gap-2">
                 {item.icon}
                 <span className="truncate">{item.name}</span>
               </div>

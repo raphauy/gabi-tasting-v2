@@ -1,13 +1,10 @@
-import { columns } from "@/app/[wineCriticSlug]/wines/wine-columns"
-import { DataTable } from "@/app/[wineCriticSlug]/wines/wine-table"
+import { WineList } from "@/app/[wineCriticSlug]/[tastingSlug]/[winerySlug]/wine-list"
 import { Button } from "@/components/ui/button"
-import { WineCard } from "@/components/wine-card"
-import { getTastingDAOBySlug, TastingDAO } from "@/services/tasting-services"
+import { getTastingDAOBySlug } from "@/services/tasting-services"
 import { getWinesDAOByWineryAndTasting } from "@/services/wine-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 type Props = {
     params: Promise<{
@@ -44,11 +41,13 @@ export default async function Page({ params }: Props) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 place-items-center">
+      <WineList wines={wines} basePath={`/winery/${winerySlug}/${tastingSlug}`} />
+
+      {/* <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 place-items-center">
         {wines.map((wine) => (
           <WineCard key={wine.id} wine={wine} />
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

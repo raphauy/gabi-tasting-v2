@@ -19,6 +19,8 @@ export type WineDAO = {
 	wineryId: string
 	winery: WineryDAO
 	tastings: TastingDAO[]
+  reviewId: string | null
+  review: ReviewDAO | null
 	createdAt: Date
 	updatedAt: Date
 }
@@ -107,6 +109,11 @@ export async function getWinesDAOByWineryAndTasting(wineryId: string, tastingId:
       winery: {
         include: {
           wineCritic: true
+        }
+      },
+      review: {
+        select: {
+          finished: true
         }
       }
     }
@@ -329,7 +336,7 @@ export async function getWinesAndReviewsDAOByWineryAndTasting(wineryId: string, 
       }
     },
     include: {
-      review: true
+      review: true,
     }
   })
   return found as WineAndReviewsDAO[]
