@@ -39,40 +39,40 @@ export default function Dashboard({ tastingsSummary }: Props) {
                     <CardContent>
                         <div className="text-2xl font-bold">{tastingsSummary.totalTastings}</div>
                         <p className="text-xs text-muted-foreground">
-                            {tastingsSummary.activeTastings} activos
+                            {tastingsSummary.activeTastings} active
                         </p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Bodegas</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Wineries</CardTitle>
                         <Building2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{tastingsSummary.totalWineries}</div>
                         <p className="text-xs text-muted-foreground">
-                            Participando en tastings
+                            Participating in tastings
                         </p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Vinos</CardTitle>
+                        <CardTitle className="text-sm font-medium">Total Wines</CardTitle>
                         <Wine className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{tastingsSummary.totalWines}</div>
                         <p className="text-xs text-muted-foreground">
-                            En todos los tastings
+                            Across all tastings
                         </p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Promedio Reviews</CardTitle>
+                        <CardTitle className="text-sm font-medium">Average Score</CardTitle>
                         <Grape className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -80,7 +80,7 @@ export default function Dashboard({ tastingsSummary }: Props) {
                             {globalAverageScore ?? '-'}
                         </div>
                         <p className="text-xs text-muted-foreground">
-                            Puntuación media global
+                            Global average score
                         </p>
                     </CardContent>
                 </Card>
@@ -89,18 +89,18 @@ export default function Dashboard({ tastingsSummary }: Props) {
             {/* Tabla de Tastings */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Resumen de Tastings</CardTitle>
+                    <CardTitle>Tastings Summary</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow className="hover:bg-transparent">
-                                <TableHead>Nombre</TableHead>
-                                <TableHead className="text-center">Bodegas</TableHead>
-                                <TableHead className="text-center">Estado</TableHead>
-                                <TableHead className="text-center">Vinos</TableHead>
-                                <TableHead className="text-center">Puntuación Media</TableHead>
-                                <TableHead className="text-center">Progreso</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead className="text-center">Wineries</TableHead>
+                                <TableHead className="text-center">Status</TableHead>
+                                <TableHead className="text-center">Wines</TableHead>
+                                <TableHead className="text-center">Average Score</TableHead>
+                                <TableHead className="text-center">Progress</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -119,7 +119,7 @@ export default function Dashboard({ tastingsSummary }: Props) {
                                         </TableCell>
                                         <TableCell className="text-center">
                                             <Badge variant={progressPercentage === 100 ? "default" : "secondary"}>
-                                                {progressPercentage === 100 ? "Completado" : "En Progreso"}
+                                                {progressPercentage === 100 ? "Completed" : "In Progress"}
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-center">{tasting.wineriesCount}</TableCell>
@@ -141,7 +141,7 @@ export default function Dashboard({ tastingsSummary }: Props) {
                                             <div className="space-y-2">
                                                 <Progress value={progressPercentage} className="h-2" />
                                                 <p className="text-xs text-muted-foreground">
-                                                    {tasting.completedReviewsCount} de {tasting.completedReviewsCount + tasting.pendingReviewsCount} reviews
+                                                    {tasting.completedReviewsCount} of {tasting.completedReviewsCount + tasting.pendingReviewsCount} reviews
                                                 </p>
                                             </div>
                                         </TableCell>
