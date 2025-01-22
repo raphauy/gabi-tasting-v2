@@ -5,7 +5,7 @@ import { MenuGroup } from "@/lib/utils"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getWinesDAOByWineryAndTastingSlugsAction } from "./wines/wine-actions"
-import { Check, Wine } from "lucide-react"
+import { Check, CheckCircle, CheckCircle2, Expand, List, Wine } from "lucide-react"
 
 type Props = {
     wineCriticMenu: MenuGroup[]
@@ -30,8 +30,15 @@ export function WineCriticSidebarWrapper({ wineCriticMenu }: Props) {
                 setFinalMenu([
                     ...baseMenu,
                     {
-                        name: `${wineryName} wines`,
-                        items: wines
+                        name: "Reviews",
+                        items: [
+                            {
+                                name: `${wineryName} reviews:`,
+                                href: `/${wineCriticSlug}/${tastingSlug}/${winerySlug}`,
+                                subItems: wines,
+                                opositeIcon: <List className="h-4 w-4" />
+                            }
+                        ]
                     }
                 ])
             } else {
@@ -48,10 +55,10 @@ export function WineCriticSidebarWrapper({ wineCriticMenu }: Props) {
 async function getWinesMenu(wineCriticSlug: string, tastingSlug: string, winerySlug: string) {
     const wines = await getWinesDAOByWineryAndTastingSlugsAction(winerySlug, tastingSlug)
     return wines.map((wine) => ({
-        name: wine.name,
+        label: wine.name,
         href: `/${wineCriticSlug}/${tastingSlug}/${winerySlug}/${wine.id}`,
         icon: <Wine className="h-4 w-4" />,
-        opositeIcon: wine.review?.finished ? <Check className="h-4 w-4" /> : undefined
+        opositeIcon: wine.review?.finished ? <Check className="h-4 w-4 text-green-500" /> : undefined
     }))
 }
 

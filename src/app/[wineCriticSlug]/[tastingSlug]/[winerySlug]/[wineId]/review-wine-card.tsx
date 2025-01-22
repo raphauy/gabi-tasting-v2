@@ -1,22 +1,33 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WineAndReviewsDAO } from "@/services/wine-services"
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Calendar, Clock, DollarSign, Droplet, FileText, GrapeIcon, MapPin } from "lucide-react"
+import { Calendar, Check, Clock, DollarSign, Droplet, FileText, GrapeIcon, MapPin } from "lucide-react"
 import Link from "next/link"
 
 type Props = {
   wine: WineAndReviewsDAO
+  href?: string
 }
 
-export function ReviewWineCard({ wine }: Props) {
-  return (
+export function ReviewWineCard({ wine, href }: Props) {
+  const handleTechnicalFileClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    window.open(wine.technicalFileUrl, '_blank', 'noopener,noreferrer')
+  }
+
+  const CardElement = (
     <Card className="hover:shadow-lg transition-shadow duration-200 w-full h-full flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl">
-            {wine.name}
+          <CardTitle className="text-2xl flex items-center gap-2">
+            <p>{wine.name}</p>
+            {wine.review?.finished && <Check className="h-6 w-6 font-bold text-green-500" />}
           </CardTitle>
           <div className="flex items-center gap-2 text-muted-foreground">
             <MapPin className="h-4 w-4" />
@@ -49,13 +60,9 @@ export function ReviewWineCard({ wine }: Props) {
           {wine.technicalFileUrl && (
             <div className="flex items-center gap-2 lg:relative lg:z-10">
               <FileText className="h-4 w-4 text-muted-foreground" />
-              <Link 
-                href={wine.technicalFileUrl} 
-                target="_blank" 
-                className="text-sm text-primary hover:underline"
-              >
+              <div onClick={handleTechnicalFileClick} className="text-sm text-primary hover:underline cursor-pointer">
                 Ficha técnica
-              </Link>
+              </div>
             </div>
           )}
 
@@ -80,5 +87,11 @@ export function ReviewWineCard({ wine }: Props) {
         </div>
       </CardContent>
     </Card>
-)
+  )
+
+  return href ? (
+    <Link href={href} className="block w-full h-full">
+      {CardElement}
+    </Link>
+  ) : CardElement
 } 

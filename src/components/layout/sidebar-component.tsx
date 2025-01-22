@@ -1,9 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuAction, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { MenuGroup, MenuItem } from "@/lib/utils"
-import { Menu } from "lucide-react"
+import { ChevronRight, Menu } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Skeleton } from "../ui/skeleton"
@@ -67,23 +67,23 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
           >
             {item.href ? 
             <Link href={item.href} prefetch={false} className="flex items-center justify-between w-full">
-              <div className="flex items-center">
+              <div className="flex items-center min-w-0">
                 {item.icon}
-                <span>{item.name}</span>
+                <span className="truncate">{item.name}</span>
               </div>
               {item.opositeIcon && (
-                <div className="ml-auto">
+                <div>
                   {item.opositeIcon}
                 </div>
               )}
             </Link> : 
             <div className="flex items-center justify-between w-full">
-              <div className="flex items-center">
+              <div className="flex items-center min-w-0">
                 {item.icon}
-                <span>{item.name}</span>
+                <span className="truncate">{item.name}</span>
               </div>
               {item.opositeIcon && (
-                <div className="ml-auto">
+                <div>
                   {item.opositeIcon}
                 </div>
               )}
@@ -92,31 +92,31 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
           {item.subItems && item.subItems.length > 0 && (
             <SidebarMenuSub>
               {item.subItems.map((subItem) => (
-                <SidebarMenuSubItem key={subItem.href}>
+                <SidebarMenuSubItem key={subItem.href} className="pr-0">
                   <SidebarMenuSubButton
                     asChild
                     isActive={pathname === subItem.href}
                     onClick={onMenuClick}
-                  >
+                 >
                     {subItem.href ? 
                     <Link href={subItem.href} className="flex items-center justify-between w-full">
-                      <div className="flex items-center">
+                      <div className="flex items-center min-w-0">
                         {subItem.icon}
-                        <span>{subItem.label}</span>
+                        <span className="truncate">{subItem.label}</span>
                       </div>
                       {subItem.opositeIcon && (
-                        <div className="ml-auto">
+                        <div>
                           {subItem.opositeIcon}
                         </div>
                       )}
                     </Link> : 
                     <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center">
+                      <div className="flex items-center min-w-0">
                         {subItem.icon}
-                        <span>{subItem.label}</span>
+                        <span className="truncate">{subItem.label}</span>
                       </div>
                       {subItem.opositeIcon && (
-                        <div className="ml-auto">
+                        <div>
                           {subItem.opositeIcon}
                         </div>
                       )}

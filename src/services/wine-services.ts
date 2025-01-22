@@ -319,3 +319,18 @@ export async function getWinesDAOByWinerySlug(winerySlug: string) {
     tastings: wine.tastings.map(wt => wt.tasting)
   })) as WineDAO[]
 }
+
+export async function getWinesAndReviewsDAOByWineryAndTasting(wineryId: string, tastingId: string) {
+  const found = await prisma.wine.findMany({
+    where: {
+      wineryId,
+      tastings: {
+        some: { tastingId }
+      }
+    },
+    include: {
+      review: true
+    }
+  })
+  return found as WineAndReviewsDAO[]
+}
