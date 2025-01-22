@@ -21,7 +21,6 @@ export function getwineCriticMenu({ wineCriticSlug, tastings }: Props): MenuGrou
         {
           name: "Tastings",
           icon: <BookOpenCheck className="h-4 w-4" />,
-          href: `/${wineCriticSlug}`,
           subItems: tastings.map((tasting) => ({
             label: tasting.name,            
             href: `/${wineCriticSlug}/${tasting.slug}`,
