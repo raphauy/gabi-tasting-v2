@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Wine, Grape, Building2, ClipboardCheck } from "lucide-react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 type Props = {
     tastingsSummary: TastingsSummary
@@ -96,8 +97,8 @@ export default function Dashboard({ tastingsSummary }: Props) {
                         <TableHeader>
                             <TableRow className="hover:bg-transparent">
                                 <TableHead>Name</TableHead>
-                                <TableHead className="text-center">Wineries</TableHead>
                                 <TableHead className="text-center">Status</TableHead>
+                                <TableHead className="text-center">Wineries</TableHead>
                                 <TableHead className="text-center">Wines</TableHead>
                                 <TableHead className="text-center">Average Score</TableHead>
                                 <TableHead className="text-center">Progress</TableHead>
@@ -139,7 +140,14 @@ export default function Dashboard({ tastingsSummary }: Props) {
                                         </TableCell>
                                         <TableCell>
                                             <div className="space-y-2">
-                                                <Progress value={progressPercentage} className="h-2" />
+                                                <Progress 
+                                                    value={progressPercentage} 
+                                                    className={cn(
+                                                        "h-2",
+                                                        "relative overflow-hidden rounded-full bg-slate-300 dark:bg-slate-700",
+                                                        "[&>div]:bg-[#ff915e]"
+                                                    )}
+                                                />
                                                 <p className="text-xs text-muted-foreground">
                                                     {tasting.completedReviewsCount} of {tasting.completedReviewsCount + tasting.pendingReviewsCount} reviews
                                                 </p>
