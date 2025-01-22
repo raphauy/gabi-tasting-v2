@@ -16,16 +16,25 @@ export type TastingsSummary = {
         completedReviewsCount: number;
         pendingReviewsCount: number;
         averageScore?: number;
+        wineries: {
+            name: string;
+            winesCount: number;
+        }[];
     }[];
 }
 
 type TastingWithRelations = Tasting & {
     wineries: (WineryTasting & {
-        winery: { id: string }
+        winery: { 
+            id: string;
+            name: string;
+        };
+        wineryId: string;
     })[];
     wines: (WineTasting & {
         wine: {
             id: string;
+            wineryId: string;
             review: Review | null;
         }
     })[];
@@ -43,7 +52,7 @@ export async function getTastingsSummary(wineCriticSlug: string): Promise<Tastin
             wineries: {
                 include: {
                     winery: true,
-                }
+                },
             },
             wines: {
                 include: {
@@ -80,6 +89,15 @@ export async function getTastingsSummary(wineCriticSlug: string): Promise<Tastin
             ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
             : undefined;
 
+        // Agrupar vinos por bodega
+        const wineriesWithWines = tasting.wineries.map(w => ({
+            name: w.winery.name,
+            winesCount: tasting.wines.filter(wine => wine.wine.wineryId === w.wineryId).length
+        }));
+
+        // sort wineriesWithWines by winesCount
+        wineriesWithWines.sort((a, b) => b.winesCount - a.winesCount);
+
         return {
             id: tasting.id,
             name: tasting.name,
@@ -89,6 +107,7 @@ export async function getTastingsSummary(wineCriticSlug: string): Promise<Tastin
             completedReviewsCount,
             pendingReviewsCount,
             averageScore,
+            wineries: wineriesWithWines
         };
     });
 

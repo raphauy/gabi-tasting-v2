@@ -1,18 +1,12 @@
 import { TastingsSummary } from "@/services/analytics"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Wine, Grape, Building2, ClipboardCheck } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { WineriesChart } from "@/components/charts/wineries-chart"
 
 type Props = {
     tastingsSummary: TastingsSummary
@@ -28,8 +22,11 @@ export default function Dashboard({ tastingsSummary }: Props) {
         ? Math.round(validScores.reduce((acc, score) => acc + score, 0) / validScores.length)
         : null;
 
+    // Preparar datos para el gráfico
+    const chartData = tastingsSummary.tastingsBreakdown[0]?.wineries || [];
+
     return (
-        <div className="p-6 space-y-6">
+        <div className="p-6 space-y-6 pb-12">
             {/* Métricas Principales */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
@@ -144,7 +141,7 @@ export default function Dashboard({ tastingsSummary }: Props) {
                                                     value={progressPercentage} 
                                                     className={cn(
                                                         "h-2",
-                                                        "relative overflow-hidden rounded-full bg-slate-300 dark:bg-slate-700",
+                                                        "relative overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800",
                                                         "[&>div]:bg-[#ff915e]"
                                                     )}
                                                 />
@@ -160,6 +157,12 @@ export default function Dashboard({ tastingsSummary }: Props) {
                     </Table>
                 </CardContent>
             </Card>
+
+            {/* Gráfico de Vinos por Bodega */}
+            <WineriesChart 
+                data={chartData}
+                title={`Wines by Winery - ${tastingsSummary.tastingsBreakdown[0]?.name}`}
+            />
         </div>
     )
 }
