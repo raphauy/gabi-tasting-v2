@@ -81,11 +81,6 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
-    initialState: {
-      pagination: {
-        pageSize: 50,
-      },
-    },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -101,8 +96,8 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     columnsOff && columnsOff.forEach(colName => {
       table.getColumn(colName)?.toggleVisibility(false)
-      table.setPageSize(50)
     });
+    table.setPageSize(50)
   // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [])
 
