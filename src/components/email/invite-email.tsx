@@ -33,10 +33,7 @@ export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName =
                 Hola {invitedName},
               </Text>
               <Text className="text-center text-gray-700 mb-8">
-                {inviterName} te invita a unirte a Gabi Tasting, una plataforma desarrollada para simplificar el registro y la gestión de vinos e información en catas de puntuación. Como representante de {wineryName}, tendrás acceso para inscribir y administrar los vinos de la bodega.
-              </Text>
-              <Text className="text-center text-gray-700 mb-8">
-                Como representante de {wineryName}, tendrás acceso para inscribir y administrar los vinos de la bodega para ser puntuados en Tim Atkin MW Uruguay 2025 Special Report.
+                {inviterName} te invita a unirte a Gabi Tasting, una plataforma desarrollada para simplificar el registro y la gestión de vinos e información en catas de puntuación. Como representante de {wineryName}, tendrás acceso para inscribir y administrar los vinos de la bodega para ser puntuados en Tim Atkin MW Uruguay 2025 Special Report.
               </Text>
               <Section className="text-center mb-8">
                 <Link
