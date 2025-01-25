@@ -211,7 +211,6 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ficha Técnica (PDF)</FormLabel>
-                <FormDescription>La Ficha Técnica es opcional pero recomendada.</FormDescription>
                 <div className="flex items-start justify-between pt-5">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     {fileName && (
