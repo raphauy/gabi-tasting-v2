@@ -88,6 +88,14 @@ export function Review({ review }: Props) {
         type: "select",
         selectOptions: ["Low", "Medium", "High"]
     }
+    const tanninsNature: DataField = {
+        id: review.id,
+        name: "tanninsNature",
+        initialValue: review.tanninsNature || "",
+        update: setFieldAction,
+        type: "input",
+        selectOptions: ["Low", "Medium", "High"]
+    }
     const body: DataField = {
         id: review.id,
         name: "body",
@@ -111,7 +119,7 @@ export function Review({ review }: Props) {
         update: setFieldAction,
         type: "textarea"
     }
-    const palateFields: DataField[] = [sweetness, acidity, alcohol, tannins, body, flavourIntensity, flavourCharacteristics]
+    const palateFields: DataField[] = [sweetness, acidity, alcohol, tannins, tanninsNature, body, flavourIntensity, flavourCharacteristics]
 
     const comments: DataField = {
         id: review.id,

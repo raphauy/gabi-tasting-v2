@@ -214,7 +214,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
       />
     ) : (
       <textarea
-        rows={4}
+        rows={8}
         {...commonProps}
         className={`${commonProps.className} min-h-[60px] resize-none`}
       />

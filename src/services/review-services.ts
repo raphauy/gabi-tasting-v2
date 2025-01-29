@@ -14,6 +14,7 @@ export type ReviewDAO = {
 	acidity: string | undefined
 	alcohol: string | undefined
 	tannins: string | undefined
+	tanninsNature: string | undefined
 	body: string | undefined
 	flavourIntensity: string | undefined
 	flavourCharacteristics: string | undefined

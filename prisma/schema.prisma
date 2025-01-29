@@ -286,6 +286,7 @@ model Review {
   acidity                 String?                              // gennext: show.column
   alcohol                 String?                              // gennext: show.column
   tannins                 String?                              // gennext: show.column
+  tanninsNature           String?                              // gennext: show.column
   body                    String?                              // gennext: show.column
   
   flavourIntensity        String?                              // gennext: show.column
