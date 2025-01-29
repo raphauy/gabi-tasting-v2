@@ -66,6 +66,8 @@ function getLabel(fieldName: string) {
       return "Acidity"
     case "alcohol":
       return "Alcohol"
+    case "tannins":
+      return "Tannins"
     case "body":
       return "Body"
     case "flavourIntensity":
