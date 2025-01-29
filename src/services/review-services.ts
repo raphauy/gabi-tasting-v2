@@ -13,6 +13,7 @@ export type ReviewDAO = {
 	sweetness: string | undefined
 	acidity: string | undefined
 	alcohol: string | undefined
+	tannins: string | undefined
 	body: string | undefined
 	flavourIntensity: string | undefined
 	flavourCharacteristics: string | undefined
@@ -35,6 +36,7 @@ export const ReviewSchema = z.object({
 	sweetness: z.string().optional(),
 	acidity: z.string().optional(),
 	alcohol: z.string().optional(),
+	tannins: z.string().optional(),
 	body: z.string().optional(),
 	flavourIntensity: z.string().optional(),
 	flavourCharacteristics: z.string().optional(),
