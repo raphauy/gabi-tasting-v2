@@ -101,7 +101,7 @@ function getMenuItems(menuItems: MenuItem[], pathname: string, onMenuClick: () =
                     {subItem.href ? 
                     <Link href={subItem.href} className="flex items-center justify-between w-full">
                       <div className="flex items-center min-w-0">
-                        {subItem.icon}
+                        <div>{subItem.icon}</div>
                         <span className="truncate">{subItem.label}</span>
                       </div>
                       {subItem.opositeIcon && (
