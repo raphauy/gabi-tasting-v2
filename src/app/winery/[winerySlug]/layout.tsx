@@ -28,10 +28,19 @@ export default async function WineryLayout({ children, params }: Props) {
   }
 
   const userWinecriticSlug= user.wineCriticSlug
+  const userWinerySlug= user.winerySlug
 
-  if (user.role === Role.WINERY || user.role === Role.ADMIN || user.role === Role.TASTER) {
+  if (user.role === Role.WINERY) {
+    if (userWinerySlug !== winery.slug) {
+      const message = `El usuario de bodega (${userWinerySlug}) solo puede acceder a su propia bodega`
+      console.log(message)
+      return <NotAlowed message={message}/>
+    }
+  }
+
+  if (user.role === Role.TASTER || user.role === Role.ADMIN) {
     if (userWinecriticSlug !== winery.wineCritic.slug) {
-      const message= `El crítico asociado al usuario (${userWinecriticSlug}) no coincide con el crítico asociado a la Bodega (${winery.wineCritic.slug})`
+      const message = `El catador solo puede acceder a bodegas del crítico ${userWinecriticSlug}`
       console.log(message)
       return <NotAlowed message={message}/>
     }

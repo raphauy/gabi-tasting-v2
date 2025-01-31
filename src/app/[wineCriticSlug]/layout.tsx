@@ -26,6 +26,15 @@ export default async function TastingLayout({ children, params }: Props) {
     return <NotAlowed message="No tienes permisos para acceder."/>
   }
 
+  const userWineCriticSlug= user.wineCriticSlug
+  if (user.role === Role.TASTER || user.role === Role.ADMIN) {
+    if (userWineCriticSlug !== wineCriticSlug) {
+      const message = `El catador solo puede acceder a bodegas de su propio crítico ${userWineCriticSlug}`
+      console.log(message)
+      return <NotAlowed message={message}/>
+    }
+  }
+
   return (
     <div className="w-full h-full">
       <SidebarProvider className="h-full flex">
