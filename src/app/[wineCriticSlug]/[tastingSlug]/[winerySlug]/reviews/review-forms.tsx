@@ -36,7 +36,8 @@ export function ReviewForm({ id, closeDialog }: Props) {
       flavourIntensity: "",
       flavourCharacteristics: "",
       score: 0,
-      comments: ""
+      comments: "",
+      tastingNote: ""
     },
     mode: "onChange",
   })

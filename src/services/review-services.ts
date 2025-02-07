@@ -20,6 +20,7 @@ export type ReviewDAO = {
 	flavourCharacteristics: string | undefined
 	score: number | undefined
 	comments: string | undefined
+	tastingNote: string | undefined
 	finished: boolean
 	wineId: string
 	wine: WineDAO
@@ -43,6 +44,7 @@ export const ReviewSchema = z.object({
 	flavourCharacteristics: z.string().optional(),
 	score: z.number().optional(),
 	comments: z.string().optional(),
+	tastingNote: z.string().optional(),
 	wineId: z.string().min(1, "wineId is required."),
 	finished: z.boolean().optional(),
 })
@@ -64,6 +66,9 @@ export async function getReviewDAO(id: string) {
     where: {
       id
     },
+    include: {
+      wine: true
+    }
   })
   return found as ReviewDAO
 }
@@ -112,6 +117,18 @@ export async function setField(id: string, name: string, value: string | number 
     },
     data: {
       [name]: value
+    }
+  })
+  return updated
+}
+
+export async function setTastingNote(id: string, tastingNote: string) {
+  const updated = await prisma.review.update({
+    where: {
+      id
+    },
+    data: {
+      tastingNote
     }
   })
   return updated

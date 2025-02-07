@@ -6,6 +6,7 @@ export type WineCriticDAO = {
 	name: string
 	slug: string
 	description: string | null | undefined
+	tastingNotePrompt: string | null | undefined
 	createdAt: Date
 	updatedAt: Date
 }
@@ -80,4 +81,25 @@ export async function getWineCriticNameBySlug(slug: string) {
     },
   })
   return found?.name || ""
+}
+
+export async function getWineCriticTastingNotePrompt(slug: string) {
+  const found = await prisma.wineCritic.findUnique({
+    where: {
+      slug
+    },
+  })
+  return found?.tastingNotePrompt || ""
+}
+
+export async function setWineCriticTastingNotePrompt(slug: string, tastingNotePrompt: string) {
+  const updated = await prisma.wineCritic.update({
+    where: {
+      slug
+    },
+    data: {
+      tastingNotePrompt
+    }
+  })
+  return updated
 }

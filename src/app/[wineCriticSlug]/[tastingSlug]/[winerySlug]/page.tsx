@@ -1,7 +1,6 @@
 import { getTastingDAOBySlug } from "@/services/tasting-services"
 import { getWinesAndReviewsDAOByWineryAndTasting } from "@/services/wine-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
-import { WineCard } from "../../../../components/wine-card"
 import { WineList } from "./wine-list"
 
 type Props = {
@@ -21,17 +20,6 @@ export default async function WineryPage({ params }: Props) {
 
             <WineList wines={wines} basePath={`/${wineCriticSlug}/${tastingSlug}/${winerySlug}`} />
             
-            {/* <div className="w-full max-w-5xl mx-auto py-6 ">      
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 place-items-center">
-                    {wines.map((wine) => (
-                        <ReviewWineCard 
-                            key={wine.id} 
-                            wine={wine} 
-                            href={`/${wineCriticSlug}/${tastingSlug}/${winerySlug}/${wine.id}`} 
-                        />
-                    ))}
-                </div>
-            </div> */}
         </div>
     )
 }

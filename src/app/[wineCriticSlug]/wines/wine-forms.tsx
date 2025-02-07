@@ -225,6 +225,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
                             href={field.value} 
                             target="_blank" 
                             rel="noopener noreferrer"
+                            className="whitespace-break-spaces"
                           >
                             {fileName}
                           </a>

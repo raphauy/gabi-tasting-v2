@@ -124,6 +124,8 @@ model WineCritic {
   slug          String    @unique                   // gennext: show.column
   description   String?                             // gennext: show.column
 
+  tastingNotePrompt String?
+
   wineries      Winery[]                              // gennext: skip.list
   users         User[]                              // gennext: skip.list
   tastings      Tasting[]                           // gennext: skip.list
@@ -294,6 +296,7 @@ model Review {
   
   score                   Int?                                 // gennext: show.column
   comments                String?                              // gennext: show.column
+  tastingNote             String?                              // gennext: show.column
 
   finished                Boolean @default(false)
 

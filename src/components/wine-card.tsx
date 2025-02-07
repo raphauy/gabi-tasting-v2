@@ -1,5 +1,6 @@
 "use client"
 
+import { WineDialog } from "@/app/[wineCriticSlug]/wines/wine-dialogs"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { WineDAO } from "@/services/wine-services"
@@ -10,10 +11,11 @@ import Link from "next/link"
 
 type Props = {
   wine: WineDAO
+  tastingId?: string
   href?: string
 }
 
-export function WineCard({ wine, href }: Props) {
+export function WineCard({ wine, tastingId, href }: Props) {
   const handleTechnicalFileClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -29,7 +31,8 @@ export function WineCard({ wine, href }: Props) {
             {wine.review?.finished && <Check className="h-6 w-6 font-bold text-green-500" />}
           </CardTitle>
           <div className="flex items-center gap-2 text-muted-foreground">
-            <MapPin className="h-4 w-4" />
+            {tastingId && <WineDialog wineryId={wine.wineryId} id={wine.id} tastingId={tastingId} />}
+            <div><MapPin className="h-4 w-4" /></div>
             <span className="text-sm">{wine.region}</span>
           </div>
         </div>

@@ -124,3 +124,15 @@ export async function getTastingNameBySlug(slug: string) {
   const tasting = await getTastingDAOBySlug(slug)
   return tasting?.name || ""
 }
+
+export async function getTastingIdBySlug(slug: string) {
+  const found = await prisma.tasting.findUnique({
+    where: {
+      slug
+    },
+    select: {
+      id: true
+    }
+  })
+  return found?.id || ""
+}
