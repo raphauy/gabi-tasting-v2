@@ -46,10 +46,10 @@ export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName =
               <Text className="text-sm text-gray-500 text-center">
                 Si tienes alguna pregunta, no dudes en contactarnos en{' '}
                 <Link
-                  href="mailto:tasting@gabizimmer.com"
+                  href="mailto:gabi@gabizimmer.com"
                   className="text-[#35472a] underline"
                 >
-                  tasting@gabizimmer.com
+                  gabi@gabizimmer.com
                 </Link>
               </Text>
             </Section>

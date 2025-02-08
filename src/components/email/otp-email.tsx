@@ -47,10 +47,10 @@ export default function OtpEmail({ code = "123456" }: OtpEmailProps) {
                 <br />
                 Contacta a{' '}
                 <Link
-                  href="mailto:tasting@gabizimmer.com"
+                  href="mailto:gabi@gabizimmer.com"
                   className="text-blue-600 underline"
                 >
-                  tasting@gabizimmer.com
+                  gabi@gabizimmer.com
                 </Link>{' '}
                 si no solicitaste este código.
               </Text>

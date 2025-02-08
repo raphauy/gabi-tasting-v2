@@ -9,6 +9,7 @@ export async function sendOTP(email: string, code: string) {
     const result = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: email,
+      replyTo: 'gabi@gabizimmer.com',
       subject: 'Código de verificación para Gabi Tasting',
       react: OtpEmail({ code }),
     });
@@ -33,6 +34,7 @@ export async function sendWineryUserInvite(email: string, inviterName: string, i
     const result = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: email,
+      replyTo: 'gabi@gabizimmer.com',
       subject: 'Invitación a Gabi Tasting',
       react: InviteEmail({ inviterName, invitedName, wineryName, ctaLink }),
     });
