@@ -24,11 +24,14 @@ export const columns: ColumnDef<WineDAO>[] = [
     cell: ({ row }) => {
       const data= row.original
       return (
-        <Link href={`/winery/${data.winery.slug}/${data.tastings[0].slug}/${data.id}`}>
+        <div>
+          <Link href={`/winery/${data.winery.slug}/${data.tastings[0].slug}/${data.id}`}>
           <Button variant="link" className="px-0">
             {data.name}
           </Button>
         </Link>
+        <p className="text-sm text-muted-foreground">{data.vintage}</p>
+        </div>
       )
     },
     filterFn: (row, id, value) => {
@@ -39,17 +42,18 @@ export const columns: ColumnDef<WineDAO>[] = [
         data.region?.toLowerCase().includes(valueLower) ||
         data.style?.toLowerCase().includes(valueLower) ||
         data.abv?.toString().includes(valueLower) ||
-        data.price?.toString().includes(valueLower))
+        data.price?.toString().includes(valueLower) ||
+        data.grapes?.toLowerCase().includes(valueLower))
     },
   },
   
   {
-    accessorKey: "vintage",
+    accessorKey: "grapes",
     header: ({ column }) => {
         return (
           <Button variant="ghost" className="pl-0 dark:text-white"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Vintage
+            Variedades
             <ArrowUpDown className="w-4 h-4 ml-1" />
           </Button>
     )},
