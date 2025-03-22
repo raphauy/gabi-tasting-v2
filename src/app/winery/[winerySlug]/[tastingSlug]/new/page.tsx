@@ -1,8 +1,6 @@
 import { WineForm } from "@/app/[wineCriticSlug]/wines/wine-forms"
-import { FileUpload } from "@/components/file-upload"
 import { getTastingDAOBySlug } from "@/services/tasting-services"
 import { getWineryDAOBySlug } from "@/services/winery-services"
-import { notFound } from "next/navigation"
 
 type Props= {
     params: Promise<{ winerySlug: string, tastingSlug: string }>
