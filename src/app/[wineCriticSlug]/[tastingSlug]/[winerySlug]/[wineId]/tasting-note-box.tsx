@@ -8,6 +8,8 @@ import { List, Loader, SaveIcon, Sparkles } from "lucide-react"
 import { useEffect, useState } from 'react'
 import { generateTastingNoteAction, setTastingNoteAction } from "../reviews/review-actions"
 import { EditPromptDialog } from "./edit-prompt-dialog"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 type Props = {
     reviewId: string
@@ -20,6 +22,7 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
     const [hasChanges, setHasChanges] = useState(false)
     const [isGenerating, setIsGenerating] = useState(false)
     const [isGeneratingStream, setIsGeneratingStream] = useState(false)
+    const [includePdf, setIncludePdf] = useState(false)
 
     const editor = useEditor({
         extensions: [
@@ -74,7 +77,7 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
 
         try {
             setIsGenerating(true)
-            const generatedNote = await generateTastingNoteAction(reviewId, wineCriticSlug)
+            const generatedNote = await generateTastingNoteAction(reviewId, wineCriticSlug, includePdf)
             editor.commands.setContent(generatedNote)
             setHasChanges(true)
             toast({
@@ -143,6 +146,14 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
                         </Button>
                     </div>
                     <div className="flex gap-2">
+                        <div className="flex items-center gap-2">
+                            <Label>Incluir PDF</Label>
+                            <Switch
+                                checked={includePdf}
+                                onCheckedChange={setIncludePdf}
+                                title="Incluir PDF"
+                            />
+                        </div>
                         <Button 
                             onClick={handleGenerate}
                             disabled={isGenerating || isGeneratingStream}

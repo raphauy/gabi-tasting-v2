@@ -46,17 +46,25 @@ export async function setTastingNoteAction(id: string, tastingNote: string): Pro
     return updated !== null
 }
 
-export async function generateTastingNoteAction(id: string, wineCriticSlug: string): Promise<string> {
+export async function generateTastingNoteAction(id: string, wineCriticSlug: string, includePdf: boolean = false): Promise<string> {
     const review= await getReviewDAO(id)
     if (!review) {
         throw new Error("Review not found")
     }
+    const revewWithoutTecnicalFile= {
+        ...review,
+        wine: {
+            ...review.wine,
+            technicalFileUrl: undefined,
+            technicalFileName: undefined
+        }
+    }
     console.log(review)
     const wineCriticTastingNotePrompt= await getWineCriticTastingNotePrompt(wineCriticSlug)
     const system= wineCriticTastingNotePrompt + tastingNoteFormat
-    const prompt= `Generates a Tasting Note with direct html tags (without markdown) for the wine ${review.wine.name} based on the following data: ${JSON.stringify(review)}`
+    const prompt= `Generates a Tasting Note with direct html tags (without markdown) for the wine ${review.wine.name} based on the following data: ${JSON.stringify(revewWithoutTecnicalFile)}`
 
-    const tastingNote= await generateAIText(system, prompt)
+    const tastingNote= await generateAIText(system, prompt, includePdf ? review.wine.technicalFileUrl : undefined)
     console.log(tastingNote)
     return tastingNote
 }
