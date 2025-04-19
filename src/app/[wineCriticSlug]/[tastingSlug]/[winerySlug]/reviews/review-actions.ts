@@ -64,7 +64,7 @@ export async function generateTastingNoteAction(id: string, wineCriticSlug: stri
     const wineCriticTastingNotePrompt= await getWineCriticTastingNotePrompt(wineCriticSlug)
     const system= wineCriticTastingNotePrompt + tastingNoteFormat
     const prompt= `Generates a Tasting Note with direct html tags (without markdown) for the wine ${review.wine.name} based on the following data: ${JSON.stringify(revewWithoutTecnicalFile)}` +
-`\n\nHere are the last tasting notes saved as examples: ${JSON.stringify(lastTastingNotes, null, 2)}`
+`\n\nHere are the last tasting notes saved as examples: ${JSON.stringify(lastTastingNotes)}`
     console.log("prompt: ", prompt)
 
     const tastingNote= await generateAIText(system, prompt, includePdf ? review.wine.technicalFileUrl : undefined)
