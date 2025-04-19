@@ -1,7 +1,7 @@
 "use server"
   
 import { generateAIText } from "@/services/ai-services"
-import { ReviewDAO, ReviewFormValues, createReview, deleteReview, getReviewDAO, setField, setTastingNote, updateReview } from "@/services/review-services"
+import { ReviewDAO, ReviewFormValues, createReview, deleteReview, getLastTastingNotes, getReviewDAO, setField, setTastingNote, updateReview } from "@/services/review-services"
 import { getWineCriticTastingNotePrompt } from "@/services/winecritic-services"
 import { revalidatePath } from "next/cache"
 
@@ -59,10 +59,13 @@ export async function generateTastingNoteAction(id: string, wineCriticSlug: stri
             technicalFileName: undefined
         }
     }
+    const lastTastingNotes= await getLastTastingNotes(wineCriticSlug, 10)
     console.log(review)
     const wineCriticTastingNotePrompt= await getWineCriticTastingNotePrompt(wineCriticSlug)
     const system= wineCriticTastingNotePrompt + tastingNoteFormat
-    const prompt= `Generates a Tasting Note with direct html tags (without markdown) for the wine ${review.wine.name} based on the following data: ${JSON.stringify(revewWithoutTecnicalFile)}`
+    const prompt= `Generates a Tasting Note with direct html tags (without markdown) for the wine ${review.wine.name} based on the following data: ${JSON.stringify(revewWithoutTecnicalFile)}` +
+`\n\nHere are the last tasting notes saved as examples: ${JSON.stringify(lastTastingNotes, null, 2)}`
+    console.log("prompt: ", prompt)
 
     const tastingNote= await generateAIText(system, prompt, includePdf ? review.wine.technicalFileUrl : undefined)
     console.log(tastingNote)

@@ -133,3 +133,29 @@ export async function setTastingNote(id: string, tastingNote: string) {
   })
   return updated
 }
+
+export async function getLastTastingNotes(wineCriticSlug: string, limit: number = 20) {
+  console.log("wineCriticSlug: ", wineCriticSlug)
+  const found = await prisma.review.findMany({
+    where: {
+      wine: {
+        winery: {
+          wineCritic: {
+            slug: wineCriticSlug
+          }
+        }
+      },
+      tastingNote: {
+        not: null
+      }
+    },
+    orderBy: {
+      updatedAt: 'desc'
+    },
+    take: limit,
+    select: {
+      tastingNote: true
+    }
+  })
+  return found.map(review => review.tastingNote)
+}
