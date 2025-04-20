@@ -280,9 +280,14 @@ function sanitizeSheetName(name: string): string {
     .substring(0, 31);
 }
 
-export async function getReportToExport(tastingId: string) {
+export async function getReportToExport(tastingId: string, wineryId?: string) {
   // Obtener los datos de bodegas, vinos y reviews
-  const wineries = await getFullWinerysDAOByTastingId(tastingId);
+  let wineries = await getFullWinerysDAOByTastingId(tastingId);
+  
+  // Si se proporciona un wineryId, filtrar solo esa bodega
+  if (wineryId) {
+    wineries = wineries.filter(winery => winery.id === wineryId);
+  }
   
   // Formatear la fecha en español
   const formatDate = (date: Date | null | undefined) => {
@@ -307,9 +312,9 @@ export async function getReportToExport(tastingId: string) {
         'Añada': wine.vintage,
         'Región': wine.region || '',
         'ABV (%)': wine.abv ? `${wine.abv}%` : '',
+        'Precio': wine.price ? `$${wine.price}` : '',
         'Puntaje': wine.review?.score || '',
         'Nota de Cata': tastingNote,
-        'Fecha de Cata': wine.review?.createdAt ? formatDate(wine.review.createdAt) : '',
       } as Record<string, string | number>;
     });
   });
@@ -321,9 +326,9 @@ export async function getReportToExport(tastingId: string) {
     'Añada', 
     'Región', 
     'ABV (%)',
+    'Precio',
     'Puntaje', 
     'Nota de Cata',
-    'Fecha de Cata',
   ];
   
   // Crear matriz de datos para Excel

@@ -8,9 +8,12 @@ import ReportWrapper from "./report-wrapper"
 
 type Props = {
     params: Promise<{ tastingSlug: string }>
+    searchParams: Promise<{
+        wineryId?: string
+    }>
 }
 
-export default async function TastingPage({ params }: Props) {
+export default async function TastingPage({ params, searchParams }: Props) {
     const { tastingSlug } = await params
     const tasting = await getTastingDAOBySlug(tastingSlug)
     const wines = await getWinesDAOByTastingId(tasting.id)
@@ -33,7 +36,7 @@ export default async function TastingPage({ params }: Props) {
                     <AssociatedWineriesWrapper tasting={tasting} />
                 </TabsContent>
                 <TabsContent value="reports">
-                    <ReportWrapper tasting={tasting} />
+                    <ReportWrapper tasting={tasting} searchParams={await searchParams} />
                 </TabsContent>
             </Tabs>
         </div>

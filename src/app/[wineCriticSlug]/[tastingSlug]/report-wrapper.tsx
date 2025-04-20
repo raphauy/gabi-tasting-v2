@@ -4,17 +4,19 @@ import { format } from "date-fns"
 import { es } from "date-fns/locale"
 
 // Componentes UI de Shadcn
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import ExportButton from "./export-button"
+import { WineryFilter } from "./winery-filter"
 
 type Props = {
     tasting: TastingDAO
+    searchParams: {
+        wineryId?: string
+    }
 }
 
-export default async function ReportWrapper({ tasting }: Props) {
+export default async function ReportWrapper({ tasting, searchParams }: Props) {
     const wineries = await getFullWinerysDAOByTastingId(tasting.id)
     
     // Función para formatear fechas
@@ -30,17 +32,35 @@ export default async function ReportWrapper({ tasting }: Props) {
         return "under90"
     }
     
+    // Filtrar wineries si hay un wineryId en los searchParams
+    const filteredWineries = searchParams.wineryId 
+        ? wineries.filter(winery => winery.id === searchParams.wineryId)
+        : wineries
+    
+    // Convertir wineries para el combobox
+    const wineryOptions = wineries.map(winery => ({
+        value: winery.id,
+        label: winery.name
+    }))
+    
     return (
         <div className="container mx-auto py-8 px-4">
             <div className="flex flex-col items-center mb-8">
                 <div className="w-full flex justify-between items-center mb-4">
                     <h1 className="text-3xl font-bold">{tasting.name}</h1>
                     <ExportButton tastingId={tasting.id} />
-                </div>                
+                </div>
+            </div>
+            <div className="flex justify-center mb-8">
+                <WineryFilter 
+                    wineries={wineryOptions} 
+                    tastingSlug={tasting.slug} 
+                    wineCriticSlug={tasting.wineCritic.slug} 
+                />
             </div>
             
             <div className="space-y-8 max-w-5xl mx-auto">
-                {wineries.map((winery) => (
+                {filteredWineries.map((winery) => (
                     <Card key={winery.id} className="mb-8 overflow-hidden">
                         <CardHeader className="bg-muted/50">
                             <div className="flex justify-between items-center">

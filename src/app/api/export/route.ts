@@ -7,6 +7,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     
     const tastingId = searchParams.get("tastingId")
+    const wineryId = searchParams.get("wineryId") || undefined
 
     if (!tastingId) {
         return NextResponse.json({ "error": "Tasting ID is required" }, { status: 400 })
@@ -18,12 +19,22 @@ export async function GET(request: Request) {
     }
 
     console.log("tastingId:", tastingId)
+    if (wineryId) {
+        console.log("wineryId:", wineryId)
+    }
 
     try {
-        const excelBuffer = await getReportToExport(tastingId)
+        const excelBuffer = await getReportToExport(tastingId, wineryId)
         
-        // Crear el nombre del archivo
-        const fileName = `${tasting.slug}_${format(new Date(), 'yyyy-MM-dd-HH-mm')}.xlsx`
+        // Crear el nombre del archivo con indicación de filtrado si existe
+        let fileName = `${tasting.slug}`
+        
+        // Si hay un filtro por bodega, agregarlo al nombre del archivo
+        if (wineryId) {
+            fileName += `_filtered`
+        }
+        
+        fileName += `_${format(new Date(), 'yyyy-MM-dd-HH-mm')}.xlsx`
 
         // Retornar el archivo para descarga
         return new NextResponse(excelBuffer, {
