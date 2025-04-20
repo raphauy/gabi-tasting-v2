@@ -301,8 +301,11 @@ export async function getReportToExport(tastingId: string, wineryId?: string) {
       // Limpiar el HTML de las notas de cata si existe
       let tastingNote = '';
       if (wine.review?.tastingNote) {
-        // Eliminar etiquetas HTML de manera simple
-        tastingNote = wine.review.tastingNote.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        // Primero, eliminar las etiquetas h2 y su contenido
+        const withoutH2 = wine.review.tastingNote.replace(/<h2>.*?<\/h2>/g, '');
+        
+        // Luego, eliminar cualquier otra etiqueta HTML 
+        tastingNote = withoutH2.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
       }
       
       return {
@@ -311,6 +314,7 @@ export async function getReportToExport(tastingId: string, wineryId?: string) {
         'Vino': wine.name, 
         'Añada': wine.vintage,
         'Región': wine.region || '',
+        'Estilo': wine.style || '',
         'ABV (%)': wine.abv ? `${wine.abv}%` : '',
         'Precio': wine.price ? `$${wine.price}` : '',
         'Puntaje': wine.review?.score || '',
@@ -325,6 +329,7 @@ export async function getReportToExport(tastingId: string, wineryId?: string) {
     'Vino', 
     'Añada', 
     'Región', 
+    'Estilo',
     'ABV (%)',
     'Precio',
     'Puntaje', 

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { toast } from "@/hooks/use-toast"
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { List, Loader, SaveIcon, Sparkles } from "lucide-react"
+import { Copy, List, Loader, SaveIcon, Sparkles } from "lucide-react"
 import { useEffect, useState } from 'react'
 import { generateTastingNoteAction, setTastingNoteAction } from "../reviews/review-actions"
 import { EditPromptDialog } from "./edit-prompt-dialog"
@@ -23,6 +23,7 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
     const [isGenerating, setIsGenerating] = useState(false)
     const [isGeneratingStream, setIsGeneratingStream] = useState(false)
     const [includePdf, setIncludePdf] = useState(false)
+    const [isCopying, setIsCopying] = useState(false)
 
     const editor = useEditor({
         extensions: [
@@ -98,6 +99,61 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
         }
     }
 
+    async function handleCopy() {
+        if (!editor) return
+
+        try {
+            setIsCopying(true)
+            
+            // Obtener el contenido HTML y extraer solo el texto
+            const html = editor.getHTML();
+            
+            // Crear un elemento temporal
+            const tempElement = document.createElement('div');
+            tempElement.innerHTML = html;
+            
+            // Obtener solo el texto (sin las etiquetas HTML)
+            const textOnly = tempElement.textContent || tempElement.innerText || '';
+            
+            // Verificar si la API de clipboard está disponible
+            if (navigator?.clipboard?.writeText) {
+                // Método moderno de copiar al portapapeles
+                await navigator.clipboard.writeText(textOnly);
+            } else {
+                // Método alternativo utilizando document.execCommand (para navegadores más antiguos)
+                const textarea = document.createElement('textarea');
+                textarea.value = textOnly;
+                textarea.style.position = 'fixed'; // Evita desplazamiento
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                if (!successful) {
+                    throw new Error('No se pudo copiar el texto');
+                }
+            }
+            
+            toast({
+                title: "Texto copiado",
+                description: "El texto de la nota de cata ha sido copiado al portapapeles",
+                duration: 3000,
+            })
+        } catch (error) {
+            toast({
+                title: "Error al copiar",
+                description: "No se pudo copiar el texto al portapapeles",
+                variant: "destructive",
+                duration: 3000,
+            })
+            console.error(error)
+        } finally {
+            setIsCopying(false)
+        }
+    }
+
     if (!editor) {
         return null
     }
@@ -167,7 +223,16 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
                     </div>
                 </div>
                 <EditorContent editor={editor} />
-                <div className="p-2 flex justify-end border-t">
+                <div className="p-2 flex justify-end border-t gap-2">
+                    <Button 
+                        onClick={handleCopy}
+                        size="sm"
+                        variant="outline"
+                        title="Copiar texto al portapapeles"
+                    >
+                        { isCopying ? <Loader className="w-4 h-4 mr-2 animate-spin" /> : <Copy className="w-4 h-4 mr-2" /> }
+                        Copiar texto
+                    </Button>
                     <Button 
                         onClick={handleSave}
                         disabled={!hasChanges || isSaving}
