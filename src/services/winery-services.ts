@@ -124,6 +124,9 @@ export async function getFullWinerysDAOByTastingId(tastingId: string) {
       wines: {
         include: {
           review: true
+        },
+        orderBy: {
+          price: 'asc'
         }
       },
     },
