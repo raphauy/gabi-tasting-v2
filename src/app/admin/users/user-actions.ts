@@ -19,8 +19,13 @@ export async function createOrUpdateUserAction(id: string | null, data: UserForm
         if (updated) {
             const winery = updated.winery;
             let wineryName = "Bodega"
+            let tastingName = "Tasting"
             if (winery) {
               wineryName = winery.name;
+              // Get the most recent tasting
+              if (winery.tastings && winery.tastings.length > 0) {
+                tastingName = winery.tastings[0].tasting.name;
+              }
             }
             const currentUser = await getCurrentUser();
             if (!currentUser) {
@@ -30,7 +35,7 @@ export async function createOrUpdateUserAction(id: string | null, data: UserForm
             const invitedName= updated.name || updated.email;
             const serverUrl = process.env.NEXTAUTH_URL;
             const ctaLink = serverUrl + "/login?email=" + updated.email;
-            const result = await sendWineryUserInvite(updated.email, inviterName, invitedName, wineryName, ctaLink);
+            const result = await sendWineryUserInvite(updated.email, inviterName, invitedName, wineryName, tastingName, ctaLink);
             if (!result.success) {
               console.error("Error sending invite email", result.error);
             } else {

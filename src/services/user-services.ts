@@ -55,10 +55,22 @@ export async function createUser(data: UserFormValues) {
     data,
     include: {
       wineCritic: true,
-      winery: true
+      winery: {
+        include: {
+          tastings: {
+            include: {
+              tasting: true
+            },
+            orderBy: {
+              createdAt: 'desc'
+            },
+            take: 1
+          }
+        }
+      }
     }
   })
-  
+
   return created
 }
 

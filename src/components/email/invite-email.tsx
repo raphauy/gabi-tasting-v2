@@ -6,10 +6,11 @@ interface InviteEmailProps {
   inviterName: string;
   invitedName: string;
   wineryName: string;
+  tastingName: string;
   ctaLink: string;
 }
 
-export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName = "Juan", wineryName = "Casa Grande", ctaLink = "https://gabitasting.com" }: InviteEmailProps) {
+export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName = "Juan", wineryName = "Casa Grande", tastingName = "Tim Atkin MW Uruguay 2025 Special Report", ctaLink = "https://gabitasting.com" }: InviteEmailProps) {
   return (
     <Html>
       <Head />
@@ -33,7 +34,7 @@ export default function InviteEmail({ inviterName = "Gabi Zimmer", invitedName =
                 Hola {invitedName},
               </Text>
               <Text className="text-center text-gray-700 mb-8">
-                {inviterName} te invita a unirte a Gabi Tasting, una plataforma desarrollada para simplificar el registro y la gestión de vinos e información en catas de puntuación. Como representante de {wineryName}, tendrás acceso para inscribir y administrar los vinos de la bodega para ser puntuados en Tim Atkin MW Uruguay 2025 Special Report.
+                {inviterName} te invita a unirte a Gabi Tasting, una plataforma desarrollada para simplificar el registro y la gestión de vinos e información en catas de puntuación. Como representante de {wineryName}, tendrás acceso para inscribir y administrar los vinos de la bodega para ser puntuados en {tastingName}.
               </Text>
               <Section className="text-center mb-8">
                 <Link

@@ -29,14 +29,14 @@ export async function sendOTP(email: string, code: string) {
   }
 }
 
-export async function sendWineryUserInvite(email: string, inviterName: string, invitedName: string, wineryName: string, ctaLink: string) {
+export async function sendWineryUserInvite(email: string, inviterName: string, invitedName: string, wineryName: string, tastingName: string, ctaLink: string) {
   try {
     const result = await resend.emails.send({
       from: process.env.EMAIL_FROM!,
       to: email,
       replyTo: 'gabi@gabizimmer.com',
       subject: 'Invitación a Gabi Tasting',
-      react: InviteEmail({ inviterName, invitedName, wineryName, ctaLink }),
+      react: InviteEmail({ inviterName, invitedName, wineryName, tastingName, ctaLink }),
     });
 
     const error = result.error;
