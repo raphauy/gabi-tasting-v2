@@ -43,7 +43,7 @@ export function UserCard({ user, fullData = true }: Props) {
                 </div>
                 <div className="flex items-center gap-2">
                   <div><Calendar className="h-4 w-4" /></div>
-                  <span>
+                  <span suppressHydrationWarning>
                     Actualizado el {format(new Date(user.updatedAt), "d 'de' MMMM, yyyy", { locale: es })}
                   </span>
                 </div>

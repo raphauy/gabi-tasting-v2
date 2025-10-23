@@ -61,7 +61,7 @@ export function WineCard({ wine, tastingId, href }: Props) {
 
           <div className="hidden lg:flex items-center gap-2 text-muted-foreground">
             <div><Clock className="h-4 w-4" /></div>
-            <span className="text-xs">
+            <span className="text-xs" suppressHydrationWarning>
               Actualizado {formatDistanceToNow(new Date(wine.updatedAt), { addSuffix: true, locale: es })}
             </span>
           </div>
@@ -80,7 +80,7 @@ export function WineCard({ wine, tastingId, href }: Props) {
         <div className="flex justify-between items-center mt-2 lg:mt-0 lg:-translate-y-6 relative lg:z-0">
           <div className="flex lg:hidden items-center gap-2 text-muted-foreground">
             <div><Clock className="h-4 w-4" /></div>
-            <span className="text-xs">
+            <span className="text-xs" suppressHydrationWarning>
               Actualizado {formatDistanceToNow(new Date(wine.updatedAt), { addSuffix: true, locale: es })}
             </span>
           </div>

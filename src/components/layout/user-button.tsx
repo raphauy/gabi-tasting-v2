@@ -8,12 +8,18 @@ import { Home, LayoutDashboard, Monitor, Moon, Settings, Sun } from "lucide-reac
 import { useSession } from "next-auth/react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { Button } from "../ui/button"
 import { LogoutButtonForDropdown } from "./logout-button"
 
 export function UserButton() {
   const { data: session } = useSession()
   const { setTheme, theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   if (!session?.user) return null
 
@@ -76,7 +82,7 @@ export function UserButton() {
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        {getThemeItem(theme || "system", setTheme)}
+        {getThemeItem(mounted ? theme || "system" : "system", setTheme, mounted)}
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-red-600 dark:text-red-400 cursor-pointer">
           <LogoutButtonForDropdown redirectTo="/" />
@@ -84,48 +90,51 @@ export function UserButton() {
       </DropdownMenuContent>
     </DropdownMenu>
   )
-} 
+}
 
 
-function getThemeItem(theme: string, setTheme: (theme: string) => void) {
+function getThemeItem(theme: string, setTheme: (theme: string) => void, mounted: boolean) {
   return (
-    <DropdownMenuItem 
+    <DropdownMenuItem
     className="hover:bg-transparent focus:bg-transparent"
     onSelect={(e) => e.preventDefault()}
     >
       <div className="flex items-center justify-between w-full">
         <span className="font-medium">Tema</span>
-        <div className="p-1 bg-muted rounded-full flex">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={cn("h-8 w-8 relative rounded-full", theme === "light" && "border")}
+        <div className="p-1 bg-muted rounded-full flex" suppressHydrationWarning>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("h-8 w-8 relative rounded-full", mounted && theme === "light" && "border")}
             onClick={() => setTheme('light')}
+            suppressHydrationWarning
           >
             <Sun className="h-4 w-4" />
-            {theme === "light" && (
+            {mounted && theme === "light" && (
               <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-sky-500 rounded-full" />
             )}
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={cn("h-8 w-8 relative rounded-full", theme === "dark" && "border border-muted-foreground")}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("h-8 w-8 relative rounded-full", mounted && theme === "dark" && "border border-muted-foreground")}
             onClick={() => setTheme('dark')}
+            suppressHydrationWarning
           >
             <Moon className="h-4 w-4" />
-            {theme === "dark" && (
+            {mounted && theme === "dark" && (
               <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-sky-500 rounded-full" />
             )}
           </Button>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={cn("h-8 w-8 relative rounded-full", theme === "system" && "border")}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("h-8 w-8 relative rounded-full", mounted && theme === "system" && "border")}
             onClick={() => setTheme('system')}
+            suppressHydrationWarning
           >
             <Monitor className="h-4 w-4" />
-            {theme === "system" && (
+            {mounted && theme === "system" && (
               <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-sky-500 rounded-full" />
             )}
           </Button>
