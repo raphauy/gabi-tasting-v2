@@ -122,6 +122,13 @@ export async function getFullWinerysDAOByTastingId(tastingId: string) {
     },
     include: {
       wines: {
+        where: {
+          tastings: {
+            some: {
+              tastingId
+            }
+          }
+        },
         include: {
           review: true
         },
