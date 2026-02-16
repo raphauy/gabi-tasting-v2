@@ -32,7 +32,7 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
         content: initialTastingNote,
         editorProps: {
             attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4 [&>h2]:text-xl [&>h2]:font-bold [&>h2]:mt-4 [&>h2]:mb-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:mt-3 [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:pl-6',
+                class: 'prose prose-sm sm:prose-sm lg:prose mx-auto focus:outline-none min-h-[200px] p-4 [&>h2]:text-lg [&>h2]:font-bold [&>h2]:mt-4 [&>h2]:mb-2 [&>h3]:text-base [&>h3]:font-semibold [&>h3]:mt-3 [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:pl-6',
             },
         },
         onUpdate: () => {
@@ -160,7 +160,7 @@ export function TastingNoteBox({ reviewId, initialTastingNote, wineCriticSlug }:
 
     return (
         <div className="space-y-2 mb-8">
-            <h2 className="text-2xl font-semibold">Nota de cata</h2>
+            <h2 className="text-xl font-semibold">Nota de cata</h2>
             <div className="border rounded-lg">
                 <div className="border-b p-2 flex gap-2 bg-muted flex-wrap items-center justify-between">
                     <div className="flex gap-2 flex-wrap">

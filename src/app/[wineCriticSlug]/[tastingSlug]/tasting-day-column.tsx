@@ -33,11 +33,11 @@ export default function TastingDayColumn({ tastingDay, wineCriticSlug, tastingSl
     <div>
       <Draggable draggableId={tastingDay.id} index={index}>
         {(provided) => (
-          <li className="shrink-0 h-full w-80 select-none" ref={provided.innerRef} {...provided.draggableProps}>
+          <li className="shrink-0 h-full w-72 select-none" ref={provided.innerRef} {...provided.draggableProps}>
             <Card className="bg-muted h-full group" {...provided.dragHandleProps}>
               <CardHeader className="pb-2 px-3">
                 <div className="flex justify-between items-center">
-                  <CardTitle className="flex items-center gap-1 text-lg font-medium" >
+                  <CardTitle className="flex items-center gap-1 text-base font-medium" >
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1">
                         {getSatusIcon(tastingDay)}
@@ -58,7 +58,7 @@ export default function TastingDayColumn({ tastingDay, wineCriticSlug, tastingSl
               <CardContent className="h-full px-2">
                 <Droppable droppableId={tastingDay.id} type="winery">
                   {(provided) => (
-                    <ol className="space-y-3 h-full" ref={provided.innerRef} {...provided.droppableProps}>
+                    <ol className="space-y-2 h-full" ref={provided.innerRef} {...provided.droppableProps}>
                       {wineries.map((winery, index) => (
                         <WineryCard key={winery.wineryId} winery={winery.winery} wines={wines.filter(wine => wine.wineryId === winery.wineryId)} wineCriticSlug={wineCriticSlug} tastingSlug={tastingSlug} index={index} />
                       ))}

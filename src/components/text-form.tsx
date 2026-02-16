@@ -138,7 +138,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
         disabled={loading}
       >
         <SelectTrigger className={cn(
-          "w-full text-xl font-bold border-0",
+          "w-full text-base font-bold border-0",
           "bg-background hover:bg-background/80 transition",
           "focus:ring-0 focus:ring-offset-0",
           "data-[placeholder]:text-muted-foreground/60"
@@ -250,7 +250,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
         variant="ghost"
         className="w-full p-0 h-auto font-bold hover:bg-transparent"
       >
-        <div className={`text-xl w-full text-left ${type === "textarea" ? "whitespace-pre-wrap" : "truncate"}`}>
+        <div className={`text-base w-full text-left ${type === "textarea" ? "whitespace-pre-wrap" : "truncate"}`}>
           {newValue || "Sin valor"}
         </div>
       </Button>
@@ -258,7 +258,7 @@ export function TextForm({ id, label, fieldName, initialValue, update, type, sel
   }
 
   return (
-    <div className="mt-3 border bg-slate-100 rounded-md p-4 dark:bg-black relative">
+    <div className="mt-2 border bg-slate-100 rounded-md p-3 dark:bg-black relative">
       <div className="font-medium flex flex-col">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-1">

@@ -25,15 +25,15 @@ export default function WineryCard({ winery, wines, wineCriticSlug, tastingSlug,
             {(provided) => (
               <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                 <Card>
-                  <CardContent className="p-3">
+                  <CardContent className="p-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center space-x-2">
-                        <Avatar className="h-10 w-10">
+                        <Avatar className="h-8 w-8">
                           <AvatarImage src={winery.image || undefined} alt={winery.name} className="object-cover"/>
                           <AvatarFallback>{winery.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <Link href={`/${wineCriticSlug}/${tastingSlug}/${winery.slug}`} className="font-medium">{winery.name}</Link>
+                          <Link href={`/${wineCriticSlug}/${tastingSlug}/${winery.slug}`} className="font-medium text-sm">{winery.name}</Link>
                           <p className="text-sm text-gray-500">{winery.description}</p>
                         </div>
                       </div>

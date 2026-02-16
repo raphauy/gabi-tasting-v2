@@ -23,7 +23,7 @@ export function WineDialog({ id, wineryId, tastingId }: Props) {
       <DialogTrigger asChild>
         {id ? updateTrigger : addTrigger }
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[650px]">
         <DialogHeader>
           <DialogTitle>{id ? 'Update' : 'Create'} Wine</DialogTitle>
           <DialogDescription>

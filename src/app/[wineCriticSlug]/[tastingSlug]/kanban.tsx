@@ -121,7 +121,7 @@ export default function Kanban({ tasting, wines, initialTastingDays }: Props) {
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tastingDays" type='list' direction='horizontal'>
             {(provided) => (
-              <ol className="flex gap-x-3 h-full min-h-[600px]" ref={provided.innerRef} {...provided.droppableProps}>
+              <ol className="flex gap-x-2 h-full min-h-[500px]" ref={provided.innerRef} {...provided.droppableProps}>
                 {tastingDays.map((tastingDay, index) => (
                   <TastingDayColumn key={tastingDay.id} tastingDay={tastingDay} index={index} wines={wines} wineCriticSlug={tasting.wineCritic.slug} tastingSlug={tasting.slug} />
                 ))}

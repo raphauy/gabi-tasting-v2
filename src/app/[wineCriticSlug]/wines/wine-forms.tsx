@@ -91,10 +91,10 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
   }, [form, id, tastingId])
 
   return (
-    <div className="rounded-lg border bg-card p-6 shadow-sm max-w-xl mx-auto w-full">
+    <div className="rounded-lg border bg-card p-4 shadow-sm max-w-xl mx-auto w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <div className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <div className="space-y-3">
             <FormField
               control={form.control}
               name="name"
@@ -211,7 +211,7 @@ export function WineForm({ id, wineryId, tastingId, closeDialog }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ficha Técnica (PDF)</FormLabel>
-                <div className="flex items-start justify-between pt-5">
+                <div className="flex items-start justify-between pt-1">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     {fileName && (
                       <>

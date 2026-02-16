@@ -26,7 +26,7 @@ export function WineCard({ wine, tastingId, href }: Props) {
     <Card className="hover:shadow-lg transition-shadow duration-200 w-full h-full flex flex-col">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-2xl flex items-center gap-2">
+          <CardTitle className="text-xl flex items-center gap-2">
             <p>{wine.name}</p>
             {wine.review?.finished && <Check className="h-6 w-6 font-bold text-green-500" />}
           </CardTitle>
