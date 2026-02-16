@@ -20,8 +20,8 @@ export default async function TastingPage({ params, searchParams }: Props) {
     const tastingDays= await getKanbanTastingDays(tasting.id)
 
     return (
-        <div className="space-y-10 w-full">
-            <p className="text-2xl font-bold text-center">{tasting.name}</p>            
+        <div className="space-y-6 w-full">
+            <p className="text-xl font-bold text-center">{tasting.name}</p>
 
             <Tabs defaultValue="kanban">
                 <TabsList>

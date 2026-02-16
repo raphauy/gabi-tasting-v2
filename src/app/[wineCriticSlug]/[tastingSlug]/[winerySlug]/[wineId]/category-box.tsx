@@ -33,7 +33,7 @@ export default function CategoryBox({ title, iconName, dataFields }: Props) {
         <CardTitle>
             <div className="flex items-center gap-x-2">
                 <IconBadge icon={Icon} variant="orange"/>
-                <p className="text-lg">{title}</p>
+                <p className="text-base">{title}</p>
             </div>
         </CardTitle>
       </CardHeader>

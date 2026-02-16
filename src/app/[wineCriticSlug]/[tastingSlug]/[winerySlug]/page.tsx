@@ -16,7 +16,7 @@ export default async function WineryPage({ params }: Props) {
 
     return (
         <div className="">
-            <p className="text-2xl font-bold text-center">{tasting.name} - {winery.name}</p>
+            <p className="text-xl font-bold text-center">{tasting.name} - {winery.name}</p>
 
             <WineList wines={wines} basePath={`/${wineCriticSlug}/${tastingSlug}/${winerySlug}`} />
             

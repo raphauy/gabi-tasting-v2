@@ -24,67 +24,54 @@ export function WineCard({ wine, tastingId, href }: Props) {
 
   const CardElement = (
     <Card className="hover:shadow-lg transition-shadow duration-200 w-full h-full flex flex-col">
-      <CardHeader>
+      <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-xl flex items-center gap-2">
+          <CardTitle className="text-lg flex items-center gap-2">
             <p>{wine.name}</p>
-            {wine.review?.finished && <Check className="h-6 w-6 font-bold text-green-500" />}
+            {wine.review?.finished && <Check className="h-5 w-5 font-bold text-green-500" />}
           </CardTitle>
           <div className="flex items-center gap-2 text-muted-foreground">
             {tastingId && <WineDialog wineryId={wine.wineryId} id={wine.id} tastingId={tastingId} />}
-            <div><MapPin className="h-4 w-4" /></div>
-            <span className="text-sm">{wine.region}</span>
+            <div><MapPin className="h-3.5 w-3.5" /></div>
+            <span className="text-xs">{wine.region}</span>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col flex-1 pb-1">
-        <div className="space-y-3 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4 mb-auto relative">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">Añada: {wine.vintage}</span>
+      <CardContent className="pb-2">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-1 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-3.5 w-3.5 shrink-0" />
+            <span>Añada: {wine.vintage}</span>
           </div>
-
-          <div className="flex items-center gap-2">
-            <GrapeIcon className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">{wine.grapes}</span>
+          <div className="flex items-center gap-1">
+            <GrapeIcon className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">{wine.grapes}</span>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Droplet className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">{wine.abv}% Alc.</span>
+          <div className="flex items-center gap-1">
+            <Droplet className="h-3.5 w-3.5 shrink-0" />
+            <span>{wine.abv}% Alc.</span>
           </div>
-
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm">{wine.price?.toLocaleString() ?? 'N/A'}</span>
+          <div className="flex items-center gap-1">
+            <DollarSign className="h-3.5 w-3.5 shrink-0" />
+            <span>{wine.price?.toLocaleString() ?? 'N/A'}</span>
           </div>
-
-          <div className="hidden lg:flex items-center gap-2 text-muted-foreground">
-            <div><Clock className="h-4 w-4" /></div>
-            <span className="text-xs" suppressHydrationWarning>
-              Actualizado {formatDistanceToNow(new Date(wine.updatedAt), { addSuffix: true, locale: es })}
-            </span>
-          </div>
-
           {wine.technicalFileUrl && (
-            <div className="flex items-center gap-2 lg:relative lg:z-10">
-              <FileText className="h-4 w-4 text-muted-foreground" />
-              <div onClick={handleTechnicalFileClick} className="text-sm text-primary hover:underline cursor-pointer">
+            <div className="flex items-center gap-1">
+              <FileText className="h-3.5 w-3.5 shrink-0" />
+              <div onClick={handleTechnicalFileClick} className="text-primary hover:underline cursor-pointer">
                 Ficha técnica
               </div>
             </div>
           )}
-
-        </div>
-
-        <div className="flex justify-between items-center mt-2 lg:mt-0 lg:-translate-y-6 relative lg:z-0">
-          <div className="flex lg:hidden items-center gap-2 text-muted-foreground">
-            <div><Clock className="h-4 w-4" /></div>
+          <div className="flex items-center gap-1">
+            <Clock className="h-3.5 w-3.5 shrink-0" />
             <span className="text-xs" suppressHydrationWarning>
               Actualizado {formatDistanceToNow(new Date(wine.updatedAt), { addSuffix: true, locale: es })}
             </span>
           </div>
-          <Badge variant="secondary" className="ml-auto">
+        </div>
+        <div className="flex justify-end mt-1">
+          <Badge variant="secondary">
             {wine.style}
           </Badge>
         </div>

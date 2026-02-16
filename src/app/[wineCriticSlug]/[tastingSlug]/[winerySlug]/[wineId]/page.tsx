@@ -28,7 +28,7 @@ export default async function WinePage({ params }: Props) {
 
             {
                 review ? (
-                    <div className="space-y-10">
+                    <div className="space-y-6">
                         <Review review={review} />
                         <TastingNoteBox reviewId={review.id} initialTastingNote={review.tastingNote || ""} wineCriticSlug={wineCriticSlug} />
                     </div>

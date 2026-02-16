@@ -148,7 +148,7 @@ export function Review({ review }: Props) {
     const conclusionFields: DataField[] = [comments, score, finished]
 
     return (
-        <div className="grid lg:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 gap-3">
             <CategoryBox title="Appearance" iconName="Eye" dataFields={appearanceFields} />
             <CategoryBox title="Nose" iconName="Wind" dataFields={noseFields} />
             <CategoryBox title="Palate" iconName="Utensils" dataFields={palateFields} />

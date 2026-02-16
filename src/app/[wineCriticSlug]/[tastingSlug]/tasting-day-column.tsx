@@ -33,11 +33,11 @@ export default function TastingDayColumn({ tastingDay, wineCriticSlug, tastingSl
     <div>
       <Draggable draggableId={tastingDay.id} index={index}>
         {(provided) => (
-          <li className="shrink-0 h-full w-72 select-none" ref={provided.innerRef} {...provided.draggableProps}>
+          <li className="shrink-0 h-full w-64 select-none" ref={provided.innerRef} {...provided.draggableProps}>
             <Card className="bg-muted h-full group" {...provided.dragHandleProps}>
               <CardHeader className="pb-2 px-3">
                 <div className="flex justify-between items-center">
-                  <CardTitle className="flex items-center gap-1 text-base font-medium" >
+                  <CardTitle className="flex items-center gap-1 text-sm font-medium" >
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1">
                         {getSatusIcon(tastingDay)}
@@ -49,7 +49,7 @@ export default function TastingDayColumn({ tastingDay, wineCriticSlug, tastingSl
                     </div>
 
                   </CardTitle>
-                  <div className="w-6 h-6 rounded-full font-bold bg-muted-foreground text-white text-xs flex items-center justify-center">{wineries.length}</div>
+                  <div className="w-5 h-5 rounded-full font-bold bg-muted-foreground text-white text-[10px] flex items-center justify-center">{wineries.length}</div>
                   {/* <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <TastingDayMenu tastingId={tastingDay.tastingId} tastingDayId={tastingDay.id} tastingDayDateStr={label} />
                   </div> */}
